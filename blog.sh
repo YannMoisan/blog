@@ -23,15 +23,15 @@ l=${#entry_files[@]}
 echo l:$l
 
 # TODO:Creer une méthode qui prend un tableau de fichiers et un mode : isEntry
-for ((i=0;i<o;i++));do
-  echo Processing:${other_files[$i]}
+for file in "${other_files[@]}";do
+  echo Processing:$file
   
-  title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' ${other_files[$i]}`
-  echo ${other_files[$i]} >> $dst_dir/menu.xml
-  dst_file=$dst_dir/${other_files[$i]#src/}
+  title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $file`
+  echo ${file} >> $dst_dir/menu.xml
+  dst_file=$dst_dir/${file#src/}
   cat xx00 > $dst_file
   
-  cat ${other_files[$i]} >> $dst_file
+  cat ${file} >> $dst_file
   cat xx02 >> $dst_file
 
   sed -i "s/<!-- title -->/$title/" $dst_file
