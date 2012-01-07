@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title><!-- title -->|Yann Moisan</title>
+        <link media="all" href="style.css" type="text/css" rel="stylesheet" />
+        
+        <link rel="shortcut icon" href="http://www.yannmoisan.com/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="http://www.yannmoisan.com/favicon.ico" />
+        
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Billets" />
+        
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-21571082-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+             })();
+
+</script>
+     </head>
+     <body>
+         <div id="container">
+             <div id="header"><h1>Yann Moisan
+                     <span>Sur Java, les technos Web et autres ...</span></h1>
+                 <ul>
+                     <li><a href="index.html">Accueil</a></li>
+                     <li><a href="a-propos.html">A propos</a></li>
+                     <li><a href="cv.html">CV</a></li>
+                 </ul>
+             </div>
+             <div id="sep"></div>
+             <div id="wrap">
+                 <div id="content">
+                     <!-- nav -->
+                     <!-- entry -->
+                     <div class="nav">
+                         <a href="recuperer-un-type-enumere-a-partir-d-un-code.html">&lt;&lt; Billet précédent</a>
+                         <a href="importer-et-classer-automatiquement-ses-photos-numeriques.html">Billet suivant &gt;&gt;</a>
+                     </div>
+                     <div class="entry">
+                         <div class="entry-date"><span class="day">09</span><span class="month">fév.</span><span class="year">2011</span></div>
+                         <h2 class="entry-title">Migration de Java 6 à Java 5.</h2>
+                         <div class="entry-content">
+                             <p>Sur mon projet actuel, nous avons du retrograder la version de Java utilisée. Seulement trois problèmes se sont posés :	</p>	    
+                             <h3>@Override</h3>
+                             <p>Depuis Java 6, il est possible d'utiliser l'annotation <code>@Override</code> sur les méthodes qui implémentent une méthode d'une interface. Pour l'anecdote, ce changement n'est pas documenté : la javadoc de l'annotation n'a pas été modifiée. La solution consiste à supprimer ces lignes. Cela est automatisé avec la ligne de commande suivante :
+             <pre>find . -name "*.java" -exec sed -i '/@Override/d' {} \</pre>
+                             </p>
+                             <h3>JAXB</h3>              
+                             <p>Nous utilisons <acronym lang="en" title="Java Architecture for XML Binding">JAXB</acronym>, qui a été intégré dans Java 6. La solution consite à ajouter les librairies suivantes au classpath:
+                             <ul>
+                                 <li>activation.jar</li>
+                                 <li>jaxb-api.jar</li>
+                                 <li>jaxb-impl.jar</li>
+                                 <li>jaxb1-impl.jar</li>
+                                 <li>jsr173_1.0_api.jar</li>
+                             </ul>
+                             </p>
+                             <h3>HSQLDB</h3>              
+                             <p>Nous utilisons HSQLDB 2.0 pour les tests unitaires. A l'execution, le code lance la classique exception suivante : <code>java.lang.UnsupportedClassVersionError: Bad version number in .class file</code>. L'explication est simple : depuis la version 2, le binaire est compilé avec Java 6. La solution consiste à récupérer la version snapshot qui est disponible pour java 6 et java 5 <a href="http://hsqldb.org/support/index.html">sur le site officiel</a>.
+                             </p></div>
+                         </div>
+
+                         <!-- entry -->
+
+
+                     </div>
+                     <div id="sidebar">
+                         <h2>Contact</h2>
+                         <p>yamo93[AT]gmail[DOT]com</p>
+                         <h2>Belt</h2>
+                         <a href="http://www.blackbeltfactory.com/UserView.wwa?userId=13810326"><img src="belt3_L.gif" alt="Green Belt"></img></a> 
+                         <h2>Liens externes</h2>
+                         <h3>Blog perso</h3>
+                         <ul>
+                             <li><a href="http://www.standblog.org">Standblog</a></li>  
+                             <li><a href="http://www.touilleur-express.fr/">Le touilleur express</a></li>
+                             <li><a href="http://thecodersbreakfast.net/">The Coder's Breakfast</a></li>
+                             <li><a href="http://blog.javabien.net/">Java Bien!</a></li>
+                         </ul>
+                         <h3>Blog entreprise</h3>
+                         <ul>
+                             <li><a href="http://blog.xebia.fr/">Xebia</a></li>
+                             <li><a href="http://blog.octo.com/">Octo</a></li>
+                             <li><a href="http://blog.zenika.com/">Zenika</a></li>
+                             <li><a href="http://blog.ippon.fr/">Ippon</a></li>
+                         </ul>
+                         <h3>Design Web</h3>
+                         <ul>
+                             <li><a href="http://openweb.eu.org/">Openweb</a></li>
+                             <li><a href="http://www.pompage.net/">Pompage</a></li>
+                             <li><a href="http://www.alsacreations.com/">Alsa creations</a></li>
+                         </ul>
+
+                     </div>
+                 </div>
+                 <div id="footer">
+                     <span id="copyright">&copy; 2011 Yann Moisan</span>
+                     <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>
+                 </div>
+             </div>
+         </body>
+     </html>
+

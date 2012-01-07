@@ -1,0 +1,140 @@
+/* http://www.colourlovers.com/palette/694737/Thought_Provoking*/
+/*
+ * {margin: 0; padding:0;}
+ */
+html {font-size: 100%;} 
+body {
+    font-size: .8em;
+    font-family: "Trebuchet MS",Verdana,"Lucida Grande",Tahoma,Helvetica,Sans-Serif; 
+    /*line-height:1.4;*/ 
+    background: url("bg.png") repeat scroll 0 0 #53777A; 
+    margin:0;
+    text-align:justify;
+}
+p { 
+    margin: .75em 0; /* Marges plus faibles que par défaut. (7) */ 
+} 
+h1, h2, h3, h4, h5, h6 { 
+    margin: 1em 0 .5em 0; /* Rapproche le titre du texte. (5) */ 
+    line-height: 1.2; 
+    font-weight: bold; /* Valeur par défaut. (6) */ 
+    font-style: normal; 
+} 
+h1 { font-size: 2.5em; margin:0; text-shadow: 0 0 5px #FFF} 
+h1 span {display: block;font-size: 0.5em; text-shadow: 0 0 0 0;}
+h2 { font-size: 1.5em; } 
+h3 { font-size: 1.25em; } 
+h4 { font-size: 1em; } 
+a { 
+    text-decoration: underline;
+    font-weight: bold; 
+} 
+a:link { color: #D95B43} 
+a:visited { color: #339; } 
+a:hover, a:focus, a:active { color: #C02942; } /*542437*/
+
+#header {padding: 1em 1em 0; background: #D95B43;position:relative;}
+#header ul {/*padding:0;margin-bottom:0;*/
+    position: absolute;
+    top: 20px; right: 10px;
+}
+#header ul li a, .nav a{ 
+    /*text-align: center;*/
+    -webkit-border-radius: 8px 8px 8px 8px;
+    -moz-border-radius: 8px 8px 8px 8px;
+    border-radius: 8px 8px 8px 8px;
+    border: 2px solid #ECD078;
+    text-shadow: 0 0 6px #777777;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#542437), to(#D95B43));
+    background: -webkit-linear-gradient(#542437, #D95B43);
+    background: -moz-linear-gradient(center top , #542437, #D95B43);
+    background: linear-gradient(center top , #542437, #D95B43);
+    /*background: #542437;*/
+    padding: 5px 20px;
+    color: #ECD078;
+    font-size: 1.2em;
+    letter-spacing: -0.3px;
+    /*line-height: 35px;*/
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-bottom:0;
+    -webkit-transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    transform: rotate(5deg);
+}
+#header li + li a {
+    margin: 0 0 0 -20px;
+}
+#sep {
+    height:10px; 
+    margin:0;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#D95B43), to(#542437));
+    background: -webkit-linear-gradient(#D95B43, #542437);
+    background: -moz-linear-gradient(center top , #D95B43, #542437);
+    background: linear-gradient(center top , #D95B43, #542437);
+}
+#header li {display:inline}
+#header li a:hover, #header li a:focus, #header li a:active {color:#542437; background: #D95B43;       -moz-transform: rotate(0deg);}
+.nav a {float:left;}
+.nav a~a {float:right;}
+.entry-date{
+    clear:both;
+    float:left;
+    text-align:center;
+    width:60px;
+    margin-right: 20px;
+    border: 2px solid #000;
+}
+.entry-content{clear:both;}
+.entry  {clear:both;padding-top:20px;}
+.day{display:block;font-weight:bold;font-size:1.4em;background-color: #D95B43}
+.month{display:block;font-weight:normal;font-size:0.8em;background-color: #D95B43}
+.year{display:block; font-size:0.8em;background-color: #C02942}
+/*h2 { font-family: 'courier new',courier,monospace }*/
+#container {
+    width:950px; 
+    margin:0 auto;     
+    background: none repeat scroll 0 0 #542437;
+} 
+#wrap {overflow:hidden; margin:10px;} 
+#content {float: left; width: 680px;} 
+#sidebar {float: right; width: 200px;}
+#content, #sidebar { padding: 10px; background-color: #ECD078; -moz-border-radius: 10px; }
+div#footer  {
+    text-align: center;
+    background: #542437;
+} 
+div#sidebar ul, div#sidebar ul li {
+    margin: 0;
+    padding: 0;
+}
+ul li, div#sidebar ul li {
+    list-style: square inside /*none*/;
+}
+blockquote, pre {
+    background: url("img/blockquote.gif") no-repeat scroll 3px 3px #F4F5F7;
+    border: 1px dashed #CCCCCC;
+    margin: 5px 0;
+    padding: 8px 12px 8px 36px;
+}
+.bloc {
+    border-bottom: 1px solid #CCCCCC;
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+    overflow:auto;
+}
+.hd .first { width: 50% }
+.first { width: 30%; float:left; }
+.cc { margin-left:30%; }
+.job h4 {
+    position: absolute;
+    right: 0;
+    top: 0.35em;
+}
+.job {
+    border-bottom: 1px solid #CCCCCC;
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    position: relative;
+}
+

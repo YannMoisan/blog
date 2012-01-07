@@ -1,0 +1,32 @@
+<div class="entry">
+    <div class="entry-date">
+        <span class="day">15</span>
+        <span class="month">mar.</span>
+        <span class="year">2011</span>
+    </div>
+    <h2 class="entry-title">HSQLDB et syntaxe Oracle</h2>
+    <div class="entry-content">
+        <h3>La problématique</h3>
+        <p>
+        Nous utilisons Oracle en production et HSQLDB pour les tests unitaires. Ces deux produits n'utilisent pas toujours la même syntaxe SQL.
+        A titre d'exemple, voici la syntaxe pour récuperer la prochaine valeur d'une séquence.
+        <br/>Avec HSQL :</p>
+<pre>SELECT [...] NEXT VALUE FOR &lt;sequencename&gt; [...] FROM &lt;tablename&gt;;</pre>
+        <p>Avec Oracle :</p>
+<pre>SELECT &lt;sequencename&gt;.NEXTVAL FROM dual;</pre>
+
+        <h3>La nouvelle fonctionnalité de HSQLDB 2.0</h3>
+        <p>
+        HSQLDB offre depuis la version 2.0 le support partiel de la syntaxe Oracle, en ajoutant simplement la propriété <code>sql.syntax_ora=true</code> sur l'URL de connexion.
+        Cela permet d'utiliser les mêmes requêtes SQL pour les tests unitaires et la production. Les premiers tests sont concluants...
+        </p>
+        <h3>Un bug ...</h3>
+        <p>Malheureusement, notre cas d'utilisation ne fonctionne pas : utilisation d'une séquence dans la requête d'insertion.
+        Après une vaine recherche sur le forum du projet, je décide de poster <a href="http://sourceforge.net/projects/hsqldb/forums/forum/73674/topic/4400421">un message</a> (ce qui passe par la création d'un compte SourceForge).
+        Et un peu moins de 3 heures plus tard, le bug est fixé. La correction sera disponible dans la version snapshot du lendemain.
+        Un grand bravo à Fred Toussi pour sa réactivité.
+        </p>        
+        <h3>Conclusion</h3>
+        <p>Cela montre bien la force de l'open source, notamment pour les projets ayant une communauté très active.</p>
+    </div>
+</div>
