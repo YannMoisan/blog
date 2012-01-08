@@ -22,7 +22,7 @@ public final class FileUtils {
     /**
      * Crée une nouvelle archive compressée au format tar gz.
      *
-     * <p>Vérifie préalablement que chaque fichier à archiver peut être lu. Si tel n'est pas le cas, une exception
+     * Vérifie préalablement que chaque fichier à archiver peut être lu. Si tel n'est pas le cas, une exception
      * est levée et le fichier archive n'est pas créé.
      *
      * @param ins les fichiers à archiver
@@ -30,7 +30,7 @@ public final class FileUtils {
      *
      * @throws TechnicalException si au moins un fichier ne peut être lu ou dans le cas d'erreurs d'E/S
      */
-    public static void createTarGz(List<File> ins, File out) {
+    public static void createTarGz(List$lt;File$gt; ins, File out) {
         check(ins);
         TarArchiveOutputStream taos = null;
         try {
@@ -43,7 +43,7 @@ public final class FileUtils {
         }
     }
 
-    private static void check(List<File> ins) {
+    private static void check(List$lt;File$gt; ins) {
         for (File file : ins) {
             if (!file.canRead()) {
                 throw new TechnicalException("The file \"" + file.getName() + "\" cannot be read.");
@@ -51,7 +51,7 @@ public final class FileUtils {
         }
     }
 
-    private static void addFilesToArchive(List<File> ins, TarArchiveOutputStream tos) throws IOException {
+    private static void addFilesToArchive(List$lt;File$gt; ins, TarArchiveOutputStream tos) throws IOException {
         for (File in : ins) {
             addFileToArchive(in, tos);
         }
