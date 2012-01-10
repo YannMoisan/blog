@@ -12,7 +12,7 @@ dst_dir=target
 rm -r $dst_dir
 mkdir $dst_dir
 
-csplit $src_dir/template.html "/<!-- entry -->/" {*}
+csplit $src_dir/page.layout "/<!-- entry -->/" {*}
 
 other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
