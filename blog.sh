@@ -17,7 +17,7 @@ csplit $src_dir/template.html "/<!-- entry -->/" {*}
 other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
 
-entry_files=(`find $src_dir -name "entry*"|sort`)
+entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
 l=${#entry_files[@]}
 echo l:$l
@@ -56,7 +56,14 @@ for ((i=0;i<l;i++));do
     fout=${in#src/entry*-}
     out=$dst_dir/$fout 
 
-    title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $in`
+#cp src/entry_layout.html src/toto
+day=`cat $in|grep day|cut -d= -f2`
+month=`cat $in|grep month|cut -d= -f2`
+year=`cat $in|grep year|cut -d= -f2`
+title=`cat $in|grep title|cut -d= -f2`
+echo "$day/$month/$year:$title"
+
+   #title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $in`
     echo Processing entry $((i+1))/$l : in=$in out=$out title=$title
 
     echo ${entry_files[$i]} >> $dst_dir/menu.xml
@@ -91,7 +98,16 @@ for ((i=0;i<l;i++));do
 
     echo "</p>"  >> $out
 
-    cat ${entry_files[$i]} >> $out
+cat src/entry.layout >> $out
+tail -n +6 $in > $out.filtered
+sed -i "s/<!-- day -->/$day/" $out
+sed -i "s/<!-- month -->/$month/" $out
+sed -i "s/<!-- year -->/$year/" $out
+sed -i "s/<!-- title -->/$title/" $out
+sed -i "/<!-- content -->/r $out.filtered" $out
+rm $out.filtered
+
+    #cat ${entry_files[$i]} >> $out
     cat xx02 >> $out 
 
     sed -i "s/<!-- title -->/$title/" $out

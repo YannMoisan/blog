@@ -1,11 +1,8 @@
-<div class="entry">
-    <div class="entry-date">
-        <span class="day">11</span>
-        <span class="month">avr.</span>
-        <span class="year">2011</span>
-    </div>
-    <h2 class="entry-title">Creer une archive .tar.gz</h2>
-    <div class="entry-content">
+day=11
+month=avr.
+year=2011
+title=Creer une archive .tar.gz
+-----
         <p>Aujourd'hui, nous allons voir comment créer en Java une archive au format .tar.gz, à partir de plusieurs fichiers d'entrée. Ce format est en fait une archive au format tar qui est ensuite compressé avec l'utilitaire gzip.</p>
         <p>Java offre le support de la compression gzip avec le package <code>java.util.zip</code>. Par contre, Java ne fournit pas le support de l'archive tar. Nous allons donc utiliser une implémentation tierce, la plus populaire étant <a href="http://commons.apache.org/compress/">Commons Compress</a> d'Apache.</p>
         <p>Le code à écrire est relativement court et peu complexe. Mais il pose souvent des difficultés aux développeurs débutants. Voici les différents points d'attention :</p>
@@ -98,5 +95,3 @@ public final class FileUtils {
         }
     }
 </pre>
-    </div>
-</div>

@@ -1,11 +1,8 @@
-<div class="entry">
-    <div class="entry-date">
-        <span class="day">02</span>
-        <span class="month">mar.</span>
-        <span class="year">2011</span>
-    </div>
-    <h2 class="entry-title">Récupérer un type énuméré à partir d'un code</h2>
-    <div class="entry-content">
+day=02
+month=mar.
+year=2011
+title=Récupérer un type énuméré à partir d'un code
+-----
         <h3>La problématique</h3>
         <p>Le but de ce billet est d'implémenter un besoin très classique : Plusieurs types avec un ensemble de valeurs finies, accessibles à partir d'un code. Cela permet de représenter des statuts, des états, ...</p> 
         <h3>La solution</h3>
@@ -87,9 +84,3 @@ public enum ExampleReference implements Reference {
         <p>Le lecteur remarquera au passage l'incroyable complexité des génériques, en particulier cette syntaxe indigeste : <code>&lt;T extends Enum&lt;T&gt; &amp; Reference&gt;</code></p>
 
         <p>N'hésitez pas à me contacter si vous avez des suggestions d'améliorations.</p>
-
-
-
-
-    </div>
-</div>

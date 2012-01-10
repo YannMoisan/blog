@@ -1,11 +1,8 @@
-<div class="entry">
-    <div class="entry-date">
-        <span class="day">21</span>
-        <span class="month">mar.</span>
-        <span class="year">2011</span>
-    </div>
-    <h2 class="entry-title">Importer et classer automatiquement ses photos numériques</h2>
-    <div class="entry-content">
+day=21
+month=mar.
+year=2011
+title=Importer et classer automatiquement ses photos numériques
+-----
         <h2>Pourquoi automatiser ?</h2>
         <p>Le transfert des photos entre un appareil numérique et un ordinateur et le classement induit sont des tâches répétitives.
         Et les données EXIF présentes dans les images permettent de réaliser le classement automatiquement.
@@ -57,5 +54,3 @@ then
 fi
 exiftool -ext JPG -ext AVI "-Directory&lt;DateTimeOriginal" -d "%Y-%m-%d" .
         </pre>
-    </div>
-</div>
