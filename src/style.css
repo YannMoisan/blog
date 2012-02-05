@@ -33,12 +33,12 @@ a:link { color: #D95B43}
 a:visited { color: #339; } 
 a:hover, a:focus, a:active { color: #C02942; } /*542437*/
 
-#header {padding: 1em 1em 0; background: #D95B43;position:relative;}
-#header ul {/*padding:0;margin-bottom:0;*/
+header {padding: 1em 1em 0; background: #D95B43;position:relative;}
+header ul {/*padding:0;margin-bottom:0;*/
     position: absolute;
     top: 20px; right: 10px;
 }
-#header ul li a, .nav a{ 
+header ul li a, .nav a{ 
     /*text-align: center;*/
     -webkit-border-radius: 8px 8px 8px 8px;
     -moz-border-radius: 8px 8px 8px 8px;
@@ -62,7 +62,7 @@ a:hover, a:focus, a:active { color: #C02942; } /*542437*/
     -moz-transform: rotate(5deg);
     transform: rotate(5deg);
 }
-#header li + li a {
+header li + li a {
     margin: 0 0 0 -20px;
 }
 #sep {
@@ -73,8 +73,8 @@ a:hover, a:focus, a:active { color: #C02942; } /*542437*/
     background: -moz-linear-gradient(center top , #D95B43, #542437);
     background: linear-gradient(center top , #D95B43, #542437);
 }
-#header li {display:inline}
-#header li a:hover, #header li a:focus, #header li a:active {color:#542437; background: #D95B43;       -moz-transform: rotate(0deg);}
+header li {display:inline}
+header li a:hover, header li a:focus, header li a:active {color:#542437; background: #D95B43;       -moz-transform: rotate(0deg);}
 .nav a {float:left;}
 .nav a~a {float:right;}
 .entry-date{
@@ -86,7 +86,7 @@ a:hover, a:focus, a:active { color: #C02942; } /*542437*/
     border: 2px solid #000;
 }
 .entry-content{clear:both;}
-.entry  {clear:both;padding-top:20px;}
+article  {clear:both;padding-top:20px;}
 .day{display:block;font-weight:bold;font-size:1.4em;background-color: #D95B43}
 .month{display:block;font-weight:normal;font-size:0.8em;background-color: #D95B43}
 .year{display:block; font-size:0.8em;background-color: #C02942}
@@ -98,17 +98,17 @@ a:hover, a:focus, a:active { color: #C02942; } /*542437*/
 } 
 #wrap {overflow:hidden; margin:10px;} 
 #content {float: left; width: 680px;} 
-#sidebar {float: right; width: 200px;}
-#content, #sidebar { padding: 10px; background-color: #ECD078; -moz-border-radius: 10px; }
-div#footer  {
+aside {float: right; width: 200px;}
+#content, aside { padding: 10px; background-color: #ECD078; -moz-border-radius: 10px; }
+footer  {
     text-align: center;
     background: #542437;
 } 
-div#sidebar ul, div#sidebar ul li {
+div aside ul, div aside ul li {
     margin: 0;
     padding: 0;
 }
-ul li, div#sidebar ul li {
+ul li, div aside ul li {
     list-style: square inside /*none*/;
 }
 blockquote, pre {
