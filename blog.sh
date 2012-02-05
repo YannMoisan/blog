@@ -123,6 +123,8 @@ for file in "${other_files[@]}";do
 
     sed -i "s/<!-- title -->/$title/" $dst_file
 done
+cp $src_dir/prettify.css $dst_dir/prettify.css
+cp $src_dir/prettify.js $dst_dir/prettify.js
 cp $src_dir/style.css $dst_dir/style.css
 cp $src_dir/favicon.ico $dst_dir/favicon.ico
 cp $src_dir/belt3_L.gif $dst_dir/belt3_L.gif
