@@ -38,6 +38,19 @@ a:hover, a:focus, a:active { color: #C02942; } /*542437*/
     width: 100px;
 }
 
+code {
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E8;
+    color: #DD1144;
+    padding: 3px 4px;
+}
+code, pre {
+    border-radius: 3px 3px 3px 3px;
+    color: #333333;
+    font-family: Menlo,Monaco,"Courier New",monospace;
+    font-size: 12px;
+    padding: 0 3px 2px;
+}
 header {padding: 1em 1em 0; background: #D95B43;position:relative;}
 header ul {/*padding:0;margin-bottom:0;*/
     position: absolute;
@@ -69,6 +82,26 @@ header ul li a, .pager a{
 }
 ul li, div aside ul li {
     list-style: square inside /*none*/;
+}
+.pager {
+    list-style: none outside none;
+    margin-bottom: 18px;
+    margin-left: 0;
+    text-align: center;
+}
+.pager li {
+    display: inline;
+}
+.pager a {
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 15px 15px 15px 15px;
+    display: inline-block;
+    padding: 5px 14px;
+}
+.pager a:hover {
+    background-color: #F5F5F5;
+    text-decoration: none;
 }
 .pager li{
     list-style: none outside none;

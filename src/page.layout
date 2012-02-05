@@ -5,7 +5,7 @@
         <title><!-- title -->|Yann Moisan</title>
         <link href="prettify.css" type="text/css" rel="stylesheet" />
         <script type="text/javascript" src="prettify.js"></script>  
-        <link media="all" href="style.css" type="text/css" rel="stylesheet" />
+        <link media="all" href="bootstrap.css" type="text/css" rel="stylesheet" />
         
         <link rel="shortcut icon" href="http://www.yannmoisan.com/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="http://www.yannmoisan.com/favicon.ico" />
@@ -27,22 +27,23 @@
 </script>
      </head>
      <body onLoad="prettyPrint()">
-         <div id="container">
-             <header>
-             <h1>Yann Moisan
-                     <span>Sur Java, les technos Web et autres ...</span></h1>
-                 <nav>
-                 <ul>
+         <div class="container">
+             <header class="jumbotron subhead" id="overview">
+  <h1>Yann Moisan</h1>
+  <p class="lead">Sur Java, les technos Web et autres...</p>
+  <div class="subnav">
+    <ul class="nav nav-pills">
                      <li><a href="index.html">Accueil</a></li>
                      <li><a href="a-propos.html">A propos</a></li>
                      <li><a href="cv.html">CV</a></li>
-                 </ul>
-                 </nav>
-             </header>
+    </ul>
 
-             <div id="sep"></div>
-             <div id="wrap">
-                 <div id="content">
+  </div>
+  </header>
+
+  <!--             <div id="sep"></div> -->
+             <div class="row">
+                 <div class="span8">
                      <!-- nav -->
                      <!-- entry -->
                      <div class="nav">
@@ -77,6 +78,7 @@
 
 
                      </div>
+                         <div class="span4">
                          <aside>    
                          <h2>Contact</h2>
                          <p>yamo93[AT]gmail[DOT]com</p>
@@ -105,12 +107,13 @@
                          </ul>
 
                          </aside>    
+                     </div>
                  </div>
                  <footer>
                      <span id="copyright">&copy; 2011 Yann Moisan</span>
                      <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>
                  </footer>
-             </div>
-         </body>
+         </div>
+     </body>
      </html>
 
