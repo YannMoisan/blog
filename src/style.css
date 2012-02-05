@@ -43,7 +43,7 @@ header ul {/*padding:0;margin-bottom:0;*/
     position: absolute;
     top: 20px; right: 10px;
 }
-header ul li a, .nav a{ 
+header ul li a, .pager a{ 
     /*text-align: center;*/
     -webkit-border-radius: 8px 8px 8px 8px;
     -moz-border-radius: 8px 8px 8px 8px;
@@ -66,6 +66,21 @@ header ul li a, .nav a{
     -webkit-transform: rotate(5deg);
     -moz-transform: rotate(5deg);
     transform: rotate(5deg);
+}
+ul li, div aside ul li {
+    list-style: square inside /*none*/;
+}
+.pager li{
+    list-style: none outside none;
+    margin-bottom: 18px;
+    margin-left: 0;
+    text-align: center;
+}
+.pager .next a {
+    float: right;
+}
+.pager .previous a {
+    float: left;
 }
 header li + li a {
     margin: 0 0 0 -20px;
@@ -112,9 +127,6 @@ footer  {
 div aside ul, div aside ul li {
     margin: 0;
     padding: 0;
-}
-ul li, div aside ul li {
-    list-style: square inside /*none*/;
 }
 blockquote, pre {
     background: url("img/blockquote.gif") no-repeat scroll 3px 3px #F4F5F7;

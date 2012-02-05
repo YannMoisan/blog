@@ -71,24 +71,23 @@ echo "$day/$month/$year:$title"
     sed -i "2i<li><span id=\"time\">$day/$month/$year</span><a href=\"$fout\">$title</a></li>"  $src_dir/index.html
 
 
-    echo "<p class=\"nav\">"  >> $out
+    echo "<ul class=\"pager\">"  >> $out
     if [ $i -eq 0 ];then
         prev="first"
     else
         prev=${entry_files[$i-1]#src/entry*-}
-        echo "<a href=\"$prev\">Billet précédent</a>" >> $out
-        echo "<span>-</span>"  >> $out
+        echo "<li class=\"previous\"><a href=\"$prev\">Billet précédent</a></li>" >> $out
     fi
 
     if [ $i -eq $((l-1)) ];then
         next="last"
     else
         next=${entry_files[$i+1]#src/entry*-}
-        echo "<a href=\"$next\">Billet suivant</a>" >> $out
+        echo "<li class=\"next\"><a href=\"$next\">Billet suivant</a></li>" >> $out
     fi
 
 
-    echo "</p>"  >> $out
+    echo "</ul>"  >> $out
 
 cat src/entry.layout >> $out
 tail -n +6 $in > $out.filtered
