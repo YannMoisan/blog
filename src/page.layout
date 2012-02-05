@@ -28,7 +28,8 @@
      </head>
      <body onLoad="prettyPrint()">
          <div class="container">
-             <header class="jumbotron subhead" id="overview">
+             <!-- <header class="jumbotron subhead" id="overview">-->
+             <div class="hero-unit">
   <h1>Yann Moisan</h1>
   <p class="lead">Sur Java, les technos Web et autres...</p>
   <div class="subnav">
@@ -39,7 +40,7 @@
     </ul>
 
   </div>
-  </header>
+  </div>
 
   <!--             <div id="sep"></div> -->
              <div class="row">
@@ -82,35 +83,32 @@
                          <aside>    
                          <h2>Contact</h2>
                          <p>yamo93[AT]gmail[DOT]com</p>
-                         <h2>Belt</h2>
-                         <a href="http://www.blackbeltfactory.com/UserView.wwa?userId=13810326"><img src="belt3_L.gif" alt="Green Belt"></a> 
-                         <h2>Liens externes</h2>
-                         <h3>Blog perso</h3>
-                         <ul>
+    <ul class="nav nav-list">
+    <li class="nav-header">Mes activités</li>
+    <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
+    <li><a href="https://github.com/YannMoisan">GitHub</a></li>
+    <li><a href="http://knowledgeblackbelt.com/UserView.wwa?userId=13810326#!User/yamo93/forcePublicView=true">Blackbelt</a></li>
+    <li class="nav-header">Liens externes - Blog perso</li>
                              <li><a href="http://www.standblog.org">Standblog</a></li>  
                              <li><a href="http://www.touilleur-express.fr/">Le touilleur express</a></li>
                              <li><a href="http://thecodersbreakfast.net/">The Coder's Breakfast</a></li>
                              <li><a href="http://blog.javabien.net/">Java Bien!</a></li>
-                         </ul>
-                         <h3>Blog entreprise</h3>
-                         <ul>
+                             <li class="nav-header">Liens externes - Blog entreprise</li> 
                              <li><a href="http://blog.xebia.fr/">Xebia</a></li>
                              <li><a href="http://blog.octo.com/">Octo</a></li>
                              <li><a href="http://blog.zenika.com/">Zenika</a></li>
                              <li><a href="http://blog.ippon.fr/">Ippon</a></li>
-                         </ul>
-                         <h3>Design Web</h3>
-                         <ul>
+                             <li class="nav-header">Liens externes - Design Web</li> 
                              <li><a href="http://openweb.eu.org/">Openweb</a></li>
                              <li><a href="http://www.pompage.net/">Pompage</a></li>
                              <li><a href="http://www.alsacreations.com/">Alsa creations</a></li>
-                         </ul>
-
+    </ul>
                          </aside>    
                      </div>
                  </div>
+                 <hr>
                  <footer>
-                     <span id="copyright">&copy; 2011 Yann Moisan</span>
+                     <span id="copyright">&copy; 2012 Yann Moisan</span>
                      <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>
                  </footer>
          </div>
