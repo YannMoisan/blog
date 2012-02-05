@@ -33,6 +33,11 @@ a:link { color: #D95B43}
 a:visited { color: #339; } 
 a:hover, a:focus, a:active { color: #C02942; } /*542437*/
 
+#time {
+    float: left;
+    width: 100px;
+}
+
 #header {padding: 1em 1em 0; background: #D95B43;position:relative;}
 #header ul {/*padding:0;margin-bottom:0;*/
     position: absolute;

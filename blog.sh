@@ -17,25 +17,13 @@ csplit $src_dir/page.layout "/<!-- entry -->/" {*}
 other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
 
+    echo "<ul>"  > $src_dir/index.html
+    echo "</ul>"  >> $src_dir/index.html
 entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
 l=${#entry_files[@]}
 echo l:$l
 
-# TODO:Creer une méthode qui prend un tableau de fichiers et un mode : isEntry
-for file in "${other_files[@]}";do
-    echo Processing:$file
-
-    title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $file`
-    echo ${file} >> $dst_dir/menu.xml
-    dst_file=$dst_dir/${file#src/}
-    cat xx00 > $dst_file
-
-    cat ${file} >> $dst_file
-    cat xx02 >> $dst_file
-
-    sed -i "s/<!-- title -->/$title/" $dst_file
-done
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" > $dst_dir/rss.xml
 echo "<rss version=\"2.0\">" >> $dst_dir/rss.xml
@@ -50,7 +38,8 @@ echo "<url><loc>http://www.yannmoisan.com/index.html</loc></url>"  >> $dst_dir/s
 echo "<url><loc>http://www.yannmoisan.com/a-propos.html</loc></url>"  >> $dst_dir/sitemap.xml
 echo "<url><loc>http://www.yannmoisan.com/cv.html</loc></url>"  >> $dst_dir/sitemap.xml
 
-for ((i=0;i<l;i++));do
+
+    for ((i=0;i<l;i++));do
     in=${entry_files[$i]}
     # Pourquoi ./ avec la commande find
     fout=${in#src/entry*-}
@@ -77,6 +66,9 @@ echo "$day/$month/$year:$title"
     echo "</item>"  >> $dst_dir/rss.xml
 
     echo "<url><loc>http://www.yannmoisan.com/$fout</loc></url>"  >> $dst_dir/sitemap.xml
+
+    #echo "<li><span id=\"time\">$day/$month/$year</span><a href=\"$fout\">$title</a></li>"  >> $src_dir/index.html
+    sed -i "2i<li><span id=\"time\">$day/$month/$year</span><a href=\"$fout\">$title</a></li>"  $src_dir/index.html
 
 
     echo "<p class=\"nav\">"  >> $out
@@ -118,7 +110,20 @@ echo "</rss>" >> $dst_dir/rss.xml
 
 echo "</urlset>"  >> $dst_dir/sitemap.xml
 
+# TODO:Creer une méthode qui prend un tableau de fichiers et un mode : isEntry
+for file in "${other_files[@]}";do
+    echo Processing:$file
+
+    title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $file`
+    echo ${file} >> $dst_dir/menu.xml
+    dst_file=$dst_dir/${file#src/}
+    cat xx00 > $dst_file
+
+    cat ${file} >> $dst_file
+    cat xx02 >> $dst_file
+
+    sed -i "s/<!-- title -->/$title/" $dst_file
+done
 cp $src_dir/style.css $dst_dir/style.css
 cp $src_dir/favicon.ico $dst_dir/favicon.ico
 cp $src_dir/belt3_L.gif $dst_dir/belt3_L.gif
-cp $out $dst_dir/index.html
