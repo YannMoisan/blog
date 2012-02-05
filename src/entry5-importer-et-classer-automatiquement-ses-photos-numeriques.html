@@ -3,32 +3,35 @@ month=mar.
 year=2011
 title=Importer et classer automatiquement ses photos numériques
 -----
-        <h2>Pourquoi automatiser ?</h2>
-        <p>Le transfert des photos entre un appareil numérique et un ordinateur et le classement induit sont des tâches répétitives.
-        Et les données EXIF présentes dans les images permettent de réaliser le classement automatiquement.
-        Utilisant Ubuntu, un système d'exploitation convivial, il est tout naturel d'automatiser ce processus grâce à un script shell.
-        </p>
+<h2>Pourquoi automatiser ?</h2>
+<p>Le transfert des photos entre un appareil numérique et un ordinateur et le classement induit sont des tâches répétitives.
+Et les données EXIF présentes dans les images permettent de réaliser le classement automatiquement.
+Utilisant Ubuntu, un système d'exploitation convivial, il est tout naturel d'automatiser ce processus grâce à un script shell.
+</p>
 
-        <p>Je classe mes photos ainsi : un premier niveau de répertoire par année, et un second niveau par jour. Je ne change pas le nom du fichier créé par l'appareil : IMGxxxx.jpg. Ce classement respecte l'ordre chronologique et il serait fastidieux de nommer chaque photo en fonction de son contenu.
-        </p><ul>
-        <li>2001
-        <ul>
-            <li>2001-01-01 Description 1</li>
-            <li>2001-02-01 Description 2</li>
-        </ul></li>
-        <li>2002
-        <ul>
-            <li>2002-01-01 Description 3</li>
-        </ul></li>
+<p>Je classe mes photos ainsi : un premier niveau de répertoire par année, et un second niveau par jour. Je ne change pas le nom du fichier créé par l'appareil : IMGxxxx.jpg. Ce classement respecte l'ordre chronologique et il serait fastidieux de nommer chaque photo en fonction de son contenu.
+</p>
+<ul>
+  <li>2001
+    <ul>
+      <li>2001-01-01 Description 1</li>
+      <li>2001-02-01 Description 2</li>
     </ul>
-    <h2>Comment automatiser ?</h2>
-    <p>Je suis sous Ubuntu 10.10, mon appareil photo est un Canon IXUS xxx.
-    Il est donc detecté automatiquement lors que je le connecte à l'ordinateur par USB.
-    Précision importante : à l'ouverture de la pop-up, cliquer sur Démonter.
-    </p>
-    <p>Le script utilise les deux programmes suivants : <strong>gphoto</strong> et <strong>exiftool</strong>.
-    Voici le code source du script</p>
-    <pre>
+  </li>
+  <li>2002
+    <ul>
+      <li>2002-01-01 Description 3</li>
+    </ul>
+  </li>
+</ul>
+<h2>Comment automatiser ?</h2>
+<p>Je suis sous Ubuntu 10.10, mon appareil photo est un Canon IXUS xxx.
+Il est donc detecté automatiquement lors que je le connecte à l'ordinateur par USB.
+Précision importante : à l'ouverture de la pop-up, cliquer sur Démonter.
+</p>
+<p>Le script utilise les deux programmes suivants : <strong>gphoto</strong> et <strong>exiftool</strong>.
+Voici le code source du script</p>
+<pre class="prettyprint">
 #! /bin/sh
 # Importe et classe les fichiers (images et videos) de l'appareil photo.
 # Ne supprime pas les photos originales de l'appareil.
@@ -53,4 +56,4 @@ then
     exit 1
 fi
 exiftool -ext JPG -ext AVI "-Directory&lt;DateTimeOriginal" -d "%Y-%m-%d" .
-        </pre>
+</pre>
