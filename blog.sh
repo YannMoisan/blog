@@ -46,10 +46,10 @@ echo "<url><loc>http://www.yannmoisan.com/cv.html</loc></url>"  >> $dst_dir/site
     out=$dst_dir/$fout 
 
 #cp src/entry_layout.html src/toto
-day=`cat $in|grep day|cut -d= -f2`
-month=`cat $in|grep month|cut -d= -f2`
-year=`cat $in|grep year|cut -d= -f2`
-title=`cat $in|grep title|cut -d= -f2`
+day=`cat $in|grep '\$day'|cut -d= -f2`
+month=`cat $in|grep '\$month'|cut -d= -f2`
+year=`cat $in|grep '\$year'|cut -d= -f2`
+title=`cat $in|grep '\$title'|cut -d= -f2`
 echo "$day/$month/$year:$title"
 
    #title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $in`
