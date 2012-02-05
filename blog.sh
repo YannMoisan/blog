@@ -17,7 +17,8 @@ csplit $src_dir/page.layout "/<!-- entry -->/" {*}
 other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
 
-    echo "<ul>"  > $src_dir/index.html
+    echo "<h1>Billets</h1>"  > $src_dir/index.html
+    echo "<ul>"  >> $src_dir/index.html
     echo "</ul>"  >> $src_dir/index.html
 entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
