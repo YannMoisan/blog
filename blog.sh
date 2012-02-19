@@ -1,5 +1,5 @@
 #! /bin/bash
-# Convention pour le nom de fichier d'un billet : entrynnn-titre-de-la-page
+# Convention pour le nom de fichier d'un billet : entry-yyyymmdd-titre-de-la-page
 # L'ordre des posts est déduit de l'ordre des fichiers
 # Mettre un lien vers BlackBelt
 # Formatage auto de la CSS avec VIM
@@ -17,21 +17,13 @@ csplit $src_dir/page.layout "/<!-- entry -->/" {*}
 other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
 
-    echo "<h1>Billets</h1>"  > $src_dir/index.html
-    echo "<ul class=\"unstyled\">"  >> $src_dir/index.html
-    echo "</ul>"  >> $src_dir/index.html
+echo "<h1>Billets</h1>"  > $src_dir/index.html
+echo "<ul class=\"unstyled\">"  >> $src_dir/index.html
+echo "</ul>"  >> $src_dir/index.html
 entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
 l=${#entry_files[@]}
 echo l:$l
-
-
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" > $dst_dir/rss.xml
-echo "<rss version=\"2.0\">" >> $dst_dir/rss.xml
-echo "<channel>" >> $dst_dir/rss.xml 
-echo "<title>Yann Moisan</title>" >> $dst_dir/rss.xml
-echo "<description>Yann Moisan RSS feed</description>" >> $dst_dir/rss.xml
-echo "<link>http://www.yannmoisan.com</link>" >> $dst_dir/rss.xml
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $dst_dir/sitemap.xml
 echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" >> $dst_dir/sitemap.xml
@@ -39,39 +31,37 @@ echo "<url><loc>http://www.yannmoisan.com/index.html</loc></url>"  >> $dst_dir/s
 echo "<url><loc>http://www.yannmoisan.com/a-propos.html</loc></url>"  >> $dst_dir/sitemap.xml
 echo "<url><loc>http://www.yannmoisan.com/cv.html</loc></url>"  >> $dst_dir/sitemap.xml
 
-
-    for ((i=0;i<l;i++));do
+for ((i=0;i<l;i++));do
     in=${entry_files[$i]}
     # Pourquoi ./ avec la commande find
     fout=${in#src/entry*-*-}
     out=$dst_dir/$fout 
 
-#cp src/entry_layout.html src/toto
-echo in=$in
-bin=$(basename $in)
-echo bin=$bin
-#day=`cat $in|grep '\$day'|cut -d= -f2`
-#month=`cat $in|grep '\$month'|cut -d= -f2`
-#year=`cat $in|grep '\$year'|cut -d= -f2`
-day=${bin:12:2}
-month=${bin:10:2}
-year=${bin:6:4}
-echo date=$day/$month/$year
-title=`cat $in|grep '\$title'|cut -d= -f2`
-echo "$day/$month/$year:$title"
+    #cp src/entry_layout.html src/toto
+    bin=$(basename $in)
+    
+    day=${bin:12:2}
+    month=${bin:10:2}
+    year=${bin:6:4}
+    title=`cat $in|grep '\$title'|cut -d= -f2`
+    echo "$day/$month/$year:$title"
 
-   #title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $in`
+    #title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $in`
     echo Processing entry $((i+1))/$l : in=$in out=$out title=$title
 
     echo ${entry_files[$i]} >> $dst_dir/menu.xml
     cat xx00 > $out
 
-    echo "<item>"  >> $dst_dir/rss.xml
-    echo "<title>$title</title>"  >> $dst_dir/rss.xml
-    echo "<description>$title</description>"  >> $dst_dir/rss.xml
-    echo "<link>http://www.yannmoisan.com/$fout</link>"  >> $dst_dir/rss.xml
-    echo "<guid>http://www.yannmoisan.com/$fout</guid>"  >> $dst_dir/rss.xml
-    echo "</item>"  >> $dst_dir/rss.xml
+    cat $src_dir/item.layout >> $dst_dir/rss.tmp
+    sed -i "s/\$title/$title/" $dst_dir/rss.tmp
+    sed -i "s/\$fout/$fout/" $dst_dir/rss.tmp
+
+#    echo "<item>"  >> $dst_dir/rss.tmp
+#    echo "<title>$title</title>"  >> $dst_dir/rss.tmp
+#    echo "<description>$title</description>"  >> $dst_dir/rss.tmp
+#    echo "<link>http://www.yannmoisan.com/$fout</link>"  >> $dst_dir/rss.tmp
+#    echo "<guid>http://www.yannmoisan.com/$fout</guid>"  >> $dst_dir/rss.tmp
+#    echo "</item>"  >> $dst_dir/rss.tmp
 
     echo "<url><loc>http://www.yannmoisan.com/$fout</loc></url>"  >> $dst_dir/sitemap.xml
 
@@ -97,14 +87,14 @@ echo "$day/$month/$year:$title"
 
     echo "</ul>"  >> $out
 
-cat src/entry.layout >> $out
-tail -n +3 $in > $out.filtered
-sed -i "s/<!-- day -->/$day/" $out
-sed -i "s/<!-- month -->/$month/" $out
-sed -i "s/<!-- year -->/$year/" $out
-sed -i "s/<!-- title -->/$title/" $out
-sed -i "/<!-- content -->/r $out.filtered" $out
-rm $out.filtered
+    cat src/entry.layout >> $out
+    tail -n +3 $in > $out.filtered
+    sed -i "s/<!-- day -->/$day/" $out
+    sed -i "s/<!-- month -->/$month/" $out
+    sed -i "s/<!-- year -->/$year/" $out
+    sed -i "s/<!-- title -->/$title/" $out
+    sed -i "/<!-- content -->/r $out.filtered" $out
+    rm $out.filtered
 
     #cat ${entry_files[$i]} >> $out
     cat xx02 >> $out 
@@ -112,8 +102,7 @@ rm $out.filtered
     sed -i "s/<!-- title -->/$title/" $out
 done
 
-echo "</channel>" >> $dst_dir/rss.xml
-echo "</rss>" >> $dst_dir/rss.xml
+sed "/<!-- content -->/r $dst_dir/rss.tmp" src/rss.layout > $dst_dir/rss.xml
 
 echo "</urlset>"  >> $dst_dir/sitemap.xml
 
