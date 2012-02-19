@@ -43,13 +43,20 @@ echo "<url><loc>http://www.yannmoisan.com/cv.html</loc></url>"  >> $dst_dir/site
     for ((i=0;i<l;i++));do
     in=${entry_files[$i]}
     # Pourquoi ./ avec la commande find
-    fout=${in#src/entry*-}
+    fout=${in#src/entry*-*-}
     out=$dst_dir/$fout 
 
 #cp src/entry_layout.html src/toto
-day=`cat $in|grep '\$day'|cut -d= -f2`
-month=`cat $in|grep '\$month'|cut -d= -f2`
-year=`cat $in|grep '\$year'|cut -d= -f2`
+echo in=$in
+bin=$(basename $in)
+echo bin=$bin
+#day=`cat $in|grep '\$day'|cut -d= -f2`
+#month=`cat $in|grep '\$month'|cut -d= -f2`
+#year=`cat $in|grep '\$year'|cut -d= -f2`
+day=${bin:12:2}
+month=${bin:10:2}
+year=${bin:6:4}
+echo date=$day/$month/$year
 title=`cat $in|grep '\$title'|cut -d= -f2`
 echo "$day/$month/$year:$title"
 
@@ -76,14 +83,14 @@ echo "$day/$month/$year:$title"
     if [ $i -eq 0 ];then
         prev="first"
     else
-        prev=${entry_files[$i-1]#src/entry*-}
+        prev=${entry_files[$i-1]#src/entry*-*-}
         echo "<li class=\"previous\"><a href=\"$prev\">Billet précédent</a></li>" >> $out
     fi
 
     if [ $i -eq $((l-1)) ];then
         next="last"
     else
-        next=${entry_files[$i+1]#src/entry*-}
+        next=${entry_files[$i+1]#src/entry*-*-}
         echo "<li class=\"next\"><a href=\"$next\">Billet suivant</a></li>" >> $out
     fi
 
@@ -91,7 +98,7 @@ echo "$day/$month/$year:$title"
     echo "</ul>"  >> $out
 
 cat src/entry.layout >> $out
-tail -n +6 $in > $out.filtered
+tail -n +3 $in > $out.filtered
 sed -i "s/<!-- day -->/$day/" $out
 sed -i "s/<!-- month -->/$month/" $out
 sed -i "s/<!-- year -->/$year/" $out
