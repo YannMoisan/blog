@@ -18,7 +18,7 @@ other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
 
     echo "<h1>Billets</h1>"  > $src_dir/index.html
-    echo "<ul>"  >> $src_dir/index.html
+    echo "<ul class=\"unstyled\">"  >> $src_dir/index.html
     echo "</ul>"  >> $src_dir/index.html
 entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
@@ -69,7 +69,7 @@ echo "$day/$month/$year:$title"
     echo "<url><loc>http://www.yannmoisan.com/$fout</loc></url>"  >> $dst_dir/sitemap.xml
 
     #echo "<li><span id=\"time\">$day/$month/$year</span><a href=\"$fout\">$title</a></li>"  >> $src_dir/index.html
-    sed -i "2i<li><span class=\"time\">$day $month $year:</span><a href=\"$fout\">$title</a></li>"  $src_dir/index.html
+    sed -i "3i<li><span class=\"time\">$day $month $year:</span><a href=\"$fout\">$title</a></li>"  $src_dir/index.html
 
 
     echo "<ul class=\"pager\">"  >> $out
@@ -125,6 +125,7 @@ for file in "${other_files[@]}";do
     sed -i "s/<!-- title -->/$title/" $dst_file
 done
 cp $src_dir/bootstrap.css $dst_dir/bootstrap.css
+cp $src_dir/yamo.css $dst_dir/yamo.css
 cp $src_dir/prettify.css $dst_dir/prettify.css
 cp $src_dir/prettify.js $dst_dir/prettify.js
 cp $src_dir/style.css $dst_dir/style.css
