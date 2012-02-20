@@ -7,6 +7,21 @@
 src_dir=src
 dst_dir=target
 
+bp=#b
+ep=#e
+
+appendHeader() {
+    sed -n 1,/$bp/p $1 | sed \$d >> $2
+}
+
+appendContent() {
+    sed -n /$bp/,/$ep/p $1 | sed 1d | sed \$d >> $2
+}
+
+appendFooter() {
+    sed -n /$ep/,\$p $1 | sed 1d >> $2
+}
+
 #cd $blog_dir
 
 rm -r $dst_dir
@@ -17,19 +32,14 @@ csplit $src_dir/page.layout "/<!-- entry -->/" {*}
 other_files=(`find $src_dir -name "*.html"|grep -v "entry.*html"`)
 o=${#other_files[@]}
 
-echo "<h1>Billets</h1>"  > $src_dir/index.html
-echo "<ul class=\"unstyled\">"  >> $src_dir/index.html
-echo "</ul>"  >> $src_dir/index.html
 entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
 l=${#entry_files[@]}
 echo l:$l
 
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $dst_dir/sitemap.xml
-echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" >> $dst_dir/sitemap.xml
-echo "<url><loc>http://www.yannmoisan.com/index.html</loc></url>"  >> $dst_dir/sitemap.xml
-echo "<url><loc>http://www.yannmoisan.com/a-propos.html</loc></url>"  >> $dst_dir/sitemap.xml
-echo "<url><loc>http://www.yannmoisan.com/cv.html</loc></url>"  >> $dst_dir/sitemap.xml
+appendHeader $src_dir/rss.layout $dst_dir/rss.xml
+appendHeader $src_dir/sitemap.layout $dst_dir/sitemap.xml
+appendHeader $src_dir/index.layout $dst_dir/index.html
 
 for ((i=0;i<l;i++));do
     in=${entry_files[$i]}
@@ -52,22 +62,22 @@ for ((i=0;i<l;i++));do
     echo ${entry_files[$i]} >> $dst_dir/menu.xml
     cat xx00 > $out
 
-    cat $src_dir/item.layout >> $dst_dir/rss.tmp
-    sed -i "s/\$title/$title/" $dst_dir/rss.tmp
-    sed -i "s/\$fout/$fout/" $dst_dir/rss.tmp
-
-#    echo "<item>"  >> $dst_dir/rss.tmp
-#    echo "<title>$title</title>"  >> $dst_dir/rss.tmp
-#    echo "<description>$title</description>"  >> $dst_dir/rss.tmp
-#    echo "<link>http://www.yannmoisan.com/$fout</link>"  >> $dst_dir/rss.tmp
-#    echo "<guid>http://www.yannmoisan.com/$fout</guid>"  >> $dst_dir/rss.tmp
-#    echo "</item>"  >> $dst_dir/rss.tmp
-
-    echo "<url><loc>http://www.yannmoisan.com/$fout</loc></url>"  >> $dst_dir/sitemap.xml
-
-    #echo "<li><span id=\"time\">$day/$month/$year</span><a href=\"$fout\">$title</a></li>"  >> $src_dir/index.html
-    sed -i "3i<li><span class=\"time\">$day $month $year:</span><a href=\"$fout\">$title</a></li>"  $src_dir/index.html
-
+    # RSS
+    appendContent $src_dir/rss.layout $dst_dir/rss.xml
+    sed -i "s/\$title/$title/" $dst_dir/rss.xml
+    sed -i "s/\$fout/$fout/" $dst_dir/rss.xml
+    
+    # Sitemap
+    appendContent $src_dir/sitemap.layout $dst_dir/sitemap.xml
+    sed -i "s/\$fout/$fout/" $dst_dir/sitemap.xml
+    
+    # index
+    appendContent $src_dir/index.layout $dst_dir/index.html
+    sed -i "s/\$fout/$fout/" $dst_dir/index.html
+    sed -i "s/\$day/$day/" $dst_dir/index.html
+    sed -i "s/\$month/$month/" $dst_dir/index.html
+    sed -i "s/\$year/$year/" $dst_dir/index.html
+    sed -i "s/\$title/$title/" $dst_dir/index.html
 
     echo "<ul class=\"pager\">"  >> $out
     if [ $i -eq 0 ];then
@@ -102,9 +112,9 @@ for ((i=0;i<l;i++));do
     sed -i "s/<!-- title -->/$title/" $out
 done
 
-sed "/<!-- content -->/r $dst_dir/rss.tmp" src/rss.layout > $dst_dir/rss.xml
-
-echo "</urlset>"  >> $dst_dir/sitemap.xml
+appendFooter $src_dir/rss.layout $dst_dir/rss.xml
+appendFooter $src_dir/sitemap.layout $dst_dir/sitemap.xml
+appendFooter $src_dir/index.layout $dst_dir/index.html
 
 # TODO:Creer une méthode qui prend un tableau de fichiers et un mode : isEntry
 for file in "${other_files[@]}";do

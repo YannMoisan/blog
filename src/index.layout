@@ -1,0 +1,6 @@
+<h1>Billets</h1>
+<ul class="unstyled">
+    #b
+    <li><span class="time">$day $month $year:</span><a href="$fout">$title</a></li>
+    #e
+</ul>

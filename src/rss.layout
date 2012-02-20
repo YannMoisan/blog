@@ -4,6 +4,13 @@
         <title>Yann Moisan</title>
         <description>Yann Moisan RSS feed</description>
         <link>http://www.yannmoisan.com</link>
-        <!-- content -->
+        #b
+        <item>
+            <title>$title</title>
+            <description>$title</description>
+            <link>http://www.yannmoisan.com/$fout</link>
+            <guid>http://www.yannmoisan.com/$fout</guid>
+        </item>
+        #e
     </channel>
 </rss>
