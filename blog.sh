@@ -22,8 +22,6 @@ appendFooter() {
     sed -n /$ep/,\$p $1 | sed 1d >> $2
 }
 
-#cd $blog_dir
-
 rm -r $dst_dir
 mkdir $dst_dir
 
@@ -35,7 +33,6 @@ o=${#other_files[@]}
 entry_files=(`find $src_dir -name "entry*html"|sort`)
 echo nb entry_files:${#entry_files[@]}
 l=${#entry_files[@]}
-echo l:$l
 
 appendHeader $src_dir/rss.layout $dst_dir/rss.xml
 appendHeader $src_dir/sitemap.layout $dst_dir/sitemap.xml
@@ -43,23 +40,17 @@ appendHeader $src_dir/index.layout $dst_dir/index.html
 
 for ((i=0;i<l;i++));do
     in=${entry_files[$i]}
-    # Pourquoi ./ avec la commande find
     fout=${in#src/entry*-*-}
     out=$dst_dir/$fout 
 
-    #cp src/entry_layout.html src/toto
     bin=$(basename $in)
-    
     day=${bin:12:2}
     month=${bin:10:2}
     year=${bin:6:4}
     title=`cat $in|grep '\$title'|cut -d= -f2`
-    echo "$day/$month/$year:$title"
 
-    #title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $in`
-    echo Processing entry $((i+1))/$l : in=$in out=$out title=$title
+    echo Processing entry $((i+1))/$l : in=$in
 
-    echo ${entry_files[$i]} >> $dst_dir/menu.xml
     cat xx00 > $out
 
     # RSS
@@ -80,21 +71,15 @@ for ((i=0;i<l;i++));do
     sed -i "s/\$title/$title/" $dst_dir/index.html
 
     echo "<ul class=\"pager\">"  >> $out
-    if [ $i -eq 0 ];then
-        prev="first"
-    else
+    if [ $i -ne 0 ];then
         prev=${entry_files[$i-1]#src/entry*-*-}
         echo "<li class=\"previous\"><a href=\"$prev\">Billet précédent</a></li>" >> $out
     fi
 
-    if [ $i -eq $((l-1)) ];then
-        next="last"
-    else
+    if [ $i -ne $((l-1)) ];then
         next=${entry_files[$i+1]#src/entry*-*-}
         echo "<li class=\"next\"><a href=\"$next\">Billet suivant</a></li>" >> $out
     fi
-
-
     echo "</ul>"  >> $out
 
     cat src/entry.layout >> $out
@@ -106,10 +91,7 @@ for ((i=0;i<l;i++));do
     sed -i "/<!-- content -->/r $out.filtered" $out
     rm $out.filtered
 
-    #cat ${entry_files[$i]} >> $out
     cat xx02 >> $out 
-
-    sed -i "s/<!-- title -->/$title/" $out
 done
 
 appendFooter $src_dir/rss.layout $dst_dir/rss.xml
@@ -121,7 +103,6 @@ for file in "${other_files[@]}";do
     echo Processing:$file
 
     title=`awk 'BEGIN{ RS="</h2>"}{gsub(/.*<h2 class="entry-title">/,"")}1{print $RS;exit}' $file`
-    echo ${file} >> $dst_dir/menu.xml
     dst_file=$dst_dir/${file#src/}
     cat xx00 > $dst_file
 
