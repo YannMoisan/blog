@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-      <meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
         <title><!-- title -->|Yann Moisan</title>
         <link href="prettify.css" type="text/css" rel="stylesheet" />
         <script type="text/javascript" src="prettify.js"></script>  
-        <link media="all" href="bootstrap.css" type="text/css" rel="stylesheet" />
         <link media="all" href="yamo.css" type="text/css" rel="stylesheet" />
-        
+
         <link rel="shortcut icon" href="http://www.yannmoisan.com/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="http://www.yannmoisan.com/favicon.ico" />
-        
+
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Billets" />
-        
+
         <script type="text/javascript">
 
             var _gaq = _gaq || [];
@@ -25,25 +24,25 @@
              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
              })();
 
-</script>
+         </script>
      </head>
      <body onLoad="prettyPrint()">
          <div class="container">
              <!-- <header class="jumbotron subhead" id="overview">-->
-             <div class="hero-unit">
-  <h1>Yann Moisan</h1>
-  <p class="lead">Sur Java, les technos Web et autres...</p>
-  <div class="subnav">
-    <ul class="nav nav-pills">
-                     <li><a href="index.html">Accueil</a></li>
-                     <li><a href="a-propos.html">A propos</a></li>
-                     <li><a href="cv.html">CV</a></li>
-    </ul>
+             <header>
+             <h1>Yann Moisan</h1>
+             <p>Sur Java, les technos Web et autres...</p>
+             </header>
+             <nav>
+             <ul>
+                 <li><a href="index.html">Accueil</a></li>
+                 <li><a href="a-propos.html">A propos</a></li>
+                 <li><a href="cv.html">CV</a></li>
 
-  </div>
-  </div>
+             </ul>
+             </nav>
 
-  <!--             <div id="sep"></div> -->
+             <!--             <div id="sep"></div> -->
              <div class="row">
                  <div class="span8">
                      <!-- nav -->
@@ -80,39 +79,46 @@
 
 
                      </div>
-                         <div class="span4">
+                     <div class="span4">
                          <aside>    
                          <h2>Contact</h2>
                          <p>yamo93[AT]gmail[DOT]com</p>
-    <ul class="nav nav-list">
-    <li class="nav-header">Mes activités</li>
-    <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
-    <li><a href="https://github.com/YannMoisan">GitHub</a></li>
-    <li><a href="http://knowledgeblackbelt.com/UserView.wwa?userId=13810326#!User/yamo93/forcePublicView=true">Blackbelt</a></li>
-    <li class="nav-header">Liens externes - Blog perso</li>
+                         <p>Mes activités</p>
+                         <ul>
+                             <li>yamo93[AT]gmail[DOT]com</li>
+                             <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
+                             <li><a href="https://github.com/YannMoisan">GitHub</a></li>
+                             <li><a href="http://knowledgeblackbelt.com/UserView.wwa?userId=13810326#!User/yamo93/forcePublicView=true">Blackbelt</a></li>
+                         </ul>
+                         <p>Liens externes - Blog perso</p>
+                         <ul>
                              <li><a href="http://www.standblog.org">Standblog</a></li>  
                              <li><a href="http://www.touilleur-express.fr/">Le touilleur express</a></li>
                              <li><a href="http://thecodersbreakfast.net/">The Coder's Breakfast</a></li>
                              <li><a href="http://blog.javabien.net/">Java Bien!</a></li>
-                             <li class="nav-header">Liens externes - Blog entreprise</li> 
+                         </ul>
+                         <p>Liens externes - Blog entreprise</p>
+                         <ul>
                              <li><a href="http://blog.xebia.fr/">Xebia</a></li>
                              <li><a href="http://blog.octo.com/">Octo</a></li>
                              <li><a href="http://blog.zenika.com/">Zenika</a></li>
                              <li><a href="http://blog.ippon.fr/">Ippon</a></li>
-                             <li class="nav-header">Liens externes - Design Web</li> 
+                         </ul>
+                         <p>Liens externes - Design Web</p> 
+                         <ul>
                              <li><a href="http://openweb.eu.org/">Openweb</a></li>
                              <li><a href="http://www.pompage.net/">Pompage</a></li>
                              <li><a href="http://www.alsacreations.com/">Alsa creations</a></li>
-    </ul>
+                         </ul>
                          </aside>    
                      </div>
                  </div>
                  <hr>
                  <footer>
-                     <span id="copyright">&copy; 2012 Yann Moisan</span>
-                     <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>
+                 <span id="copyright">&copy; 2012 Yann Moisan</span>
+                 <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>
                  </footer>
-         </div>
-     </body>
+             </div>
+         </body>
      </html>
 

@@ -1,11 +1,11 @@
 $title=Migration de Java 6 à Java 5.
 -----
 <p>Sur mon projet actuel, nous avons du retrograder la version de Java utilisée. Seulement trois problèmes se sont posés :	</p>	    
-<h3>@Override</h3>
+<h2>@Override</h2>
 <p>Depuis Java 6, il est possible d'utiliser l'annotation <code>@Override</code> sur les méthodes qui implémentent une méthode d'une interface. Pour l'anecdote, ce changement n'est pas documenté : la javadoc de l'annotation n'a pas été modifiée. La solution consiste à supprimer ces lignes. Cela est automatisé avec la ligne de commande suivante :
 <pre>find . -name "*.java" -exec sed -i '/@Override/d' {} \</pre>
 </p>
-<h3>JAXB</h3>              
+<h2>JAXB</h2>              
 <p>Nous utilisons <acronym lang="en" title="Java Architecture for XML Binding">JAXB</acronym>, qui a été intégré dans Java 6. La solution consite à ajouter les librairies suivantes au classpath:
 <ul>
     <li>activation.jar</li>
@@ -15,6 +15,6 @@ $title=Migration de Java 6 à Java 5.
     <li>jsr173_1.0_api.jar</li>
 </ul>
 </p>
-<h3>HSQLDB</h3>              
+<h2>HSQLDB</h2>              
 <p>Nous utilisons HSQLDB 2.0 pour les tests unitaires. A l'execution, le code lance la classique exception suivante : <code>java.lang.UnsupportedClassVersionError: Bad version number in .class file</code>. L'explication est simple : depuis la version 2, le binaire est compilé avec Java 6. La solution consiste à récupérer la version snapshot qui est disponible pour java 6 et java 5 <a href="http://hsqldb.org/support/index.html">sur le site officiel</a>.
 </p>
