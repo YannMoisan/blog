@@ -10,7 +10,7 @@
         <link rel="shortcut icon" href="http://www.yannmoisan.com/favicon.ico" />
         <link rel="icon" type="image/x-icon" href="http://www.yannmoisan.com/favicon.ico" />
 
-        <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="Billets" />
+        <link rel="alternate" type="application/rss+xml" href="rss.xml" title="Billets" />
 
         <script type="text/javascript">
 
@@ -31,7 +31,7 @@
              <!-- <header class="jumbotron subhead" id="overview">-->
              <header>
              <h1>Yann Moisan</h1>
-             <p>Sur Java, les technos Web et autres...</p>
+             <p>Sur Java, les technos Web, Linux...</p>
              </header>
              <nav>
              <ul>
@@ -81,15 +81,20 @@
                      </div>
                      <div class="span4">
                          <aside>    
-                         <h2>Contact</h2>
-                         <p>yamo93[AT]gmail[DOT]com</p>
-                         <p>Mes activités</p>
+                         <p>Me contacter</p>
+                         <ul><li>yamo93[AT]gmail[DOT]com</li></ul>
+                         <p>Me suivre</p>
+                         <ul><li><a href="rss.xml">RSS</a></li></ul>
+                         <p>Me retrouver ailleurs</p>
                          <ul>
-                             <li>yamo93[AT]gmail[DOT]com</li>
                              <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
                              <li><a href="https://github.com/YannMoisan">GitHub</a></li>
                              <li><a href="http://knowledgeblackbelt.com/UserView.wwa?userId=13810326#!User/yamo93/forcePublicView=true">Blackbelt</a></li>
                          </ul>
+                         </aside>
+                     </div>
+                     <div class="span4">
+                         <aside>
                          <p>Liens externes - Blog perso</p>
                          <ul>
                              <li><a href="http://www.standblog.org">Standblog</a></li>  
