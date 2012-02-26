@@ -29,8 +29,15 @@ p, h1, h2, pre, .pager, .entry-date {
     padding-right: 20px;
 }
 aside p {
-    font-size: 15px;
+    margin : 16px 0px 8px 0px;
+    font-size: 13px;
     font-weight: bold;
+    text-transform: uppercase;
+}
+aside a {
+    display: block;
+    margin: 0 -20px;
+    padding : 3px 20px;
 }
 .container {
     width: 940px;
@@ -39,23 +46,31 @@ aside p {
 
 .container > header {
     background: #fdf6e3;
-    border: 1px solid #657b83;
+    border: 1px solid #93a1a1;
 }
 nav {
     background: #93a1a1;
     display: block;
     margin-bottom: 20px;
-    border: 1px solid #657b83;
+    /*border: 1px solid #657b83;*/
 }
 nav a {
     color: #586E75;
 }
+nav a:hover {
+    background: #93a1a1;
 
+}
 aside ul, .pager, nav > ul {
     list-style: none outside none;
 }
+aside ul {
+    margin: 8px 0px;
+    padding: 0px 20px;
+}
 nav > ul {
     margin:0;
+    padding: 0px 20px;
 }
 .row:after, .pager:after, nav:after, nav > ul:after {
     clear: both;
@@ -72,7 +87,8 @@ nav > ul > li a {
     padding: 8px 12px;
 }
 nav > ul > li a:hover {
-    background: #DDDDDD;
+    color : #fdf6e3; 
+    
 } 
 .pager .previous a {
     float: left;
