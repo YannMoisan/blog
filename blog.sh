@@ -111,6 +111,11 @@ for file in "${other_files[@]}";do
 
     sed -i "s/<!-- title -->/$title/" $dst_file
 done
+cat xx00 > $dst_dir/index2.html
+cat $dst_dir/index.html >> $dst_dir/index2.html
+cat xx02 >> $dst_dir/index2.html
+mv $dst_dir/index2.html $dst_dir/index.html
+
 cp $src_dir/bootstrap.css $dst_dir/bootstrap.css
 cp $src_dir/yamo.css $dst_dir/yamo.css
 cp $src_dir/prettify.css $dst_dir/prettify.css
