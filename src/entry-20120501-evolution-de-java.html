@@ -82,11 +82,13 @@ public class Java8Euler1 {
 <p>Ce code utilise deux nouveautés de Java 8 : les lambda expressions et les méthodes d'extension virtuelles. La syntaxe retenue pour les lambda est celle du C#. Le code est lisible et assez proche de Scala. Voici quelques précisions techniques :</p>
 <ul>
     <li>Les méthodes d'extension virtuelles permettent d'adresser le problème de l'evolution des API existantes, et notamment l'API Collection. Elles permettent d'ajouter une implémentation par défaut sur les interfaces. L'interface <code>Iterable</code> gagne ainsi une méthode <code>filter</code> qui prend en paramètre un <code>Predicate</code> et possède une implémentation par défaut.</li>
-    <pre class="prettyprint">
-    Iterable&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate) default {
-        return Iterables.filter(this, predicate);
-        }
-    </pre>
+</ul>
+<pre class="prettyprint">
+Iterable&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate) default {
+    return Iterables.filter(this, predicate);
+}
+</pre>
+<ul>
     <li>Le type de la lambda expression est déduit en fonction du contexte par le compilateur. On parle alors de <i>target typing</i>. Dans le code ci-dessus, l'expression <code>s -&gt; s % 3 == 0 || s % 5 == 0</code> est de type <code>Predicate</code>. Le type est toujours une interface à une seule méthode.</li>
     <li>Le type des paramètres est déduit à partir de la signature de la méthode de l'interface cible. Dans notre cas, le compilateur déduit que les paramètres <code>s</code>, <code>x</code> et <code>y</code> sont des <code>Integer</code>. C'est une extension de l'inférence de type apparue avec les génériques de Java 5 et étendue avec l'opérateur diamant de Java 7.
 </ul>
