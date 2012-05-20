@@ -24,10 +24,19 @@ a {
 a:hover {
     background: #eee8d5; 
 }
-p, h1, h2, pre, .pager, .entry-date {
+p, h1, h2, pre, .pager, .entry-date, pre.prettyprint {
     padding-left: 20px;
     padding-right: 20px;
 }
+pre {
+    margin-left:20px;
+    margin-right:20px;
+}
+
+pre {
+    overflow-x:auto;
+}
+
 aside p {
     margin : 16px 0px 8px 0px;
     font-size: 13px;
