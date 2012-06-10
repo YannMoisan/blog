@@ -48,7 +48,8 @@ for ((i=0;i<l;i++));do
     month=${bin:10:2}
     year=${bin:6:4}
     title=`cat $in|grep '\$title'|cut -d= -f2`
-
+    description=`cat $in|grep '\$description'|cut -d= -f2`
+    echo "description:$description"    
     echo Processing entry $((i+1))/$l : in=$in
 
     cat xx00 > $out
@@ -83,11 +84,12 @@ for ((i=0;i<l;i++));do
     echo "</ul>"  >> $out
 
     cat src/entry.layout >> $out
-    tail -n +3 $in > $out.filtered
+    tail -n +4 $in > $out.filtered
     sed -i "s/<!-- day -->/$day/" $out
     sed -i "s/<!-- month -->/$month/" $out
     sed -i "s/<!-- year -->/$year/" $out
     sed -i "s/<!-- title -->/$title/" $out
+    sed -i "s/<!-- description -->/$description/" $out
     sed -i "/<!-- content -->/r $out.filtered" $out
     rm $out.filtered
 

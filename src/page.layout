@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title><!-- title -->|Yann Moisan</title>
+        <meta name="description" content="<!-- description -->" />
         <link href="prettify.css" type="text/css" rel="stylesheet" />
         <script type="text/javascript" src="prettify.js"></script>  
         <link media="all" href="yamo.css" type="text/css" rel="stylesheet" />
