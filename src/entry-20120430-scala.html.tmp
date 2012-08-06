@@ -1,0 +1,14 @@
+$title=Scala
+-----
+<p>En tant que developpeur Java, j'ai entendu parlé de loin des nouveaux langages sur la JVM. Scala est celui qui suscite le plus d'intérêt, comme le montre les nombreux billets sur le sujet. Ce langage mélange la programmation orientée objet et la programmation fonctionnelle. J'ai profité de la présence du <a href="http://www.lmet.fr">Monde en "Tique"</a> à Devoxx France pour acheter ce livre : Scala for the impatient. Les premiers chapitres sont disonible gratuitement sur le site de typesafe. Je vous recommande ce livre car il est très didactique.</p>
+<p>Afin de m'exercer, j'ai développé en Scala les 9 premiers problèmes du <a ref="http://projecteuler.net/">projet euler</a>.</p>
+<p>Voici mes premières impressions : Après des années de pratique de Java, il n'est pas évident de penser "fonctionnel". Néanmoins, c'est très rafraichissant de découvrir Scala. Notamment pour le plaisir d'écrire en une ligne de code ce qu'il fallait faire en 10 lignes de Java.</p>
+<p>J'ai ainsi mis en pratique quelques fonctionnalités de Scala : les boucles <code>for</code>, beaucoup plus puissantes qu'en Java, les nombreuses fonctions disponibles sur les colletions, les fonctions d'ordre supérieur : une fonction prenant une fonction en paramètre, le pattern matching, permettant d'écrire de puissantes instructions <code>switch</code> ...
+
+<p>Voici pour ceux que çà intéresse le code des neufs premiers problèmes. Etant donné que je débute complètement en Scala, il doit y avoir pleins d'erreurs de débutant...
+<pre class="prettyprint">
+object euler1 extends App {
+ println((1 until 1000).filter(n => n % 3 == 0 || n % 5 == 0).sum)
+}
+</pre>
+
