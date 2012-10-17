@@ -4,7 +4,7 @@ $description=Tester unitairement la lecture d'un fichier, sans utiliser de fichi
 <p>Nous allons voir comment tester unitairement un composant basé sur la lecture d'un fichier, sans utiliser de fichier. Cette approche peut sembler étrange mais elle offre plusieurs avantages : le test sera ainsi plus rapide, plus lisible (car le contenu à tester est dans le même fichier que le test) et indépendant du système de fichier. Pour l'exemple, nous allons implémenter en java un programme qui compte le nombre de ligne d'un fichier. 
 L'astuce consiste à utiliser dans le code la classe <code>java.io.Reader</code> et d'injecter un <code>java.io.StringReader</code> à la place du <code>java.io.FileReader</code> dans le test.</p>
 <p>Voyons comment faire :</p>
-<pre>
+<pre class="prettyprint">
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ public class Counter {
 
 </pre>
 
-<pre>
+<pre class="prettyprint">
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;

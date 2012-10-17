@@ -13,7 +13,7 @@ $description=Java 7 depuis les tranchées, un retour d'expérience de l'utilisat
 </ul>
 <h2>Une incompatibilité avec Surefire</h2>
 <p>J'ai rencontré l'erreur suivante : <code>java.lang.VerifyError: Expecting a stackmap frame at branch target</code>. Heureusement, il est possible de contourner en passant l'argument <code>-XX:-UseSplitVerifier</code> à la JVM. Voici la configuration pour les utilisateurs de Maven:</p>
-<pre>
+<pre class="prettyprint">
 &lt;plugin&gt;
     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
     &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;

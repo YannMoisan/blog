@@ -11,11 +11,11 @@ $description=Retour d'expérience du premier dojo Scala du 05 juin 2012
 <p>On parle alors de <code>Option</code> et de sa sous classe <code>None</code> qui permet de ne pas retourner <code>null</code> et ainsi éviter la fameuse <code>NullPointerException</code>. Puis des case classes qui génère automatiquement tout un tas de méthodes utilitaires : <code>equals</code>, <code>hashCode</code>, <code>toString</code>.
 <p>Après la pause pizza, des groupes plus informels se forment pour discuter. Une personne (désolé, étant nouveau, je ne connais pas les prénoms) fait suite à ma demande et me montre comment faire cohabiter Java et Scala dans Eclipse et me donne quelques infos sur le <a href="http://scala-tools.org/mvnsites/maven-scala-plugin/">maven-scala-plugin</a>. On echange alors sur les pratiques de test et il m'indique l'existence d'un plugin eclipse pour ScalaTest et du projet <a href="http://etorreborre.github.com/specs2/">specs2</a> plus orienté BDD.</p>
 <p>Avec une autre personne, on regarde les premiers codes Scala que j'ai écrit, et notamment le problème 8 du projet euler. Il me montre ainsi comment améliorer mon implémentation en tirant parti de la richesse de l'API Collection de Scala. Voici le code initial :</p>
-<pre>
+<pre class="prettyprint">
 println((for (i <- 0 to 1000 - 5) yield (0 to 4).map(j => s.charAt(i + j).getNumericValue).reduceLeft(_ * _)).max)
 </pre>
 <p>Et le code refactoré :</p>
-<pre>
+<pre class="prettyprint">
 println(s.map(_.asDigit).sliding(5).map(_.product).max)
 </pre>
 <p>Conclusion : Cette soirée était très intéressante. Cela permet de progresser plus rapidement en posant ses questions à des cadors du langage et de repartir avec des pistes à approfondir...</p>
