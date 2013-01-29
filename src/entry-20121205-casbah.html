@@ -1,0 +1,17 @@
+$title=La dernière version de Casbah
+$description=Utiliser la dernière version stable de Casbah
+-----
+<p>J'utilise <a href="https://github.com/mongodb/casbah">Casbah</a>, le driver Scala officiel pour MongoDB. Pour être précis, la dernière version 2.1.5.0, enfin la dernière version <a href="http://api.mongodb.org/scala/casbah/">documentée</a>... Mon cas d'utilisation est de faire des aggregations, j'ai donc besoin de la méthode <code>DBCollection.aggregate</code>. Malheureusement, cette dernière est introuvable.</p>
+<h2>La dernière version ?</h2>
+<p>Après un tour sur la mailing list du projet et une réponse de Kali sur la mailing list du <abbr title="Paris Scala User Group">PSUG</abbr>, il apparait que la dernière version stable est en fait la 2.4.1. Attention, il ne suffit pas de mettre à jour le numéro de version car le <code>groupId</code> a changé : passant de <code>com.mongodb.casbah</code> à <code>org.mongodb</code>. Pour les utilisateurs de sbt :</p>
+<pre class="prettyprint">
+libraryDependencies += "org.mongodb" %% "casbah" % "2.4.1"
+</pre>
+<p>Cette nouvelle version tire une dépendance vers la version 2.8.0 du driver java (alors que Casbah 2.1.5.0 tirait la version 2.5.3). Avec ces nouvelles versions, c'est plein d'espoir que je m'aperçois que la méthode n'est toujours pas là.</p>
+<h2>Une ultime tentative</h2>
+<p>Dernière possibilité, mettre à jour manuellement la dépendance vers le driver java. Je suis donc passé à la version 2.9.3. et là, miracle, la méthode est présente. Ouf !</p>
+<pre class="prettyprint">
+libraryDependencies += "org.mongodb" %% "casbah" % "2.4.1"
+
+libraryDependencies += "org.mongodb" % "mongo-java-driver" % "2.9.3"
+</pre>

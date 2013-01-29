@@ -1,0 +1,55 @@
+$title=TDD en Scala
+$description=Comment pratiquer le TDD en Scala, le plus simplement possible (sans IDE)
+-----
+<p>En ce moment, je pratique le <a href="http://en.wikipedia.org/wiki/Kata_%28programming%29">kata</a> Roman Numerals pour me familiariser avec l'écosystème Scala. Mon but est la simplicité, je n'utilise donc que ces programmes : Vim, tmux et sbt. Voici, étape par étape, comment je pratique le <abbr title="Test Driven Development">TDD</abbr> en Scala.</p>
+<p>Lancer tmux</p>
+<pre class="prettyprint">$ tmux</pre>
+
+<p>Créer et aller dans le répertoire du projet</p>
+<pre class="prettyprint">
+$ mkdir roman
+$ cd $_
+</pre>
+
+<p>Créer le fichier de configuration de sbt, afin d'ajouter la dépendance avec ScalaTest (framework de test).</p>
+<pre class="prettyprint">$ vim build.sbt</pre>
+<pre class="prettyprint">libraryDependencies += "org.scalatest" %% "scalatest" % "1.8" % "test"</pre>
+
+<p>Créer et aller dans le répertoire du code source</p>
+<pre class="prettyprint">
+$ mkdir -p src/test/scala
+$ cd $_
+</pre>
+
+<p>Ecrire le code, dans un seul fichier pour faciliter les déplacements entre le code et les tests.</p>
+<pre class="prettyprint">$ vim RomanTest.scala</pre>
+<pre class="prettyprint">
+import org.scalatest.FunSuite
+
+object Roman {
+  def decode(s: String) : Int = 0
+}
+
+class RomanTest extends FunSuite {
+  test("I") {
+    assert(Roman.decode("I") === 1)
+  }
+}
+</pre>
+
+<p>Nous allons maintenant pouvoir tester. C'est maintenant que tmux va être utile pour séparer l'écran en 2 &lt;Ctrl-b&gt; " et aller en bas.</p>
+<pre class="prettyprint">$ sbt</pre>
+
+<p>Lancer les tests en continu</p>
+<pre class="prettyprint">&gt; ~ test</pre>
+
+<p>Le test ne passe pas :</p>
+<pre class="prettyprint">
+[info] RomanTest:
+[info] - I *** FAILED ***
+[info]   0 did not equal 1 (RomanTest.scala:9)
+</pre>
+
+<p>On revient dans Vim, on corrige l'implémentation, on sauvegarde et le test est relancé automatiquement. L'enchainement des cycles Red Green Refactor se fait ainsi de manière très fluide.</p>
+<p>Pour aller plus loin : configurer Vim pour Scala, essayer specs 2.</p>
+<p>Et vous, des idées, des remarques ...</p>

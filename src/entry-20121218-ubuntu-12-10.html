@@ -1,0 +1,124 @@
+$title=Que faire après l'installation d'Ubuntu 12.10
+$description=Que faire après l'installation d'Ubuntu 12.10
+-----
+<p>update 05/01/2013 : Désinstaller Zeitgeist, désactiver Update Notifier</p>
+<p>update 25/01/2013 : Installer Gnome Shell, désinstaller ubuntu one, la géolocalisation, unity
+<h3>Installer les programmes que j'utilise pour développer</h3>
+<pre class="prettyprint"> 
+sudo apt-get install git tmux vim-gnome htop virtualbox openjdk-7-jdk
+</pre>
+
+<h3>Installer Skype</h3>
+<pre class="prettyprint"> 
+wget http://www.skype.com/go/getskype-linux-ubuntu-64/skype-ubuntu-precise_4.1.0.20-1_amd64.deb
+sudo dpkg -i skype-ubuntu*.deb
+sudo apt-get -f install 
+</pre>
+
+<h3>Réactiver la zone de notification, notamment pour Skype</h3>
+<pre class="prettyprint"> 
+gsettings set com.canonical.Unity.Panel systray-whitelist "['all']"
+</pre>
+
+<h3>Désinstaller la lentille <em>Shopping</em></h3>
+<pre class="prettyprint"> 
+sudo apt-get remove unity-lens-shopping
+</pre>
+
+<h3>Installer Gnome Shell</h3>
+<p>Unity est l'interface de Gnome 3 par défaut sur Ubuntu. Je préfère cependant son concurrent, Gnome Shell. Les deux paragraphes suivants expliquent comment installer Gnome Shell et désinstaller Unity.</p>
+<pre class="prettyprint"> 
+sudo add-apt-repository ppa:gnome3-team/gnome3
+sudo apt-get update
+sudo apt-get install gnome-shell gnome-tweak-tool
+sudo reboot
+</pre>
+
+<h3>Désinstaller Unity</h3>
+<pre class="prettyprint"> 
+sudo apt-get purge unity unity-common unity-services unity-webapps-service(remove bamfdaemon)
+sudo apt-get purge unity-lens-files unity-lens-gwibber unity-lens-music unity-lens-photos unity-lens-video
+sudo apt-get purge unity-asset-pool unity-greeter unity-scope-gdocs
+sudo apt-get purge gir1.2-unity-5.0:amd64 (remove usb-creator-gtk)
+sudo apt-get purge indicator-applet-complete indicator-application indicator-datetime indicator-messages indicator-power indicator-printers indicator-session indicator-sound
+sudo apt-get purge indicator-datetime indicator-printers libindicator7
+</pre>
+
+<h3>Evolution</h3>
+<p>Bien qu'utilisant Thunderbird, j'ai des processus evolution qui tournent</p>
+<pre class="prettyprint"> 
+$ ps -ef|grep evolution
+yamo      2193     1  0 Jan24 ?        00:00:00 /usr/lib/evolution/evolution-source-registry
+yamo      2202     1  0 Jan24 ?        00:00:00 /usr/lib/evolution/evolution-calendar-factory
+</pre>
+
+<p>Je déconseille cependant de désinstaller evolution-data-server car j'ai essayé et gnome shell refuse alors de démarrer.
+<h3>Désinstaller Zeitgeist</h3>
+<p>Zeitgeist est le service de Gnome 3 qui enregistre les actions de l'utilisateur. Unity utilise ces informations pour connaitre les dernières applications utilisées, les applications les plus utilisées, la musique que vous écoutez, ... Si comme moi vous n'avez pas besoin de cela, cela permettra d'améliorer les performances du système.</p>
+<pre class="prettyprint"> 
+zeitgeist-daemon --quit
+sudo apt-get --purge autoremove activity-log-manager-common activity-log-manager-control-center zeitgeist zeitgeist-core zeitgeist-datahub python-zeitgeist
+sudo rm -fr {/root,/home/*}/.local/share/zeitgeist
+</pre>
+<p>Remarque : il n'est pas possible d'enlever libzeitgeist-1.0-1 car c'est entremêler avec nautilus, ...</p>
+
+<h3>Désinstaller Ubuntu One</h3>
+<pre class="prettyprint"> 
+sudo apt-get purge ubuntuone-client ubuntuone-client-gnome ubuntuone-control-panel python-ubuntuone-client python-ubuntuone-storageprotocol
+</pre>
+
+<h3>Désinstaller la geolocalisation</h3>
+<pre class="prettyprint"> 
+sudo apt-get purge geoclue-ubuntu-geoip geoclue libtimezonemap1 indicator-datetime
+</pre>
+
+<h3>Désactiver les programmes inutiles au démarrage</h3>
+<p>Pour ce faire, il faut commencer par faire apparaitre ceux qui sont cachés</p>
+<pre class="prettyprint"> 
+sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
+</pre>
+<p>Il suffit maintenant de lancer Startup Application, pour faire apparaitre les 25 applications lancées au démarrage. Je désactive celles qui sont rayées.</p>
+<ul>
+<li>T-SPI D-Bus Bus : Accessibilité</li>
+<li><span style="text-decoration: line-through;">Backup Monitor : pour faire ses sauvegardes (j'utilise un script maison)</span></li>
+<li><span style="text-decoration: line-through;">Bluetooth Manager : je n'utilise pas le bluetooth</span></li>
+<li>Certificate and Key Storage : </li>
+<li><span style="text-decoration: line-through;">Chat : fonctionne avec telepathy, j'utilise pidgin</span></li>
+<li><span style="text-decoration: line-through;">Desktop sharing : pour partager son bureau</span></li>
+<li>Files</li>
+<li>GNOME Settings Daemon</li>
+<li><span style="text-decoration: line-through;">GPG Password Agent : pour crypter ses messages avec <abbr title="GNU Privacy Guard">GPG</abbr></span></li>
+<li>GSettings Data Conversion</li>
+<li>Gwibber</li>
+<li>Mount Helper</li>
+<li>Network</li>
+<li><span style="text-decoration: line-through;">Onboard : pour l'accessibilité</span></li>
+<li><span style="text-decoration: line-through;">Orca Screen reader : pour l'accessibilité</span></li>
+<li>Personal File Sharing</li>
+<li>PolicyKit Authentication Agent</li>
+<li>PulseAudio Sound System</li>
+<li>Screensaver</li>
+<li>Secret Storage Service</li>
+<li>SSH Key Agent</li>
+<li><span style="text-decoration: line-through;">Ubuntu One : pour utiliser le service d’hébergement de fichiers en ligne intégré à Ubuntu</span></li>
+<li><span style="text-decoration: line-through;">Update Notifier</span></li>
+<li><span style="text-decoration: line-through;">User folders update</span></li>
+<li><span style="text-decoration: line-through;">Zeitgeist Datahub : pour logguer automatiquement sa vie personnelle (je préfère éviter pour des raisons éthiques).</span></li>
+</ul>
+<p>Pour Update Notifier, je préfère lancer régulièrement (tous les 2-3 jours) la commande suivante</p>
+<pre class="prettyprint">
+sudo apt-get update &amp;&amp; sudo apt-get upgrade &amp;&amp; sudo apt-get dist-upgrade
+</pre>
+<h3>En vrac</h3>
+<p>Réduire la taille des icones dans le lanceur Unity (de 48 à 32 pixels). Aller dans System Settings - Appearance puis Launcher icon size</p>
+<p></p>
+<p>N'hésitez pas à partager vos astuces et à revenir sur cette page, je mettrais à jour au fur et à mesure de la customisation</p>
+
+<p>Sources:</p>
+<ul>
+    <li><a href="http://www.webupd8.org/2011/04/how-to-re-enable-notification-area.html">how-to-re-enable-notification-area</a></li>
+    <li><a href="https://help.ubuntu.com/community/ShowHiddenStartupApplications#Displaying_Hidden_Startup_Applications">Displaying_Hidden_Startup_Applications</a></li>
+    <li><a href="http://askubuntu.com/questions/192269/how-can-i-remove-amazon-search-results-from-the-dash">how-can-i-remove-amazon-search-results-from-the-dash"</a></li>
+    <li><a href="http://linuxaria.com/howto/how-to-remove-zeitgeist-in-ubuntu-and-why">how-to-remove-zeitgeist-in-ubuntu-and-why</a></li>
+    <li><a href="http://www.webupd8.org/2012/10/how-to-get-complete-gnome-3-desktop-in.html">how-to-get-complete-gnome-3-desktop-in</a>
+</ul>
