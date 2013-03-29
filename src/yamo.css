@@ -70,7 +70,7 @@ nav a:hover {
     background: #93a1a1;
 
 }
-aside ul, .pager, nav > ul {
+aside ul, .pager, nav > ul, .unstyled {
     list-style: none outside none;
 }
 aside ul {
@@ -125,6 +125,12 @@ nav > ul > li a:hover {
         
 }
 
+.time {
+    float: left;
+    text-align: right;
+    padding-right: 20px;
+    width: 120px;
+}
 aside {
     float: right;
     width: 298px;

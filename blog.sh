@@ -64,12 +64,12 @@ for ((i=0;i<l;i++));do
     sed -i "s/\$fout/$fout/" $dst_dir/sitemap.xml
     
     # index
-    appendContent $src_dir/index.layout $dst_dir/index.html
-    sed -i "s/\$fout/$fout/" $dst_dir/index.html
-    sed -i "s/\$day/$day/" $dst_dir/index.html
-    sed -i "s/\$month/$month/" $dst_dir/index.html
-    sed -i "s/\$year/$year/" $dst_dir/index.html
-    sed -i "s/\$title/$title/" $dst_dir/index.html
+#    appendContent $src_dir/index.layout $dst_dir/index.html
+#    sed -i "s/\$fout/$fout/" $dst_dir/index.html
+#    sed -i "s/\$day/$day/" $dst_dir/index.html
+#    sed -i "s/\$month/$month/" $dst_dir/index.html
+#    sed -i "s/\$year/$year/" $dst_dir/index.html
+#    sed -i "s/\$title/$title/" $dst_dir/index.html
 
     echo "<ul class=\"pager\">"  >> $out
     if [ $i -ne 0 ];then
@@ -94,6 +94,39 @@ for ((i=0;i<l;i++));do
     rm $out.filtered
 
     cat xx02 >> $out 
+done
+
+months=("Jan" "Fév" "Mar" "Avr" "Mai" "Jun" "Jul" "Aoû" "Sep" "Oct" "Nov" "Déc")
+
+#index in reverse order, lot of duplicate code with above code
+for ((i=l-1;i>=0;i--));do
+    in=${entry_files[$i]}
+    fout=${in#src/entry*-*-}
+    out=$dst_dir/$fout 
+
+    bin=$(basename $in)
+    day=${bin:12:2}
+    month=${bin:10:2}
+    year=${bin:6:4}
+    title=`cat $in|grep '\$title'|cut -d= -f2`
+    description=`cat $in|grep '\$description'|cut -d= -f2`
+    echo "description:$description"    
+    echo Processing entry $((i+1))/$l : in=$in
+
+    # index
+    appendContent $src_dir/index.layout $dst_dir/index.html
+    sed -i "s/\$fout/$fout/" $dst_dir/index.html
+    sed -i "s/\$day/$day/" $dst_dir/index.html
+    
+    month_index=`expr $month - 1`
+    month_name=${months[$month_index]}
+    echo $month
+    echo `expr $month - 1`
+    echo $month_name
+    sed -i "s/\$month/$month_name/" $dst_dir/index.html
+    sed -i "s/\$year/$year/" $dst_dir/index.html
+    sed -i "s/\$title/$title/" $dst_dir/index.html
+
 done
 
 appendFooter $src_dir/rss.layout $dst_dir/rss.xml
