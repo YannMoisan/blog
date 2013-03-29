@@ -1,0 +1,30 @@
+$title=Mes astuces Vim
+$description=Mes astuces Vim
+-----
+<p>Voici une petite liste d'astuces que j'ai apprises en jouant à VimGolf</p>
+
+<h3>Quelques astuces simples pour gagner une frappe de touche</h3>
+<p><code>hx</code> = X</p>
+<p>j^ = +</p>
+<p>k^ = -</p>
+<p>d$ = D</p>
+<p>jdd = JD</p>
+
+<h3>Les opérateurs commençant par g</h3>
+<p>Avec Vim, il suffit de doubler les opérateurs pour qu'ils s'appliquent à la ligne courante. Par exemple : dd. Et pour certains opérateurs, il existe même une syntaxe raccourcie.</p>
+<p>gugu = guu : mettre la ligne courante en majuscule</p>
+<p>gUgU = gUU : mettre la ligne courante en minuscule </p>
+<p>g?g? = g?? : mettre la ligne courante en ROT13</p>
+<p>g~g~ = g~~ : inverser la casse de ligne courante</p>
+
+<h3>Recherche/Substituion</h3>
+<p>:g/^/m0 : inverser l'ordre du fichier</p>
+<p>:s = &amp; : Répéter la dernière substition</p>
+<p>g&amp; = :%s//~/&amp; : Répéter la dernière substitution sur tout le fichier</p>
+<p>@: Répéter la dernière ex commande</p>
+
+<h3>Quelques commandes avec la touche Ctrl</h3>
+<p>&lt;C-x&gt;&lt;C-l&gt; : En mode insertion, complétion pour une ligne entière</p>
+<p>&lt;C-n&gt; ou &lt;C-p&gt; : En mode insertion, insérer le mot suivant/précédent correspondant (complétion)</p>
+<p>&lt;C-o&gt; : Revenir au dernier emplacement visité</p>
+<p>&lt;C-a&gt; / &lt;C-x&gt; : En mode normal, incrémenter / décrémenter le prochaine nombre sur la ligne</p>
