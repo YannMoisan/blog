@@ -24,7 +24,7 @@ a {
 a:hover {
     background: #eee8d5; 
 }
-p, h1, h2, h3, pre, .pager, .entry-date, pre.prettyprint {
+p, h1, h2, h3, h4, pre, .pager, .entry-date, pre.prettyprint {
     padding-left: 20px;
     padding-right: 20px;
 }
