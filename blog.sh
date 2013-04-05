@@ -158,3 +158,9 @@ cp $src_dir/prettify.js $dst_dir/prettify.js
 cp $src_dir/style.css $dst_dir/style.css
 cp $src_dir/favicon.ico $dst_dir/favicon.ico
 cp $src_dir/belt3_L.gif $dst_dir/belt3_L.gif
+cp $src_dir/rss.png $dst_dir/rss.png
+cp $src_dir/twitter.png $dst_dir/twitter.png
+cp $src_dir/email.png $dst_dir/email.png
+cp $src_dir/linkedin.png $dst_dir/linkedin.png
+cp $src_dir/github.png $dst_dir/github.png
+

@@ -30,11 +30,22 @@
      <body onLoad="prettyPrint()">
          <div class="container">
              <!-- <header class="jumbotron subhead" id="overview">-->
-             <header>
-             <h1>Yann Moisan</h1>
+             <header class="clearfix">
+             <div class="hleft">
+                 <h1>Yann Moisan</h1>
              <p>Sur Java, les technos Web, Linux...</p>
+             </div>
+             <div class="hright">
+                 <ul>
+                     <li><img src="rss.png"><a href="rss.xml">RSS</a></li>
+                     <li><img src="email.png">yamo93[AT]gmail[DOT]com</li>
+                     <li><img src="twitter.png"><a href="https://twitter.com/yannmoisan">twitter</a></li>
+                     <li><img src="linkedin.png"><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
+                     <li><img src="github.png"><a href="https://github.com/YannMoisan">GitHub</a></li>
+                 </ul>
+             </div>
              </header>
-             <nav>
+             <nav class="clearfix">
              <ul>
                  <li><a href="index.html">Accueil</a></li>
                  <li><a href="a-propos.html">A propos</a></li>
@@ -45,7 +56,8 @@
 
              <!--             <div id="sep"></div> -->
              <div class="row">
-                 <div class="span8">
+                 <!--                 <div class="span8">
+                     -->
                      <!-- nav -->
                      <!-- entry -->
                      <div class="nav">
@@ -78,9 +90,9 @@
 
                          <!-- entry -->
 
-
-                     </div>
-                     <div class="span4">
+<!--
+                     </div>-->
+<!--                     <div class="span4">
                          <aside>    
                          <p>Me contacter</p>
                          <ul><li>yamo93[AT]gmail[DOT]com</li></ul>
@@ -119,6 +131,7 @@
                          </ul>
                          </aside>    
                      </div>
+                     -->
                  </div>
                  <hr>
                  <footer>

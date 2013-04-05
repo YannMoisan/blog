@@ -6,7 +6,7 @@ $description=Récupération d'un type énuméré à partir d'un code, de la bonn
 <h2>La solution</h2>
 <p>Préambule : cet article fait référence à l'excellent livre de Joshua Bloch : Effective Java, 2nd Edition.</p>
 <p>Pour chaque type, un <code>Enum</code> est créé (cf Item 30 : Use enums instead of int constants) avec une méthode servant de factory static (cf Item 1 : Consider static factory methods instead of constructors).
-Afin de respecter le principe <abbr title="Don't Repeat Yourself">DRY<abbr>, nous allons mettre en place un mécanisme afin de ne pas dupliquer le code de cette méthode dans chaque type.
+Afin de respecter le principe <abbr title="Don't Repeat Yourself">DRY</abbr>, nous allons mettre en place un mécanisme afin de ne pas dupliquer le code de cette méthode dans chaque type.
 Premièrement, une interface <code>Reference</code> est créée (cf Item 34 : Emulate extensible enums with interfaces). 
 Ensuite, une classe utilitaire <code>References</code> est créée afin de servir de dictionnaire; 
 c'est à dire pour stocker toutes les valeurs de tous les types (cf Item 29 : Consider heterogeneous containers).

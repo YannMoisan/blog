@@ -53,7 +53,14 @@ aside a {
     margin: 0 auto;
 }
 
-.container > header {
+.clearfix {
+    clear: both;
+}
+header {
+    overflow: auto;
+}
+
+.container > header, .row {
     background: #fdf6e3;
     border: 1px solid #93a1a1;
 }
@@ -70,7 +77,7 @@ nav a:hover {
     background: #93a1a1;
 
 }
-aside ul, .pager, nav > ul, .unstyled {
+aside ul, .pager, nav > ul, .unstyled, .hright > ul {
     list-style: none outside none;
 }
 aside ul {
@@ -81,6 +88,13 @@ nav > ul {
     margin:0;
     padding: 0px 20px;
 }
+.hleft {
+    float: left;
+}
+.hright {
+    float: right;
+}
+
 .row:after, .pager:after, nav:after, nav > ul:after {
     clear: both;
 }
