@@ -8,7 +8,10 @@ base 2:  #eee8d5 : background body
 base 3:  #fdf6e3 : background content
 yellow:  #b58900 : lien
 */
-
+* {
+    margin: 0;
+    padding: 0;
+}
 body {
     background: #eee8d5;
     margin: 0;
@@ -24,10 +27,33 @@ a {
 a:hover {
     background: #eee8d5; 
 }
-p, h1, h2, h3, h4, pre, .pager, .entry-date, pre.prettyprint {
+
+dl dt, dl dd {
+    display: inline-block;
+    min-height: 1.5em;
+    vertical-align: top;
+}
+dl dt {
+    margin-right: 10px;
+    width: 20%;
+}
+dl dd {
+    width: 75%;
+}
+.row, header{
+    padding:20px 20px 20px 20px
+}
+p, ul {
+    margin-bottom: 10px;
+}
+h1, h2, h3, h4, h5 {
+    margin-bottom: 10px;
+}
+/*
+p, h1, h2, h3, h4, dl, pre, .pager, .entry-date, pre.prettyprint {
     padding-left: 20px;
     padding-right: 20px;
-}
+}*/
 pre {
     margin-left:20px;
     margin-right:20px;
@@ -36,7 +62,9 @@ pre {
 pre {
     overflow-x:auto;
 }
-
+ul {
+    padding-left: 40px;
+}
 aside p {
     margin : 16px 0px 8px 0px;
     font-size: 13px;
