@@ -1,0 +1,30 @@
+$title=Les pièges à éviter avec Archlinux
+$description=Les pièges à éviter avec Archlinux
+-----
+<p>
+Je suis passé sur Archlinux, car j'ai été déçu par Ubuntu (<a href="ubuntu-12-10.html">comme je l'ai déjà expliqué</a>). Je cherchais une distribution plus configurable et on (<a href="https://twitter.com/OlivierCroisier">Olivier</a>, <a href="https://twitter.com/FreakyNadley">Nahir</a>, Alkino) m'a conseillé Archlinux.
+Cela permet de revenir à plus de simplicité. Je profite d'ailleurs de cette expérience pour tester i3, un tiling window manager.
+</p>
+<h2>beep</h2>
+<p>
+La première chose à faire est de désactiver le beep, en ajoutant dans le <code>.xinitrc</code>.
+<pre class="prettyprint">
+    xset -b
+</pre>
+</p>
+<h2>Vim</h2>
+<p>
+Un des premiers programmes que j'installe est Vim. Malheureusement, le paste du clipboard <code>"*p</code> ne fonctionne pas.
+En fait, le package est minimal et il faut installer gvim pour avoir le support du clipboard.
+</p>
+<h2>Zathura</h2>
+<p>
+Zathura est un lecteur de PDF léger et clavier centric, avec les raccourcis de Vim.
+Après l'installation, Zathura affiche un écran noir. A l'instar de Vim, les packageurs de Arch ont le souci de gérer les dépendances de manière minimale. 
+Les moteurs de rendu pdf sont en dépendances optionnelles. Il faut donc en installer un à la main.
+</p>
+<h2>IntelliJ Idea</h2>
+<p>
+IntelliJ Idea est le meilleur IDE pour Java. Mais il plante au démarrage en affichant l'erreur suivante :
+<code>Caused by: java.lang.UnsatisfiedLinkError: /usr/lib/jvm/java-7-openjdk/jre/lib/amd64/libsplashscreen.so: libgif.so.4</code>. Il faut installer giflib.
+</p>
