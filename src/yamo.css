@@ -17,8 +17,37 @@ body {
     margin: 0;
     color: #657b8;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 13px;
-    line-height: 18px;
+    font-size: 16px;
+    line-height: 24px;
+}
+blockquote {
+    color: #383838;
+    font-family: Georgia,serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.45;
+    margin: 0.25em 0;
+    padding: 0.25em 40px;
+    position: relative;
+    width: 500px;
+}
+blockquote:before {
+    color: #7A7A7A;
+    content: "“";
+    display: block;
+    font-size: 80px;
+    left: -20px;
+    position: absolute;
+    top: -20px;
+}
+blockquote cite {
+    color: #999999;
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+}
+blockquote cite:before {
+    content: "— ";
 }
 a {
     color: #b58900;
@@ -40,13 +69,13 @@ dl dt {
 dl dd {
     width: 75%;
 }
-.row, header{
-    padding:20px 20px 20px 20px
+.row, .hleft{
+    padding:20px 40px 20px 40px
 }
 p, ul {
     margin-bottom: 10px;
 }
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, pre {
     margin-bottom: 10px;
 }
 /*
@@ -55,8 +84,12 @@ p, h1, h2, h3, h4, dl, pre, .pager, .entry-date, pre.prettyprint {
     padding-right: 20px;
 }*/
 pre {
-    margin-left:20px;
     margin-right:20px;
+}
+
+code {
+    border: 1px solid #AAAAAA;
+    padding: 0 4px;
 }
 
 pre {
