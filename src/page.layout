@@ -37,11 +37,11 @@
              </div>
              <div class="hright">
                  <ul>
-                     <li><img width="16" height="16" src="rss.png"><a href="rss.xml">RSS</a></li>
-                     <li><img width="16" height="16" src="email.png">yamo93[AT]gmail[DOT]com</li>
-                     <li><img width="16" height="16" src="twitter.png"><a href="https://twitter.com/yannmoisan">twitter</a></li>
-                     <li><img width="16" height="16" src="linkedin.png"><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
-                     <li><img width="16" height="16" src="github.png"><a href="https://github.com/YannMoisan">GitHub</a></li>
+                     <li><img width="16" height="16" alt="rss" src="rss.png"><a href="rss.xml">RSS</a></li>
+                     <li><img width="16" height="16" alt="email" src="email.png">yamo93[AT]gmail[DOT]com</li>
+                     <li><img width="16" height="16" alt="twitter" src="twitter.png"><a href="https://twitter.com/yannmoisan">twitter</a></li>
+                     <li><img width="16" height="16" alt="linkedin" src="linkedin.png"><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
+                     <li><img width="16" height="16" alt="github" src="github.png"><a href="https://github.com/YannMoisan">GitHub</a></li>
                  </ul>
              </div>
              </header>
