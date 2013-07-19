@@ -1,0 +1,51 @@
+$title=Scala Puzzles
+$description=Scala Puzzles
+-----
+<p>Quelques petites bizarreries ou astuces, issues de mon expérience.
+Je vous encourage à réfléchir un peu avant de tester dans le REPL. 
+Et j'en profite pour vous donner une petite astuce que je viens de découvrir : <code>:paste</code> permet de coller plusieurs lignes dans le REPL.
+</p>
+<h2>Division par zéro</h2>
+Commençons par une venant de Java :
+<pre class="prettyprint">
+0/0
+0d/0
+</pre>
+<p>Qu'affichent ces deux lignes ?</p>
+<h2>Pattern matching</h2>
+<p>Considérons la méthode suivante :</p>
+<pre class="prettyprint">
+def f(a: Any) = a match {
+  case ints: List[Int]    =&gt; println("int")
+  case strs: List[String] =&gt; println("string")
+}
+</pre>
+<p>Qu'affiche le code suivant ?</p>
+<pre class="prettyprint">
+f(List(42))
+f(List("scala.io"))
+</pre>
+<h2>Pattern matching</h2>
+<pre class="prettyprint">
+case class A(x: Int, y: Int)
+def f: A =&gt; Int = { a =&gt; a.x + a.y }
+def g: A =&gt; Int = { case A(x, y) =&gt; x + y }
+</pre>
+<p>Qu'affiche le code suivant ?</p>
+<pre class="prettyprint">
+f(A(21, 21))
+g(A(21, 21))
+</pre>
+<h2>Un pattern courant</h2>
+<pre class="prettyprint">
+object Action { def apply(f: String =&gt; Int) = { s: String =&gt; println("s = " + f(s)) } }
+val f = Action { _.length }
+val g = Action { _.toInt }
+</pre>
+<p>Qu'affiche le code suivant ?</p>
+<pre class="prettyprint">
+f("42")
+g("42")
+</pre>
+<p>Les explications arrivent bientôt, le temps de vous laissez cogiter un peu …</p>
+<p>PS: Les plus attentifs auront surement remarqué une <a href="http://scala.io">publicité subliminale</a></p>
