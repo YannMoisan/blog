@@ -209,6 +209,9 @@ code {
 pre {
     overflow-x:auto;
 }
+.pager {
+    padding-left: 0px;
+}
 ul {
     padding-left: 40px;
 }
