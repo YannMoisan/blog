@@ -29,7 +29,7 @@ L'installation a créé 3 partitions :</p>
 <p>Tous les périphériques fonctionnent correctement : le wifi, la webcam, le microphone, les touches de fonction, le touchpad. Le seul problème rencontré est que le double tap LED pour désactiver le touchpad ne fonctionne pas. Les logiciels non libres (flash et MP3) fonctionne aussi après l'installation.</p>
 
 <h2>2ème problème: l'amorçage</h2>
-<p>Pour vérifier le bon fonctionnement du dual boot, je démarre Windows. Pas de problème. Puis je démarre à nouveau Ubuntu. Le menu de Grub s'affiche bien mais le système reste bloqué pendant le démarrage … Après recherche, il s'agit d'un problème spécifique à Windows/HP qui écrit dans le MBR au détriment de Grub 2. Il suffit de désactiver le service HP Software Framework Service (hpqwmiex.exe) et de restaurer Grub 2. Au menu de grub, sélectionner recovery mode et, au recovery menu, sélectionner Update grub bootloader.</p>
+<p>Pour vérifier le bon fonctionnement du dual boot, je démarre Windows. Pas de problème. Puis je démarre à nouveau Ubuntu. Le menu de Grub s'affiche bien mais le système reste bloqué pendant le démarrage… Après recherche, il s'agit d'un problème spécifique à Windows/HP qui écrit dans le MBR au détriment de Grub 2. Il suffit de désactiver le service HP Software Framework Service (hpqwmiex.exe) et de restaurer Grub 2. Au menu de grub, sélectionner recovery mode et, au recovery menu, sélectionner Update grub bootloader.</p>
 <h2>3ème problème: la carte graphique</h2>
 <p>L'ordinateur possède deux cartes graphiques : une carte intégrée au processeur et une carte AMD Radeon HD 6470M dédiée. Le but est d'optimiser la consommation d'énergie en basculant sur la carte dédiée uniquement en cas de besoin. Malheureusement, cette technique fonctionne encore mal sous Linux car le serveur X a besoin d'un redémarrage pour le switch.</p>
 <p>Après une mise à jour du système, le système reste bloqué pendant le démarrage. Après recherche, c'est lié à la carte graphique.
@@ -90,5 +90,5 @@ echo "options ath9k nohwcrypt=1" &gt; /etc/modprobe.d/ath9k.conf
 <p>Installation de numlockx afin de verrouiller automatiquement le pavé numérique avant la connection.</p>
 
 <h2>Conclusion</h2>
-<p>Malheureusement, l'installation fut plus laborieuse que ce que j'imaginais. Mais une fois cette étape passée, le système fonctionne impeccablement (pas comme Windows …).
+<p>Malheureusement, l'installation fut plus laborieuse que ce que j'imaginais. Mais une fois cette étape passée, le système fonctionne impeccablement (pas comme Windows…).
 J'essayerai l'installation de la version 11.10 prochainement pour voir si la situation s'est améliorée.</p>

@@ -23,7 +23,7 @@ object App extends com.typesafe.play.mini.Application {
 <p>Il faut commencer par étendre le trait <code>Application</code>, donc implémenter la méthode <code>route</code>, qui doit renvoyer une <a href="http://www.scala-lang.org/api/current/index.html#scala.PartialFunction"><code>PartialFunction[RequestHeader, Handler]</code></a>.
 Une fonction partielle est une fonction qui n'est définie que pour un sous ensemble des valeurs possibles de ces arguments : dans notre cas, que pour certains headers HTTP.</p>
 <p>Regardons maintenant la définition des routes : <code> case GET(Path("/coco"))</code>. Ce bout de code utilise le <a href="http://www.scala-lang.org/node/120">pattern matching</a> et des <a href="http://www.scala-lang.org/node/112">extractor</a> personnalisés.
-Pour rappel, <code>case Path(p) …</code> est équivalent à <code>p = Path.unapply(…)</code>. Dans notre cas, on chaine les extracteurs, ce qui équivaut à 
+Pour rappel, <code>case Path(p)…</code> est équivalent à <code>p = Path.unapply(…)</code>. Dans notre cas, on chaine les extracteurs, ce qui équivaut à 
 <code>p = Path.unapply(GET.unapply(…))</code>. L'astuce consiste pour le unapply de l'objet GET à renvoyer le même objet que celui passé en paramètre.
 
 <p>play2-mini utilise donc très élégamment plusieurs fonctionnalités du langage et est donc une excellente source d'inspiration pour ses propres développements.</p>
