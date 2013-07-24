@@ -35,7 +35,7 @@ cat dst/*
 </ul>
 <p>Avec ce système, il est possible d'avoir un répertoire backup par jour de la semaine. Le problème est que la restauration n'est pas immédiate : il faut rejouer la sauvegarde complète puis les sauvegardes différentielles</p>
 <h2>Sauvegarde incrémentielle de type snapshot</h2>
-<p>C'est la Rolls-Royce de la sauvegarde. C'est une sauvegarde incrémentielle et qui apparait comme un snapshot (i.e. chaque sauvegarde semble complète) 
+<p>C'est la Rolls-Royce de la sauvegarde. C'est une sauvegarde incrémentielle et qui apparait comme un snapshot (c.-à-d. chaque sauvegarde semble complète) 
 Ainsi, il suffit juste de recopier le répertoire 
 pour restaurer. Le secret réside dans l'utilisation de l'option <code>--link-dest</code> et une rotation des répertoires</p>
 <pre class="prettyprint">
