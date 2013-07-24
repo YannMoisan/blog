@@ -3,14 +3,14 @@ $description=Pourquoi et comment je partitionne ma machine
 -----
 <p>Ce billet n'est pas une introduction sur la notion de partition mais explique les choix que j'ai retenu pour le partitionnement de ma machine.</p>
 <h2>Pourquoi avoir plusieurs partitions ?</h2>
-<p>La montée de version d'un système d'exploitation comporte toujours un risque (régressions, ...). Il est donc plus sur de <strong>réinstaller sur une nouvelle partition</strong>. Ainsi, en cas de problème sur le nouveau système, il est possible de démarrer sur l'ancien.</p>
+<p>La montée de version d'un système d'exploitation comporte toujours un risque (régressions, …). Il est donc plus sur de <strong>réinstaller sur une nouvelle partition</strong>. Ainsi, en cas de problème sur le nouveau système, il est possible de démarrer sur l'ancien.</p>
 <p>Il est aussi intéressant de <strong>faire cohabiter différentes distributions</strong> et dans ce cas, chaque système est installé sur une partition dédiée.</p>
 <p>Plusieurs distributions sont alors installées sur la même machine mais certaines données ne sont pas spécifiques à une distribution. Il est donc intéressant de les isoler sur des partitions qui seront accessibles par ces différents systèmes.</p>
 
 <h2>Quelles sont mes partitions ?</h2>
-<p>Bien qu'il soit possible de mettre l'intégralité du répertoire <code>/home</code> sur une partition dédiée, je le déconseille car le même fichier de configuration peut-être lu/écrit par des versions différentes du même programme, ce qui peut entrainer des comportements inattendus. L'autre possibilité est d'avoir une partition <code>/mnt/data</code> qui contient les documents, les photos, la musique, ...</p>
+<p>Bien qu'il soit possible de mettre l'intégralité du répertoire <code>/home</code> sur une partition dédiée, je le déconseille car le même fichier de configuration peut-être lu/écrit par des versions différentes du même programme, ce qui peut entrainer des comportements inattendus. L'autre possibilité est d'avoir une partition <code>/mnt/data</code> qui contient les documents, les photos, la musique, …</p>
 <p>Je partage la partition de swap</p>
-<p>J'ai une partition <code>/opt</code> pour les programmes que j'installe à la main, i.e. dont l'installation se limite à une simple décompression. Ce sont souvent des outils pour le développement : maven, eclipse, intellij, sbt, mongodb, ...</p>
+<p>J'ai une partition <code>/opt</code> pour les programmes que j'installe à la main, i.e. dont l'installation se limite à une simple décompression. Ce sont souvent des outils pour le développement : maven, eclipse, intellij, sbt, mongodb, …</p>
  
 <p>Voici ma configuration</p>
 <pre class="prettyprint">

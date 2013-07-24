@@ -54,13 +54,13 @@ yamo      2202     1  0 Jan24 ?        00:00:00 /usr/lib/evolution/evolution-cal
 
 <p>Je déconseille cependant de désinstaller evolution-data-server car j'ai essayé et gnome shell refuse alors de démarrer.
 <h3>Désinstaller Zeitgeist</h3>
-<p>Zeitgeist est le service de Gnome 3 qui enregistre les actions de l'utilisateur. Unity utilise ces informations pour connaitre les dernières applications utilisées, les applications les plus utilisées, la musique que vous écoutez, ... Si comme moi vous n'avez pas besoin de cela, cela permettra d'améliorer les performances du système.</p>
+<p>Zeitgeist est le service de Gnome 3 qui enregistre les actions de l'utilisateur. Unity utilise ces informations pour connaitre les dernières applications utilisées, les applications les plus utilisées, la musique que vous écoutez, … Si comme moi vous n'avez pas besoin de cela, cela permettra d'améliorer les performances du système.</p>
 <pre class="prettyprint"> 
 zeitgeist-daemon --quit
 sudo apt-get --purge autoremove activity-log-manager-common activity-log-manager-control-center zeitgeist zeitgeist-core zeitgeist-datahub python-zeitgeist
 sudo rm -fr {/root,/home/*}/.local/share/zeitgeist
 </pre>
-<p>Remarque : il n'est pas possible d'enlever libzeitgeist-1.0-1 car c'est entremêler avec nautilus, ...</p>
+<p>Remarque : il n'est pas possible d'enlever libzeitgeist-1.0-1 car c'est entremêler avec nautilus, …</p>
 
 <h3>Désinstaller Ubuntu One</h3>
 <pre class="prettyprint"> 

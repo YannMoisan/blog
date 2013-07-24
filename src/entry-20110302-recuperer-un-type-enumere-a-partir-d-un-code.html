@@ -2,7 +2,7 @@ $title=Récupérer un type énuméré à partir d'un code
 $description=Récupération d'un type énuméré à partir d'un code, de la bonne utilisation des Generics de Java 5
 -----
 <h2>La problématique</h2>
-<p>Le but de ce billet est d'implémenter un besoin très classique : plusieurs types avec un ensemble de valeurs finies, accessibles à partir d'un code. Cela permet de représenter des statuts, des états, ...</p> 
+<p>Le but de ce billet est d'implémenter un besoin très classique : plusieurs types avec un ensemble de valeurs finies, accessibles à partir d'un code. Cela permet de représenter des statuts, des états, …</p> 
 <h2>La solution</h2>
 <p>Préambule : cet article fait référence à l'excellent livre de Joshua Bloch : Effective Java, 2nd Edition.</p>
 <p>Pour chaque type, un <code>Enum</code> est créé (cf Item 30 : Use enums instead of int constants) avec une méthode servant de factory static (cf Item 1 : Consider static factory methods instead of constructors).
