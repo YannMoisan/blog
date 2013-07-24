@@ -2,7 +2,7 @@ $title=Functional Programming Principles in Scala
 $description=Functional Programming Principles in Scala
 -----
 <p>Le cours de <a href="https://www.coursera.org/course/progfun">programmation fonctionnelle en Scala</a> sur coursera se termine. Il est assuré par Martin Odersky, qui n'est rien moins que l'inventeur du langage. Le cours, avec ces 50.000 inscrits, a rencontré un franc succès, révélateur de l'émulation autour de ce langage.</p>
-<p>Il a duré 7 semaines, à raison de 5-7 heures par semaine. J'en suis très satisfait. Chaque semaine, il y a 2 grandes parties : un cours théorique en video et des exercices portant, bien évidemment, sur le contenu du cours. Les videos sont en anglais mais relativement simples à comprendre et le discours est appuyé par des slides. De plus, le professeur est un excellent pédagogue. Les exercices, parfois ardus, permettent, au fur et à mesure, d'appréhender un mode de raisonnement fonctionnel. Et un astucieux système de notation en quasi temps réel permet d'avoir un feedback rapide sur son travail.</p>
+<p>Il a duré 7 semaines, à raison de 5-7 heures par semaine. J'en suis très satisfait. Chaque semaine, il y a 2 grandes parties : un cours théorique en vidéo et des exercices portant, bien évidemment, sur le contenu du cours. Les vidéos sont en anglais mais relativement simples à comprendre et le discours est appuyé par des <i>slides</i>. De plus, le professeur est un excellent pédagogue. Les exercices, parfois ardus, permettent, au fur et à mesure, d'appréhender un mode de raisonnement fonctionnel. Et un astucieux système de notation en quasi temps réel permet d'avoir un <i>feedback</i> rapide sur son travail.</p>
 <p>Une nouvelle thématique est abordée chaque semaine. Voici le programme semaine par semaine, avec quelques points qui ont retenu mon attention, en tant que développeur Java :</p>
 <ul>
     <li>Semaine 1 : Fonctions et Evaluations
@@ -12,14 +12,14 @@ $description=Functional Programming Principles in Scala
     <p>La récursivité, la recursivité terminale et l'astuce de l'accumulateur</p>
     <p><a href="http://fr.wikipedia.org/wiki/Curryfication">La curryfication</a></p></li>
     <li>Semaine 3 : Données et abstraction
-    <p>L'associativité de l'opérateur est determinée par le dernier caractère (<code>:</code> pour associativité à droite). En Java, seul l'opérateur <code>=</code> est associatif à droite.</p>
+    <p>L'associativité de l'opérateur est déterminée par le dernier caractère (<code>:</code> pour associativité à droite). En Java, seul l'opérateur <code>=</code> est associatif à droite.</p>
     <p>En Scala, tout est objet (pas de type primitif comme en Java). La hiérarchie des objets est : <code>Any</code>, <code>AnyVal</code>, <code>AnyRef</code></p></li>
     <li>Semaine 4 : Type et pattern matching
-    <p>Les fonctions sont des objets avec une méthode apply. A creuser <a href="http://gleichmann.wordpress.com/2011/01/09/functional-scala-turning-methods-into-functions/">eta expansion</a>.<p>Les deux formes de polymorphisme : subtype et generics - Les types paramétrés s'écrivent <code>MaClasse[T]</code> (au lieu de <code>MaClasse&lt;T&gt;</code> en Java).</p>
-    <p>La notion de variance. Etant donné que <code>A &lt;: B</code>, si <code>C[A] &lt;: C[B]</code> C est covariant. Un objet immuable peut-être covariant. Pour rappel, en Java, Array est mutable et covariant, ce qui peut entrainer des erreurs à l'execution (<code>ArrayStoreException</code>). Une bonne pratique : Les fonctions doivent être contravariant dans leurs types d'argument et covariant dans leurs types de résultats (<code>trait Function[-T, +U]{ def apply(x: T): U }</code>).</p>
+    <p>Les fonctions sont des objets avec une méthode apply. À creuser <a href="http://gleichmann.wordpress.com/2011/01/09/functional-scala-turning-methods-into-functions/">eta expansion</a>.<p>Les deux formes de polymorphisme : subtype et generics - Les types paramétrés s'écrivent <code>MaClasse[T]</code> (au lieu de <code>MaClasse&lt;T&gt;</code> en Java).</p>
+    <p>La notion de variance. Étant donné que <code>A &lt;: B</code>, si <code>C[A] &lt;: C[B]</code> C est covariant. Un objet immuable peut-être covariant. Pour rappel, en Java, Array est mutable et covariant, ce qui peut entrainer des erreurs à l'execution (<code>ArrayStoreException</code>). Une bonne pratique : Les fonctions doivent être contravariant dans leurs types d'argument et covariant dans leurs types de résultats (<code>trait Function[-T, +U]{ def apply(x: T): U }</code>).</p>
     <p>Le pattern matching</p></li>
     <li>Semaine 5 : Les listes
-    <p><code>xs ++ ys</code> (concatenation) est équivanlent à : <code>(xs foldRight ys)(_ :: _)</code></p></li>
+    <p><code>xs ++ ys</code> (concaténation) est équivalent à : <code>(xs foldRight ys)(_ :: _)</code></p></li>
     <li>Semaine 6 : Les collections
     <p><code>flatten</code> est équivalent à <code>foldRight (_++_)</code></p>
     <p><code>xs flatMap f est équivalent à (xs map f).flatten</code></p>

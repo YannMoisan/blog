@@ -1,7 +1,7 @@
-$title=Evolution de Java
-$description=A travers un exemple concret, reflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala
+$title=Évolution de Java
+$description=A travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala
 -----
-<p>J'ai déjà parlé du projet euler <a href="librairie-mathematiques.html">ici</a>. Dans ce billet, nous allons voir comment résoudre le premier problème en utilisant des technologies de plus en plus récentes, ce qui permet d'apprécier l'évolution des langages basés sur la JVM. Tout d'abord, voici l'énoncé : </p>
+<p>J'ai déjà parlé du <a href="librairie-mathematiques.html">projet euler</a>. Dans ce billet, nous allons voir comment résoudre le premier problème en utilisant des technologies de plus en plus récentes, ce qui permet d'apprécier l'évolution des langages basés sur la JVM. Tout d'abord, voici l'énoncé : </p>
 <blockquote>Si on liste tous les entiers naturels inférieurs à 10 qui sont multiples de 3 ou de 5, on obtient 3, 5, 6 et 9. La somme de ces nombres est 23. Trouvez la somme de tous les multiples de 3 ou de 5 inférieurs à 1000</blockquote>
 
 <h2>Avec Java 6</h2>
@@ -18,9 +18,9 @@ public class Java6Euler1 {
     }
 }
 </pre>
-<p>Ce code semble familier, clair et relativement lisible. Alors pourquoi chercher à l'améliorer ? Le premier problème est que l'itération est côté client et deuxièment, cet algorithme n'est pas parallélisable, et donc n'est pas optimisé les processeurs multi-coeur qui sont devenus la norme aujourd'hui.</p>
+<p>Ce code semble familier, clair et relativement lisible. Alors pourquoi chercher à l'améliorer ? Le premier problème est que l'itération est côté client et deuxièmement, cet algorithme n'est pas parallélisable, et donc n'est pas optimisé les processeurs multi-coeur qui sont devenus la norme aujourd'hui.</p>
 <h2>Avec Guava</h2>
-<p><a href="http://code.google.com/p/guava-libraries/">Guava</a> est une librairie développée par Google qui offre notamment une API Collection riche et un support partiel de la programmation fonctionnelle. Cette librairie remplace avantageusement la librairie commons collections d'Apache, tombé en désuetude. 
+<p><a href="http://code.google.com/p/guava-libraries/">Guava</a> est une librairie développée par Google qui offre notamment une API Collection riche et un support partiel de la programmation fonctionnelle. Cette librairie remplace avantageusement la librairie commons collections d'Apache, tombé en désuétude. 
 <pre class="prettyprint">
 import java.util.Collection;
 
@@ -51,7 +51,7 @@ public class GuavaEuler1 {
     }
 }
 </pre>
-<p>On progresse : l'iteration et le filtrage sont pris en charge par la librairie et l'execution n'est pas intrinsèquement en série. Malheureusement, la syntaxe n'est pas pratique car très verbeuse ...</p>
+<p>On progresse : l'itération et le filtrage sont pris en charge par la librairie et l'exécution n'est pas intrinsèquement en série. Malheureusement, la syntaxe n'est pas pratique car très verbeuse ...</p>
 
 <h2>Avec Scala</h2>
 <p><a href="http://www.scala-lang.org/">Scala</a> est un nouveau langage sur la JVM qui combine la programmation orientée objet et la programmation fonctionnelle. Scala supporte nativement les lambda expressions (i.e. les fonctions anonymes) et les fonctions d'ordre supérieur (i.e. une fonction prenant en paramètre d'entrée une ou plusieurs fonctions et/ou renvoyant une fonction). Le code suivant montre la puissance du langage.</p>
@@ -82,7 +82,7 @@ public class Java8Euler1 {
 </pre>
 <p>Ce code utilise deux nouveautés de Java 8 : les lambda expressions et les méthodes d'extension virtuelles. La syntaxe retenue pour les lambda est celle du C#. Le code est lisible et assez proche de Scala. Voici quelques précisions techniques :</p>
 <ul>
-    <li>Les méthodes d'extension virtuelles permettent d'adresser le problème de l'evolution des API existantes, et notamment l'API Collection. Elles permettent d'ajouter une implémentation par défaut sur les interfaces. L'interface <code>Iterable</code> gagne ainsi une méthode <code>filter</code> qui prend en paramètre un <code>Predicate</code> et possède une implémentation par défaut.</li>
+    <li>Les méthodes d'extension virtuelles permettent d'adresser le problème de l'évolution des API existantes, et notamment l'API Collection. Elles permettent d'ajouter une implémentation par défaut sur les interfaces. L'interface <code>Iterable</code> gagne ainsi une méthode <code>filter</code> qui prend en paramètre un <code>Predicate</code> et possède une implémentation par défaut.</li>
 </ul>
 <pre class="prettyprint">
 Iterable&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate) default {

@@ -1,8 +1,8 @@
 $title=Ubuntu sur HP ProBook 4530s
-$description=Notes d'installation d'Ubuntu sur un ordianteur portable HP ProBook 4530s
+$description=Notes d'installation d'Ubuntu sur un ordinateur portable HP ProBook 4530s
 -----
 <h2>Un nouveau portable</h2>
-<p>J'ai acheté un PC portable HP ProBook 4530s, notamment pour un usage professionnel. Les atouts sont une dalle mate, un disque dur à 7200t et un processeur Intel Core i5 2410M dernière génération. L'ordinateur est pré-installé avec Windows 7 Pro. Après le premier boot, le système consomme 1,8 Go de RAM. 4 partitions sont utilisées :</p>
+<p>J'ai acheté un PC portable HP ProBook 4530s, notamment pour un usage professionnel. Les atouts sont une dalle mate, un disque dur à 7200t et un processeur Intel Core i5 2410M dernière génération. L'ordinateur est pré installé avec Windows 7 Pro. Après le premier boot, le système consomme 1,8 Go de RAM. 4 partitions sont utilisées :</p>
 <ul>
     <li>ntfs  SYSTEM       300M boot</li>
     <li>ntfs  (C:)         442G</li>
@@ -33,11 +33,11 @@ L'installation a créé 3 partitions :</p>
 <h2>3ème problème: la carte graphique</h2>
 <p>L'ordinateur possède deux cartes graphiques : une carte intégrée au processeur et une carte AMD Radeon HD 6470M dédiée. Le but est d'optimiser la consommation d'énergie en basculant sur la carte dédiée uniquement en cas de besoin. Malheureusement, cette technique fonctionne encore mal sous Linux car le serveur X a besoin d'un redémarrage pour le switch.</p>
 <p>Après une mise à jour du système, le système reste bloqué pendant le démarrage. Après recherche, c'est lié à la carte graphique.
-Une solution, assez bourrine, consiste à désactiver Switchable Graphics dans le BIOS. Ainsi, le sytème n'utilise que la carte embarqué avec le processeur, comme l'indique la commande <code>lspci|grep VGA</code>.
+Une solution, assez bourrine, consiste à désactiver Switchable Graphics dans le BIOS. Ainsi, le système n'utilise que la carte embarqué avec le processeur, comme l'indique la commande <code>lspci|grep VGA</code>.
 </p>
 
 <h2>4ème problème: la carte Wifi</h2>
-<p>La connexion Wifi souffre de lenteurs. C'est dû à l'utilisation du driver ath9k de la carte Atheros avec un noyau 2.6.38. La solution consiste simplement à executer cette commande :</p>
+<p>La connexion Wifi souffre de lenteurs. C'est dû à l'utilisation du driver ath9k de la carte Atheros avec un noyau 2.6.38. La solution consiste simplement à exécuter cette commande :</p>
 <pre>
 sudo -s
 echo "options ath9k nohwcrypt=1" &gt; /etc/modprobe.d/ath9k.conf
@@ -70,7 +70,7 @@ echo "options ath9k nohwcrypt=1" &gt; /etc/modprobe.d/ath9k.conf
     </li>
 </ul>
 <h2>Optimisation du démarrage</h2>
-<p>Comme indiqué précedemment, Ubuntu est une distribution simple. Le revers de la médaille est le démarrage par défaut de programmes que je n'utilise pas. J'ai donc décoché dans Startup Application :</p>
+<p>Comme indiqué précédemment, Ubuntu est une distribution simple. Le revers de la médaille est le démarrage par défaut de programmes que je n'utilise pas. J'ai donc décoché dans Startup Application :</p>
 <ul>
     <li>Bluetooth Manager</li>
     <li>Check for new hardware drivers</li>
@@ -81,13 +81,14 @@ echo "options ath9k nohwcrypt=1" &gt; /etc/modprobe.d/ath9k.conf
     <li>Ubuntu One</li>
     <li>User folders update</li>
     <li>Visual Assistance</li>
-    <li>Zeitgeist Datahub (mais malheureusement le service démarre quand-même)</li>
+    <li>Zeitgeist Datahub (mais malheureusement le service démarre quand même)</li>
 </ul>
 <p>Après le démarrage, le système consomme 400Mo de RAM (4 fois moins que Win 7 !!!)</p>
 
 <h2>Quelques pistes à faire après l'installation</h2>
 <p>La configuration du touchpad : je désactive le clic avec le touchpad (pour éviter l'insupportable déplacement du curseur pendant la frappe) et j'utilise le scroll à deux doigts.</p>
-<p>Installation de numlockx afin de vérouiller automatiquement le pavé numérique avant la connection.</p>
+<p>Installation de numlockx afin de verrouiller automatiquement le pavé numérique avant la connection.</p>
 
 <h2>Conclusion</h2>
-<p>Malheureusement, l'installation fut plus laborieuse que ce que j'imaginais. Mais une fois cette étape passée, le sytème fonctionne impeccablement (pas comme Windows ...). J'essayerai l'installation de la version 11.10 prochainement pour voir si la situation s'est améliorée.</p>
+<p>Malheureusement, l'installation fut plus laborieuse que ce que j'imaginais. Mais une fois cette étape passée, le système fonctionne impeccablement (pas comme Windows ...).
+J'essayerai l'installation de la version 11.10 prochainement pour voir si la situation s'est améliorée.</p>
