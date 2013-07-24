@@ -9,10 +9,10 @@ $description=Pourquoi et comment je partitionne ma machine
 
 <h2>Quelles sont mes partitions ?</h2>
 <p>Bien qu'il soit possible de mettre l'intégralité du répertoire <code>/home</code> sur une partition dédiée, je le déconseille car le même fichier de configuration peut-être lu/écrit par des versions différentes du même programme, ce qui peut entrainer des comportements inattendus. L'autre possibilité est d'avoir une partition <code>/mnt/data</code> qui contient les documents, les photos, la musique, …</p>
-<p>Je partage la partition de swap</p>
+<p>Je partage la partition de swap.</p>
 <p>J'ai une partition <code>/opt</code> pour les programmes que j'installe à la main, c.-à-d. dont l'installation se limite à une simple décompression. Ce sont souvent des outils pour le développement : maven, eclipse, intellij, sbt, mongodb, …</p>
  
-<p>Voici ma configuration</p>
+<p>Voici ma configuration :</p>
 <pre class="prettyprint">
 /dev/sda (500GB)
   /dev/sda7  /mnt/data (100GB ext4)
@@ -22,7 +22,7 @@ $description=Pourquoi et comment je partitionne ma machine
   /dev/sda11 /opt (10GB ext4)
 </pre>
 <h2>Comment configurer ces partitions ?</h2>
-<p>Afin de monter automatiquement les partitions au démarrage, il suffit de les ajouter au fichier <code>/etc/fstab</code> de chaque distribution. Dans ce fichier, chaque partition est représentée par son <abbr title="Universal Unique Identifier">UUID</abbr>, que l'on obtient grâce à la commande <code>ls -l /dev/disk/by-uuid/</code>. A titre d'exemple, voici le contenu de mon fichier <code>/etc/fstab</code></p>
+<p>Afin de monter automatiquement les partitions au démarrage, il suffit de les ajouter au fichier <code>/etc/fstab</code> de chaque distribution. Dans ce fichier, chaque partition est représentée par son <abbr title="Universal Unique Identifier">UUID</abbr>, que l'on obtient grâce à la commande <code>ls -l /dev/disk/by-uuid/</code>. A titre d'exemple, voici le contenu de mon fichier <code>/etc/fstab</code>.</p>
 <pre class="prettyprint">
 # / was on /dev/sda5 during installation
 UUID=d1a25eba-7e6c-4ecf-83d1-d584b02df81d /               ext4    errors=remount-ro 0       1

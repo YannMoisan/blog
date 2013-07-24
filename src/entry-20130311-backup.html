@@ -5,11 +5,11 @@ $description=Stratégie de sauvegarde d'un ordinateur personnel
 Je fuis donc les applications graphiques qui masquent certaines choses. La sauvegarde doit s'effectuer automatiquement, le plus rapidement possible et en conservant si possible un historique des dernières versions.
 </p>
 <p>Je sauvegarde sur un disque USB externe. La vitesse d'<i>upload</i>, limité à 100k, ne permettant pas de réaliser confortablement des sauvegardes en ligne.</p>
-<p>L'outil de prédilection est rsync, disponible sur la plupart des distributions Linux. C'est un outil de sauvegarde incrémentale, rapide, avec une syntaxe très simple : rsync options source dest</p>
-<p>Mais rsync dispose aussi de nombreuses options</p>
+<p>L'outil de prédilection est rsync, disponible sur la plupart des distributions Linux. C'est un outil de sauvegarde incrémentale, rapide, avec une syntaxe très simple : rsync options source dest.</p>
+<p>Mais rsync dispose aussi de nombreuses options.</p>
 <h2>Sauvegarde différentielle</h2>
 <p>Le principe est de ne stocker que la différence avec la sauvegarde précédente.</p>
-<p>Commençons par mettre les mains dans le cambouis pour se familiariser avec l'outil</p>
+<p>Commençons par mettre les mains dans le cambouis pour se familiariser avec l'outil :</p>
 <pre class="prettyprint">
 mkdir rsynctest
 cd rsynctest
@@ -33,11 +33,11 @@ cat dst/*
     <li>A savoir : le / à la fin de la source est important, il indique de copier le contenu du répertoire.</li>
     <li>A savoir : les liens symboliques sont préservés mais pas les liens matériel</li>
 </ul>
-<p>Avec ce système, il est possible d'avoir un répertoire backup par jour de la semaine. Le problème est que la restauration n'est pas immédiate : il faut rejouer la sauvegarde complète puis les sauvegardes différentielles</p>
+<p>Avec ce système, il est possible d'avoir un répertoire backup par jour de la semaine. Le problème est que la restauration n'est pas immédiate : il faut rejouer la sauvegarde complète puis les sauvegardes différentielles.</p>
 <h2>Sauvegarde incrémentielle de type snapshot</h2>
 <p>C'est la Rolls-Royce de la sauvegarde. C'est une sauvegarde incrémentielle et qui apparait comme un snapshot (c.-à-d. chaque sauvegarde semble complète) 
 Ainsi, il suffit juste de recopier le répertoire 
-pour restaurer. Le secret réside dans l'utilisation de l'option <code>--link-dest</code> et une rotation des répertoires</p>
+pour restaurer. Le secret réside dans l'utilisation de l'option <code>--link-dest</code> et une rotation des répertoires.</p>
 <pre class="prettyprint">
 rsync -av --delete --link-dest=$destdir/backup.1 $element $destdir/backup.0
 </pre>

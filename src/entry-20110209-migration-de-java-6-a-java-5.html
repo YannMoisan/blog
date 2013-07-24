@@ -1,7 +1,7 @@
 $title=Migration de Java 6 à Java 5.
 $description=Migration d'une application de Java 6 à Java 5
 -----
-<p>Sur mon projet actuel, nous avons du retrograder la version de Java utilisée. Seulement trois problèmes se sont posés :	</p>	    
+<p>Sur mon projet actuel, nous avons du retrograder la version de Java utilisée. Seulement trois problèmes se sont posés :</p>	    
 <h2>@Override</h2>
 <p>Depuis Java 6, il est possible d'utiliser l'annotation <code>@Override</code> sur les méthodes qui implémentent une méthode d'une interface. Pour l'anecdote, ce changement n'est pas documenté : la javadoc de l'annotation n'a pas été modifiée. La solution consiste à supprimer ces lignes. Cela est automatisé avec la ligne de commande suivante :
 <pre class="prettyprint">find . -name "*.java" -exec sed -i '/@Override/d' {} \</pre>

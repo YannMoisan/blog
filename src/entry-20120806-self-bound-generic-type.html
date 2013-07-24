@@ -1,7 +1,7 @@
 $title=Self-bound generic type
 $description=Self-bound generic type
 -----
-<p>Ce billet porte sur les self-bound generic types. Mais que se cache derrière ce terme étrange. Rassurez-vous, aucun développeur n'a été blessé pour réaliser ce billet. Laissons le besoin émerger à travers un exemple. Le point de départ consiste à construire à l'aide de Builders deux objets, Child1 et Child2, ayant une propriété commune. Voici une première implémentation naive. Pour des raisons de clarté, nous n'affichons que le code nécessaire à la compréhension : </p>
+<p>Ce billet porte sur les self-bound generic types. Mais que se cache derrière ce terme étrange. Rassurez-vous, aucun développeur n'a été blessé pour réaliser ce billet. Laissons le besoin émerger à travers un exemple. Le point de départ consiste à construire à l'aide de Builders deux objets, Child1 et Child2, ayant une propriété commune. Voici une première implémentation naive. Pour des raisons de clarté, nous n'affichons que le code nécessaire à la compréhension :</p>
 <pre class="prettyprint">
 public class Child1Builder {
     private String parentProperty;

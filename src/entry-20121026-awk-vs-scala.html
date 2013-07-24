@@ -2,7 +2,7 @@ $title=awk vs Scala
 $description=awk vs Scala
 -----
 <p>Dans la série "the right tool for the right job", j'ai besoin d'un petit programme qui filtre certaines lignes d'un fichier, au format csv.
-Je veux filtrer les enregistrements pour lesquelles le nombre de lignes contenant la première colonne est inférieur à un seuil, l'équivalent d'un <code>HAVING(COUNT(*)) > seuil</code> en SQL. </p>
+Je veux filtrer les enregistrements pour lesquelles le nombre de lignes contenant la première colonne est inférieur à un seuil, l'équivalent d'un <code>HAVING(COUNT(*)) > seuil</code> en SQL.</p>
 <p>Prenons un exemple pour clarifier cela : un fichier pays.csv contenant des couples pays, ville
 <pre class="prettyprint">
 France,Paris
@@ -17,7 +17,7 @@ France,Paris
 France,Grenoble
 France,Marseille
 </pre>
-<p>J'ai voulu tester 2 approches différentes : une première en ligne de commandes et une deuxième avec Scala</p>
+<p>J'ai voulu tester 2 approches différentes : une première en ligne de commandes et une deuxième avec Scala.</p>
 <h3>awk</h3>
 <p>La boite à outils Unix permettant de rendre des services inestimables, j'ai implémenté une version avec awk :
 <pre class="prettyprint">

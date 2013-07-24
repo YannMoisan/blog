@@ -29,7 +29,7 @@ Il est donc detecté automatiquement lors que je le connecte à l'ordinateur par
 Précision importante : à l'ouverture de la pop-up, cliquer sur Démonter.
 </p>
 <p>Le script utilise les deux programmes suivants : <strong>gphoto</strong> et <strong>exiftool</strong>.
-Voici le code source du script</p>
+Voici le code source du script :</p>
 <pre class="prettyprint">
 #! /bin/sh
 # Importe et classe les fichiers (images et videos) de l'appareil photo.
@@ -59,4 +59,4 @@ then
 fi
 exiftool -ext JPG -ext AVI "-Directory&lt;DateTimeOriginal" -d "%Y-%m-%d" .
 </pre>
-<p>Le script est disponible sur mon <a href="https://github.com/YannMoisan/dotfiles/blob/master/scripts/photo-import">GitHub</a></p>
+<p>Le script est disponible sur mon <a href="https://github.com/YannMoisan/dotfiles/blob/master/scripts/photo-import">GitHub</a>.</p>

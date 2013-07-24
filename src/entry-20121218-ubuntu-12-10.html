@@ -45,7 +45,7 @@ sudo apt-get purge indicator-datetime indicator-printers libindicator7
 </pre>
 
 <h3>Evolution</h3>
-<p>Bien qu'utilisant Thunderbird, j'ai des processus evolution qui tournent</p>
+<p>Bien qu'utilisant Thunderbird, j'ai des processus evolution qui tournent.</p>
 <pre class="prettyprint"> 
 $ ps -ef|grep evolution
 yamo      2193     1  0 Jan24 ?        00:00:00 /usr/lib/evolution/evolution-source-registry
@@ -73,7 +73,7 @@ sudo apt-get purge geoclue-ubuntu-geoip geoclue libtimezonemap1 indicator-dateti
 </pre>
 
 <h3>Désactiver les programmes inutiles au démarrage</h3>
-<p>Pour ce faire, il faut commencer par faire apparaitre ceux qui sont cachés</p>
+<p>Pour ce faire, il faut commencer par faire apparaitre ceux qui sont cachés :</p>
 <pre class="prettyprint"> 
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 </pre>
@@ -105,13 +105,12 @@ sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 <li><span style="text-decoration: line-through;">User folders update</span></li>
 <li><span style="text-decoration: line-through;">Zeitgeist Datahub : pour logguer automatiquement sa vie personnelle (je préfère éviter pour des raisons éthiques).</span></li>
 </ul>
-<p>Pour Update Notifier, je préfère lancer régulièrement (tous les 2-3 jours) la commande suivante</p>
+<p>Pour Update Notifier, je préfère lancer régulièrement (tous les 2-3 jours) la commande suivante :</p>
 <pre class="prettyprint">
 sudo apt-get update &amp;&amp; sudo apt-get upgrade &amp;&amp; sudo apt-get dist-upgrade
 </pre>
 <h3>En vrac</h3>
 <p>Réduire la taille des icônes dans le lanceur Unity (de 48 à 32 pixels). Aller dans System Settings - Appearance puis Launcher icon size</p>
-<p></p>
 <p>N'hésitez pas à partager vos astuces et à revenir sur cette page, je mettrais à jour au fur et à mesure de la personnalisation.</p>
 
 <p>Sources:</p>
