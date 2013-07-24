@@ -140,7 +140,8 @@ public class FibControllerTest {
 </pre>
 <h2>Tests de bout en bout</h2>
 <p>Les tests de bout en bout permettent de vérifier que le résulat est identique, avec les 2 webapps déployées sur un serveur tomcat.</p>
-<pre>$ curl http://localhost:8080/restcmp-jersey/fib/10
+<pre class="prettyprint">
+$ curl http://localhost:8080/restcmp-jersey/fib/10
 {"fib":[1,1,2,3,5,8,13,21,34,55]}
 $ curl http://localhost:8080/restcmp-spring/fib/10
 {"fib":[1,1,2,3,5,8,13,21,34,55]}

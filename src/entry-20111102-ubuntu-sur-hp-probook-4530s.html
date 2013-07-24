@@ -38,7 +38,7 @@ Une solution, assez bourrine, consiste à désactiver Switchable Graphics dans l
 
 <h2>4ème problème: la carte Wifi</h2>
 <p>La connexion Wifi souffre de lenteurs. C'est dû à l'utilisation du driver ath9k de la carte Atheros avec un noyau 2.6.38. La solution consiste simplement à exécuter cette commande :</p>
-<pre>
+<pre class="prettyprint">
 sudo -s
 echo "options ath9k nohwcrypt=1" &gt; /etc/modprobe.d/ath9k.conf
 </pre>
