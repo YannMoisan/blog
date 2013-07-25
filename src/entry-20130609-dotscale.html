@@ -10,10 +10,10 @@ C'est des bonnes pratiques pour concevoir une application qui sera scalable hori
 <ul>
     <li>considérer plus de choses comme étant de la donnée, par ex. les <i>events</i> ;</li>
     <li>les choix technologiques doivent être guidés par <b>le besoin</b>, ex. du stockage de la session HTTP ;</li>
-    <li>séparer le code et le stockage;</li>
-    <li>ne pas utiliser le système de fichiers;</li>
-    <li>utiliser un <i>event broker</i> pour ajouter de l'asynchronisme;</li>
-    <li>utiliser toujours un <i>reverse proxy</i>;</li>
+    <li>séparer le code et le stockage ;</li>
+    <li>ne pas utiliser le système de fichiers ;</li>
+    <li>utiliser un <i>event broker</i> pour ajouter de l'asynchronisme ;</li>
+    <li>utiliser toujours un <i>reverse proxy</i> ;</li>
     <li>garder son calme en cas d'incendie.</li>
 </ul>
 <p>Une mise en lumière de certains principes d'architecture.</p>
@@ -26,12 +26,12 @@ A noter : La technologie est en train d'être open sourcée.
 <p>
 Une présentation, en remontant les couches, de la stack Heroku :
 <ul>
-    <li>/get, une requête HTTP;</li>
-    <li>MRI Ruby VM;</li>
-    <li>Heroku LXC Container;</li>
-    <li>Ubuntu, notamment pour cgroups qui permet de faire de l'isolation;</li>
-    <li>Xen Hypervisor;</li>
-    <li>Amazon Linux - Paravirtual API;</li>
+    <li>/get, une requête HTTP ;</li>
+    <li>MRI Ruby VM ;</li>
+    <li>Heroku LXC Container ;</li>
+    <li>Ubuntu, notamment pour cgroups qui permet de faire de l'isolation ;</li>
+    <li>Xen Hypervisor ;</li>
+    <li>Amazon Linux - Paravirtual API ;</li>
     <li>Intel CPU.</li>
 </ul>
 </p>
@@ -40,16 +40,16 @@ Une présentation, en remontant les couches, de la stack Heroku :
 A l'instar de la première présentation, il nous livre quelques bonnes pratiques :
 </p>
 <ul>
-    <li>prévoir la panne car les choses casseront;</li>
-    <li>déployer seulement une machine, puis une seule zone géographique;</li>
-    <li>automatiser, d'autant plus que c'est compliqué;</li>
-    <li>sauvegarder et restaurer tout le temps;</li>
+    <li>prévoir la panne car les choses casseront ;</li>
+    <li>déployer seulement une machine, puis une seule zone géographique ;</li>
+    <li>automatiser, d'autant plus que c'est compliqué ;</li>
+    <li>sauvegarder et restaurer tout le temps ;</li>
     <li>monitorer et mesurer (mesurer TOUT).</li>
 </ul>
 <h2>Mandy Waite, Google</h2>
 <p>
 C'est l'histoire d'une expérience faite pendant le Google I/O. Des capteurs sans fil sont disposés à plusieurs endroits de l'évènement et les données sont collectées.
-C'est ainsi l'occasion de montrer comment les différentes briques de l'offre Google permettent de traiter ces données : App Engine, Compute Engine, Cloud Storage et Big Query
+C'est ainsi l'occasion de montrer comment les différentes briques de l'offre Google permettent de traiter ces données : App Engine, Compute Engine, Cloud Storage et Big Query.
 </p>
 <h2>Solomon Hykes, dotCloud</h2>
 <p>
@@ -59,7 +59,7 @@ La présentation ne rentre pas dans les détails techniques et donne envie de cr
 </p>
 <h2>5 lighting talks</h2>
 <p>
-<p>très sympa, après la pause repas, de démarrer avec 5 petits talks, et des speakers avec bien la pêche, pour se remettre dans le bain.</p>
+<p>Très sympa, après la pause repas, de démarrer avec 5 petits talks, et des speakers avec bien la pêche, pour se remettre dans le bain.</p>
 </p>
 <h2>Shay Banon, Elastic Search</h2>
 <p>
@@ -69,10 +69,10 @@ Une introduction à Elastic Search. Un des principes structurant qui fait la rap
 <p>
 Il décide de nous présenter les sujets qui l'excitent, classés par thématique :
 <ul>
-    <li>Machine virtuelle : <a href="http://libvirt.org/">libvirt</a></li>
-    <li>Gestion de parc : <a href="http://www.docker.io/">docker</a>, juju, <a href="http://www.openstack.org/">openstack</a></li>
-    <li>Langage : <a href="http://golang.org/">Go</a>. Go est un langage créé par Google. Il propose une gestion de la concurrence basée ni sur les thread, ni sur les event.</li>
-    <li>Lock Server : Doozer. Raft</li>
+    <li>machine virtuelle : <a href="http://libvirt.org/">libvirt</a> ;</li>
+    <li>gestion de parc : <a href="http://www.docker.io/">docker</a>, juju, <a href="http://www.openstack.org/">openstack</a> ;</li>
+    <li>langage : <a href="http://golang.org/">Go</a>. Go est un langage créé par Google. Il propose une gestion de la concurrence basée ni sur les thread, ni sur les event ;</li>
+    <li>lock server : Doozer, Raft.</li>
 </ul>
 </p>
 <h2>Barry Abrahamson, WordPress</h2>
@@ -94,8 +94,8 @@ Le dernier papier de Google étant <b>Spanner</b>, publié en 2012, devrait donc
 <p>
 Un retour sur le monde de l'open source et les heureux hasards qui font le succès du projet. Open Stack a le record de croissance pour un projet O/S. La communauté compte <b>9685 membres</b>. 
 Les geeks sont des menteurs. Il montre la loi de Conway.
-Et le plus important, parler ne sert à rien, il faut livrer. 
-Il a inventer le terme Chaordic Governance
+Et le plus important : parler ne sert à rien, il faut livrer.
+Il a inventé le terme Chaordic Governance.
 </p>
 <h2>Conclusion</h2>
 <p>Les speakers étaient très bons, on voit clairement qu'ils sont familiers de l'exercice. La variété des sujets étaient appréciable. Bien joué aux organisateurs et à l'année prochaine !</p>

@@ -1,7 +1,7 @@
 $title=for-comprehension en Scala 
 $description=Explication du for-comprehension en Scala par l'exemple
 -----
-<p>Scala possède un mécanisme très puissant mais pas simple à appréhender : for-comprehension. Le but de ce billet est d'aborder ce sujet par l'exemple avec les <code>List</code>. J'illustre le propos avec des exemples que vous pouvez executer dans le REPL pour vous exercer.</p>
+<p>Scala possède un mécanisme très puissant mais pas simple à appréhender : for-comprehension. Le but de ce billet est d'aborder ce sujet par l'exemple avec les <code>List</code>. J'illustre le propos avec des exemples que vous pouvez exécuter dans le REPL pour vous exercer.</p>
 
 <h2><code>map</code></h2>
 <p>La méthode <code>map</code> permet d'appliquer une fonction à tous les éléments d'une liste.</p>
@@ -41,7 +41,7 @@ res2: List[Int] = List(1, 1, 2, 1, 2, 3)
 </pre>
 
 <h2>for-comprehension</h2>
-<p>C'est le moment de venir au coeur du sujet. Un for-comprehension ressemble à une boucle mais le mécanisme est en fait beaucoup plus puissant.</p>
+<p>C'est le moment de venir au cœur du sujet. Un for-comprehension ressemble à une boucle mais le mécanisme est en fait beaucoup plus puissant.</p>
 <pre class="prettyprint">
 scala&gt; for (x &lt;- List(1, 2); y &lt;- List(3, 4)) yield (x, y)
 res0: List[(Int, Int)] = List((1,3), (1,4), (2,3), (2,4))
@@ -57,7 +57,7 @@ res1: List[(Int, Int)] = List((1,3), (1,4), (2,3), (2,4))
 scala&gt; (x: Int) =&gt; List(3, 4).map(y =&gt; (x, y))
 res2: Int =&gt; List[(Int, Int)] = <function1>
 </pre>
-<p>C'est donc une fonction qui prend un Int et renvoie une liste de paires. Voici le résultat de l'execution quand on passe 1 en paramètre :</p>
+<p>C'est donc une fonction qui prend un Int et renvoie une liste de paires. Voici le résultat de l'exécution quand on passe 1 en paramètre :</p>
 <pre class="prettyprint">
 scala&gt; res2(1)
 res3: List[(Int, Int)] = List((1,3), (1,4))
@@ -67,7 +67,7 @@ res3: List[(Int, Int)] = List((1,3), (1,4))
 scala&gt; List(1, 2).flatMap(x =&gt; List((x, 3), (x, 4)))
 res4: List[(Int, Int)] = List((1,3), (1,4), (2,3), (2,4))
 </pre>
-<p>Comme précedemment, revoyons la scène au ralenti :</p>
+<p>Comme précédemment, revoyons la scène au ralenti :</p>
 <pre class="prettyprint">
 scala&gt; List(1, 2).map(x =&gt; List((x, 3), (x, 4)))
 res5: List[List[(Int, Int)]] = List(List((1,3), (1,4)), List((2,3), (2,4)))
