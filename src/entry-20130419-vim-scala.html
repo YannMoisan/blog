@@ -5,7 +5,9 @@ $description=Vim comme IDE Scala
 Je suis en cours de conversion de IntelliJ Idea vers Vim, pour développer en Scala. J'ai déjà brièvement parlé de Vim et Scala <a href="tdd-en-scala.html">dans ce billet</a>.
 Le but de ce billet est de présenter comment configurer Vim pour avoir les principales fonctionnalités d'un IDE.
 L'utilisation de Vim en entreprise me semble assez marginale en France, comme s'en étonne Bodil Stokke dans ce tweet :
-<blockquote>« Enterprise guys give me such a feeling of disconnect: they're arguing IDEA vs Eclipse instead of vim vs emacs. »</blockquote>Il me paraît donc important de mentionner que moult développeurs talentueux utilisent Vim.
+</p>
+<blockquote>« Enterprise guys give me such a feeling of disconnect: they're arguing IDEA vs Eclipse instead of vim vs emacs. »</blockquote>
+<p>Il me paraît donc important de mentionner que moult développeurs talentueux utilisent Vim.
 En voici quelques-uns qui sont pour moi une source d'inspiration :
 </p>
 
@@ -27,7 +29,7 @@ Ctags est un outil classique du monde Unix. Il ne supporte pas Scala par défaut
 <p>Alors que l'IDE recompile de manière transparente le code pour permettre la complétion, il faut lancer ctags à la main. Le mapping suivant permet d'effectuer cela en tapant <code>F5</code>.
 <pre class="prettyprint">
 map &lt;F5&gt; :!ctags -R
-</pre/>
+</pre>
 <p>Le plugin <a href="https://github.com/majutsushi/tagbar/">tagbar</a> donne un aperçu de la structure du code source du fichier courant, comme la vue <i>structure</i> d'IntelliJ Idea. 
 Le langage Scala n'est pas supporté par défaut. Il faut ajouter la ligne suivante dans le <code>.vimrc</code>
 <pre class="prettyprint">
@@ -45,7 +47,8 @@ let g:tagbar_type_scala = {
         \ 'r:cclasses',
         \ 'm:methods'
     \ ]
-\ }</pre/>
+\ }</pre>
+<p>
 J'ai noté deux limites : tagbar confond méthode et variable, et les méthodes ne sont pas regroupées par objet.
 </p>
 
@@ -58,15 +61,15 @@ La complétion de code est native dans Vim. Les commandes sont <code>&lt;C-n&gt;
 <p>
 ack est un meilleur grep. Le plugin <a href="https://github.com/mileszs/ack.vim">Ack.vim</a> ajoute une commande <code>:Ack [options] {pattern} [{directory}]</code> qui permet de chercher récursivement <i>pattern</i> dans <i>directory</i>. Les résultats alimentent le quick fix de Vim. Les mappings suivant permettent de faciliter la navigation dans les occurences du quick fix.
 <pre class="prettyprint">
-nnoremap &lt;silent&gt; [q :cprevious<CR>
-nnoremap &lt;silent&gt; ]q :cnext<CR>
-nnoremap &lt;silent&gt; [Q :cfirst<CR>
-nnoremap &lt;silent&gt; ]Q :clast<CR>
-</pre/>
+nnoremap &lt;silent&gt; [q :cprevious&lt;CR&gt;
+nnoremap &lt;silent&gt; ]q :cnext&lt;CR&gt;
+nnoremap &lt;silent&gt; [Q :cfirst&lt;CR&gt;
+nnoremap &lt;silent&gt; ]Q :clast&lt;CR&gt;
+</pre>
 ack recherche par défaut dans le répertoire courant. Il est pratique de configurer son .ackrc pour limiter le bruit en excluant certains fichiers ou répertoires.
 <pre class="prettyprint">
 --ignore-dir=target
-</pre/>
+</pre>
 <p>Dans IntelliJ Idea, c'est <i>Edit | Find | Find in Path</i>.
 </p>
 
@@ -75,7 +78,8 @@ ack recherche par défaut dans le répertoire courant. Il est pratique de config
 Le plugin <a href="https://github.com/kien/ctrlp.vim">CtrlP</a> ajoute, entre autres, une commande <code>:CtrlP</code> qui ouvre un fichier à partir de son nom, en mode fuzzy. ctrlp trouve la racine du projet en recherchant le répertoire <code>.git</code>. Pour exclure certains fichiers ou répertoires, on utilise le <code>wildignore</code> de vim :
 <pre class="prettyprint">
 set wildignore=**/target/*
-</pre/>
+</pre>
+<p>
 Dans IntelliJ Idea, c'est <i>Navigation | File</i>.
 </p>
 
