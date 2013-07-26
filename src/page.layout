@@ -29,23 +29,22 @@
      </head>
      <body onLoad="prettyPrint()">
          <div class="container">
-             <!-- <header class="jumbotron subhead" id="overview">-->
-             <header class="clearfix">
+             <header class="clearfix header">
              <div class="hleft">
                  <h1>Yann Moisan</h1>
              <p>Sur Java, les technos Web, Linux...</p>
              </div>
              <div class="hright">
                  <ul>
-                     <li><img width="16" height="16" alt="rss" src="rss.png"><a href="rss.xml">RSS</a></li>
-                     <li><img width="16" height="16" alt="email" src="email.png">yamo93[AT]gmail[DOT]com</li>
-                     <li><img width="16" height="16" alt="twitter" src="twitter.png"><a href="https://twitter.com/yannmoisan">twitter</a></li>
-                     <li><img width="16" height="16" alt="linkedin" src="linkedin.png"><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
-                     <li><img width="16" height="16" alt="github" src="github.png"><a href="https://github.com/YannMoisan">GitHub</a></li>
+                     <li><a href="rss.xml"><img width="32" height="32" alt="rss" src="rss.png"></a></li>
+                     <li><img width="32" height="32" alt="email" src="email.png"></li>
+                     <li><a href="https://twitter.com/yannmoisan"><img width="32" height="32" alt="twitter" src="twitter.png"></a></li>
+                     <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><img width="32" height="32" alt="linkedin" src="linkedin.png"></a></li>
+                     <li><a href="https://github.com/YannMoisan"><img width="32" height="32" alt="github" src="github.png"></a></li>
                  </ul>
              </div>
              </header>
-             <nav class="clearfix">
+             <nav class="menu">
              <ul>
                  <li><a href="index.html">Accueil</a></li>
                  <li><a href="a-propos.html">A propos</a></li>
@@ -54,10 +53,7 @@
              </ul>
              </nav>
 
-             <!--             <div id="sep"></div> -->
              <div class="row">
-                 <!--                 <div class="span8">
-                     -->
                      <!-- nav -->
                      <!-- entry -->
                      <div class="nav">
@@ -133,7 +129,6 @@
                      </div>
                      -->
                  </div>
-                 <hr>
                  <footer>
                  <span id="copyright">&copy; 2012 Yann Moisan</span>
                  <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>

@@ -71,7 +71,8 @@ for ((i=0;i<l;i++));do
 #    sed -i "s/\$year/$year/" $dst_dir/index.html
 #    sed -i "s/\$title/$title/" $dst_dir/index.html
 
-    echo "<ul class=\"pager\">"  >> $out
+    echo "<nav class=\"pager\">" >> $out
+    echo "<ul>"  >> $out
     if [ $i -ne 0 ];then
         prev=${entry_files[$i-1]#src/entry*-*-}
         echo "<li class=\"previous\"><a href=\"$prev\">Billet précédent</a></li>" >> $out
@@ -82,6 +83,7 @@ for ((i=0;i<l;i++));do
         echo "<li class=\"next\"><a href=\"$next\">Billet suivant</a></li>" >> $out
     fi
     echo "</ul>"  >> $out
+    echo "</nav>"  >> $out
 
     cat src/entry.layout >> $out
     tail -n +4 $in > $out.filtered
