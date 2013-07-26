@@ -5,14 +5,14 @@ $description=Scala Puzzles
 Je vous encourage à réfléchir un peu avant de tester dans le REPL. 
 Et j'en profite pour vous donner une petite astuce que je viens de découvrir : <code>:paste</code> permet de coller plusieurs lignes dans le REPL.
 </p>
-<h2>Division par zéro</h2>
+<h3>Division par zéro</h3>
 Commençons par une venant de Java :
 <pre class="prettyprint">
 0/0
 0d/0
 </pre>
 <p>Qu'affichent ces deux lignes ?</p>
-<h2>Pattern matching</h2>
+<h3>Pattern matching</h3>
 <p>Considérons la méthode suivante :</p>
 <pre class="prettyprint">
 def f(a: Any) = a match {
@@ -25,7 +25,7 @@ def f(a: Any) = a match {
 f(List(42))
 f(List("scala.io"))
 </pre>
-<h2>Pattern matching</h2>
+<h3>Pattern matching</h3>
 <pre class="prettyprint">
 case class A(x: Int, y: Int)
 def f: A =&gt; Int = { a =&gt; a.x + a.y }
@@ -36,7 +36,7 @@ def g: A =&gt; Int = { case A(x, y) =&gt; x + y }
 f(A(21, 21))
 g(A(21, 21))
 </pre>
-<h2>Un pattern courant</h2>
+<h3>Un pattern courant</h3>
 <pre class="prettyprint">
 object Action { def apply(f: String =&gt; Int) = { s: String =&gt; println("s = " + f(s)) } }
 val f = Action { _.length }
