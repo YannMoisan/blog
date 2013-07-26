@@ -1,11 +1,11 @@
 <article>
     <header>
+        <h2 class="entry-title"><!-- title --></h2>
         <div class="entry-date">
             <span class="day"><!-- day --></span>
             <span class="month"><!-- month --></span>
             <span class="year"><!-- year --></span>
         </div>
-        <h2 class="entry-title"><!-- title --></h2>
     </header>
     <div class="entry-content">
         <!-- content -->
