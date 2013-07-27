@@ -152,6 +152,7 @@ cat xx00 > $dst_dir/index2.html
 cat $dst_dir/index.html >> $dst_dir/index2.html
 cat xx02 >> $dst_dir/index2.html
 mv $dst_dir/index2.html $dst_dir/index.html
+sed -i "s/<!-- title -->/Liste des billets/" $dst_dir/index.html
 
 cp $src_dir/bootstrap.css $dst_dir/bootstrap.css
 cp $src_dir/yamo.css $dst_dir/yamo.css
