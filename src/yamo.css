@@ -168,7 +168,15 @@ a {
 a:hover {
     background: #eee8d5; 
 }
-
+table {
+    width: 100%;
+}
+th {
+    text-align: left;
+}
+td, th {
+    padding: 8px;
+}
 dl dt, dl dd {
     display: inline-block;
     min-height: 1.5em;

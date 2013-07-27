@@ -1,47 +1,137 @@
 $title=Mes astuces Vim
 $description=Mes astuces Vim
 -----
-<p>Voici une petite liste d'astuces que j'ai apprises en jouant à VimGolf</p>
+<p>Voici quelques astuces que j'ai apprises en jouant à VimGolf</p>
 
-<h3>Quelques astuces simples pour gagner une frappe de touche</h3>
+<h3>Gagner une frappe de touche</h3>
 <table>
-    <tr>
-        <td><code>hx</code></td>
-        <td><code>X</code></td>
-    </tr>
-    <tr>
-        <td><code>j^</code></td>
-        <td><code>+</code></td>
-    </tr>
-    <tr>
-        <td><code>k^</code></td>
-        <td><code>-</code></td>
-    </tr>
-    <tr>
-        <td><code>d$</code></td>
-        <td><code>D</code></td>
-    </tr>
-    <tr>
-        <td><code>jdd</code></td>
-        <td><code>JD</code></td>
-    </tr>
+    <thead>
+        <tr>
+            <th>long</th>
+            <th>court</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>hx</code></td>
+            <td><code>X</code></td>
+            <td>supprimer le caractère avant le curseur</td>
+        </tr>
+        <tr>
+            <td><code>j^</code></td>
+            <td><code>+</code></td>
+            <td>aller au premier caractère non vide de la ligne suivante</td>
+        </tr>
+        <tr>
+            <td><code>k^</code></td>
+            <td><code>-</code></td>
+            <td>aller au premier caractère non vide de la ligne précédente</td>
+        </tr>
+        <tr>
+            <td><code>d$</code></td>
+            <td><code>D</code></td>
+            <td>supprimer jusqu'à la fin de la ligne</td>
+        </tr>
+        <tr>
+            <td><code>jdd</code></td>
+            <td><code>JD</code></td>
+            <td>supprimer la ligne du dessous</td>
+        </tr>
+    </tbody>
 </table>
 
-<h3>Les opérateurs commençant par g</h3>
-<p>Avec Vim, il suffit de doubler les opérateurs pour qu'ils s'appliquent à la ligne courante. Par exemple : dd. Et pour certains opérateurs, il existe même une syntaxe raccourcie.</p>
-<p>gugu = guu : mettre la ligne courante en minuscule</p>
-<p>gUgU = gUU : mettre la ligne courante en majuscule</p>
-<p>g?g? = g?? : mettre la ligne courante en ROT13</p>
-<p>g~g~ = g~~ : inverser la casse de ligne courante</p>
+<h3>Opérateurs commençant par g</h3>
+<p>Avec Vim, il suffit de doubler les opérateurs pour qu'ils s'appliquent à la ligne courante. Par exemple : <code>dd</code>. Et pour certains opérateurs, il existe même une syntaxe raccourcie.</p>
+<table>
+    <thead>
+        <tr>
+            <th>long</th>
+            <th>court</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>gugu</code></td>
+            <td><code>guu</code></td>
+            <td>mettre la ligne courante en minuscule</td>
+        </tr>
+        <tr>
+            <td><code>gUgU</code></td>
+            <td><code>gUU</code></td>
+            <td>mettre la ligne courante en majuscule</td>
+        </tr>
+        <tr>
+            <td><code>g?g?</code></td>
+            <td><code>g??</code></td>
+            <td>mettre la ligne courante en ROT13</td>
+        </tr>
+        <tr>
+            <td><code>g~g~</code></td>
+            <td><code>g~~</code></td>
+            <td>inverser la casse de ligne courante</td>
+        </tr>
+    </tbody>
+</table>
 
-<h3>Recherche/Substituion</h3>
-<p>:g/^/m0 : inverser l'ordre du fichier</p>
-<p>:s = &amp; : Répéter la dernière substitution</p>
-<p>g&amp; = :%s//~/&amp; : Répéter la dernière substitution sur tout le fichier</p>
-<p>@: Répéter la dernière ex commande</p>
+<h3>Recherche et substitution</h3>
+<table>
+    <thead>
+        <tr>
+            <th>long</th>
+            <th>court</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td><code>:g/^/m0</code></td>
+            <td>inverser l'ordre du fichier</td>
+        </tr>
+        <tr>
+            <td><code>:s</code></td>
+            <td><code>&amp;</code></td>
+            <td>répéter la dernière substitution</td>
+        </tr>
+        <tr>
+            <td><code>:%s//~/g</code></td>
+            <td><code>g&amp;</code></td>
+            <td>répéter la dernière substitution sur tout le fichier</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><code>@:</code></td>
+            <td>répéter la dernière ex commande</td>
+        </tr>
+    </tbody>
+</table>
 
 <h3>Quelques commandes avec la touche Ctrl</h3>
-<p>&lt;C-x&gt;&lt;C-l&gt; : En mode insertion, complétion pour une ligne entière</p>
-<p>&lt;C-n&gt; ou &lt;C-p&gt; : En mode insertion, insérer le mot suivant/précédent correspondant (complétion)</p>
-<p>&lt;C-o&gt; : Revenir au dernier emplacement visité</p>
-<p>&lt;C-a&gt; / &lt;C-x&gt; : En mode normal, incrémenter / décrémenter le prochaine nombre sur la ligne</p>
+<table>
+    <thead>
+        <tr>
+            <th>commande</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>&lt;C-x&gt;&lt;C-l&gt;</code></td>
+            <td>en mode insertion, complétion pour une ligne entière</td>
+        </tr>
+        <tr>
+            <td><code>&lt;C-n&gt; ou &lt;C-p&gt;</code></td>
+            <td>en mode insertion, insérer le mot suivant/précédent correspondant (complétion)</td>
+        </tr>
+        <tr>
+            <td><code>&lt;C-o&gt;</code></td>
+            <td>revenir au dernier emplacement visité</td>
+        </tr>
+        <tr>
+            <td><code>&lt;C-a&gt; / &lt;C-x&gt;</code></td>
+            <td>en mode normal, incrémenter / décrémenter le prochaine nombre sur la ligne</td>
+        </tr>
+    </tbody>
+</table>
