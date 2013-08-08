@@ -10,6 +10,9 @@ dst_dir=target
 bp=#b
 ep=#e
 
+short_months=("Jan" "Fév" "Mar" "Avr" "Mai" "Jun" "Jul" "Aoû" "Sep" "Oct" "Nov" "Déc")
+long_months=("janvier" "février" "mars" "avril" "mai" "juin" "juillet" "août" "septembre" "octobre" "novembre" "décembre")
+
 appendHeader() {
     sed -n 1,/$bp/p $1 | sed \$d >> $2
 }
@@ -87,8 +90,9 @@ for ((i=0;i<l;i++));do
 
     cat src/entry.layout >> $out
     tail -n +4 $in > $out.filtered
+    month_index=`expr $month - 1`
     sed -i "s/<!-- day -->/$day/" $out
-    sed -i "s/<!-- month -->/$month/" $out
+    sed -i "s/<!-- month -->/${long_months[$month_index]}/" $out
     sed -i "s/<!-- year -->/$year/" $out
     sed -i "s/<!-- title -->/$title/" $out
     sed -i "s/<!-- description -->/$description/" $out
@@ -98,7 +102,6 @@ for ((i=0;i<l;i++));do
     cat xx02 >> $out 
 done
 
-months=("Jan" "Fév" "Mar" "Avr" "Mai" "Jun" "Jul" "Aoû" "Sep" "Oct" "Nov" "Déc")
 
 #index in reverse order, lot of duplicate code with above code
 for ((i=l-1;i>=0;i--));do
@@ -121,7 +124,7 @@ for ((i=l-1;i>=0;i--));do
     sed -i "s/\$day/$day/" $dst_dir/index.html
     
     month_index=`expr $month - 1`
-    month_name=${months[$month_index]}
+    month_name=${short_months[$month_index]}
     echo $month
     echo `expr $month - 1`
     echo $month_name
@@ -154,16 +157,8 @@ cat xx02 >> $dst_dir/index2.html
 mv $dst_dir/index2.html $dst_dir/index.html
 sed -i "s/<!-- title -->/Liste des billets/" $dst_dir/index.html
 
-cp $src_dir/bootstrap.css $dst_dir/bootstrap.css
-cp $src_dir/yamo.css $dst_dir/yamo.css
-cp $src_dir/prettify.css $dst_dir/prettify.css
-cp $src_dir/prettify.js $dst_dir/prettify.js
-cp $src_dir/style.css $dst_dir/style.css
-cp $src_dir/favicon.ico $dst_dir/favicon.ico
-cp $src_dir/belt3_L.gif $dst_dir/belt3_L.gif
-cp $src_dir/rss.png $dst_dir/rss.png
-cp $src_dir/twitter.png $dst_dir/twitter.png
-cp $src_dir/email.png $dst_dir/email.png
-cp $src_dir/linkedin.png $dst_dir/linkedin.png
-cp $src_dir/github.png $dst_dir/github.png
-
+# copy static resources : images, styles, …
+for f in `find src/* -not -name "*.html" -not -name "*.layout"`
+do
+    cp $f $dst_dir
+done
