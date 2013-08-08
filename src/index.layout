@@ -1,4 +1,4 @@
-<h1>Billets</h1>
+<h2>Billets</h2>
 <ul class="unstyled">
     #b
     <li><span class="time">$day $month $year</span><a href="$fout">$title</a></li>
