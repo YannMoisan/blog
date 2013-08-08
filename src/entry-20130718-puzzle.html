@@ -12,6 +12,11 @@ Commençons par une venant de Java :
 0d/0
 </pre>
 <p>Qu'affichent ces deux lignes ?</p>
+<p>
+La première ligne lève une <code>java.lang.ArithmeticException</code> alors que la deuxième affiche <code>NaN</code>.
+Cela peut paraitre étrange mais c'est conforme au standard <a href="http://fr.wikipedia.org/wiki/IEEE_754">IEEE 754</a> pour la représentation des nombres à virgule flottante.
+NaN est le résultat d'une opération invalide.
+</p>
 <h3>Pattern matching</h3>
 <p>Considérons la méthode suivante :</p>
 <pre class="prettyprint">
@@ -25,6 +30,10 @@ def f(a: Any) = a match {
 f(List(42))
 f(List("scala.io"))
 </pre>
+<p>
+Les deux lignes affichent <code>int</code>.
+Le <i>pattern matching</i> est fait à l'exécution, l'information de type n'est donc plus disponible en raison du <i>type erasure</i> de la JVM.
+</p>
 <h3>Pattern matching</h3>
 <pre class="prettyprint">
 case class A(x: Int, y: Int)
@@ -36,6 +45,9 @@ def g: A =&gt; Int = { case A(x, y) =&gt; x + y }
 f(A(21, 21))
 g(A(21, 21))
 </pre>
+<p>Même si la syntaxe de la deuxième méthode est surprenante, les deux méthodes sont équivalentes.
+Scala permet d'utiliser le <i>pattern matching</i>, et donc la déstructuration pour les paramètres d'entrée d'une fonction anonyme.
+</p>
 <h3>Un pattern courant</h3>
 <pre class="prettyprint">
 object Action { def apply(f: String =&gt; Int) = { s: String =&gt; println("s = " + f(s)) } }
@@ -47,5 +59,8 @@ val g = Action { _.toInt }
 f("42")
 g("42")
 </pre>
-<p>Les explications arrivent bientôt, le temps de vous laissez cogiter un peu…</p>
+<p>
+Cette astuce combine l'appel implicite de la méthode <code>apply</code> du <i>companion object</i>, qui est une <abbr title="higher-order function">HOF</abbr> car elle retourne une méthode. 
+Cela permet d'implémenter élégamment le design pattern <i>Template method</i>.
+</p>
 <p>PS: Les plus attentifs auront surement remarqué une <a href="http://scala.io">publicité subliminale</a>.</p>
