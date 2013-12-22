@@ -37,8 +37,9 @@
              <div class="hright">
                  <ul>
                      <li><a href="rss.xml"><img width="32" height="32" alt="rss" src="rss.png"></a></li>
-                     <li><img width="32" height="32" alt="email" src="email.png"></li>
+                     <li><a href="mailto:yamo93+blog@gmail.com"><img width="32" height="32" alt="email" src="email.png"></a></li>
                      <li><a href="https://twitter.com/yannmoisan"><img width="32" height="32" alt="twitter" src="twitter.png"></a></li>
+                     <li><a href="http://stackoverflow.com/users/1437346/yann-moisan"><img width="32" height="32" alt="stackoverflow" src="stackoverflow.png"></a></li>
                      <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><img width="32" height="32" alt="linkedin" src="linkedin.png"></a></li>
                      <li><a href="https://github.com/YannMoisan"><img width="32" height="32" alt="github" src="github.png"></a></li>
                  </ul>
