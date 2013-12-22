@@ -28,3 +28,14 @@ Les moteurs de rendu pdf sont en dépendances optionnelles. Il faut donc en inst
 IntelliJ Idea est le meilleur IDE pour Java. Mais il plante au démarrage en affichant l'erreur suivante :
 <code>Caused by: java.lang.UnsatisfiedLinkError: /usr/lib/jvm/java-7-openjdk/jre/lib/amd64/libsplashscreen.so: libgif.so.4</code>. Il faut installer giflib.
 </p>
+<h2>Imprimante</h2>
+<p>Il faut installer les paquets <code>cups</code> (le serveur d'impression) et <code>gutenprint</code> (un ensemble de drivers). Il reste alors à démarrer le service : <code>systemctl start cups</code>. J'ai opté pour un démarrage à la main, uniquement en cas de besoin. On peut alors configurer alors l'imprimante, une Canon PIXMA 360 dans mon cas, dans un navigateur <a href="http://localhost:631">localhost:631</a> grâce à l'interface web de cups.</p>
+<h2>Touches multimédia</h2>
+<p>Pour pouvoir régler le volume à l'aide des touches multimédia, il faut installer le paquet <code>alsa-utils</code> qui contient le programme amixer. Puis installer le paquet <code>xorg-xev</code> qui contient le programme xev, qui nous permettra de trouver les codes des touches multimédia. Il reste alors à configurer i3, voici l'extrait de ma config :</p>
+<pre class="prettyprint">
+bind 123 exec amixer -q set Master 2dB+ unmute
+bind 122 exec amixer -q set Master 2dB- unmute
+bind 121 exec amixer -q set Master toggle
+</pre>
+<h2>Réseau</h2>
+<p>Je gère aussi le réseau à la main. J'utilise le programme wifi-menu pour le wifi et j'utilise la commande suivante pour me connecter en ethernet <code>netcfg -u ethernet-dhcp</code>, ce qui correspond au profil dans mon répertoire <code>etc/network.d/</code>.</p>
