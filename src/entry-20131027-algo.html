@@ -1,0 +1,132 @@
+$title=Coursera, Algorithms: Design and Analysis
+$description=Coursera, Algorithms: Design and Analysis
+-----
+<p>Une bonne connaissance des algorithmes et des structures de données est indispensable pour un développeur. C'est aussi présent dans <a href="http://programmer.97things.oreilly.com/wiki/index.php/Use_the_Right_Algorithm_and_Data_Structure">97 Things Every Programmer Should Know</a>. 
+J'ai suivi le cours Algorithms: Design and Analysis, de l'université de Stanford, sur Coursera.
+Ce cours est passionnant et exigeant. Il m'a permis de réviser des algos appris à l'école, d'en découvrir de nouveau et d'implémenter tout cela en Scala.
+Il est constitué de deux parties de 6 semaines. Voici un petite mémo qui me servira de pense bête pour me remémorer tous les choses apprises durant ce cours.
+J'ai laissé la plupart des termes en anglais car il est plus aisé de trouver de l'information en anglais sur ces sujets. Voici le programme :
+</p>
+<h2>Première partie</h2>
+<h3>Introduction</h3>
+<p><a href="http://en.wikipedia.org/wiki/Karatsuba_algorithm">Karatsuba multiplication</a> : pour montrer qu'il peut toujours y avoir un meilleur algorithme, même pour quelque chose d'aussi trivial qu'une multiplication.</p>
+<p>merge sort : introduction à diviser pour régner</p>
+<h3>Diviser pour régner</h3>
+<ul>
+    <li>Diviser en sous problème plus petit</li>
+    <li>Résoudre récursivement chaque sous problème</li>
+    <li>Combiner le résultat des sous problèmes</li>
+</ul>
+<p>Voici deux autres algorithmes pour illustrer ce principe.
+<p>counting inversion : étant donné un tableau A contenant les nombres 1,2,…,n, il faut déterminer le nombre d'inversions, c'est à dire le nombre de couple d'indices (i,j) tels que A[i] &gt; A[j]. Cela permet de mesurer la similarité entre 2 listes rankés, pour du <i>collaborative filtering</i> par ex.</p>
+<p>Algorithme de <a href="http://en.wikipedia.org/wiki/Strassen_algorithm">Strassen</a> pour la multiplication de matrices.</p>
+<h3>Master method</h3>
+<p>C'est une boite noire pour résoudre les récurrences.</p>
+<h3>Quick sort</h3>
+<p>Un algorithme star, tri en O(nlog n), travail in-place (économe en mémoire). L'idée principale est de partitionner autour d'un pivot.</p>
+<h3>Graphes et algorithme de contraction</h3>
+<p>Le découpage d'un graphe est une partition des nœuds en deux ensembles non vide.
+<p>Le problème du <a href="http://en.wikipedia.org/wiki/Minimum_cut">minimum cut</a> : étant donné un graphe non orienté, 
+déterminer un découpage qui minimise le nombre d'arcs traversants. 
+C'est utile pour identifier les goulots d'étranglement, pour détecter les communautés dans un réseau social, pour segmenter une image.
+<p>Pour représenter un graphe, il existe 2 choix : la liste d'adjacence O(m+n) et la matrice d'adjacence O(n<sup>2</sup>), 
+chacun ayant des avantages et des inconvénients en fonction de la densité du graphe et des opérations nécessaires.</p>
+<p>L'algorithme de <a href="http://en.wikipedia.org/wiki/Karger%27s_algorithm">Karger</a> utilise une contraction aléatoire et demande donc à être exécuté plusieurs fois.</p>
+<h3>Recherche dans les graphes</h3>
+<p><abbr title="Breadth First Search">BFS</abbr> : parcours en largeur. O(m+n) avec une queue (FIFO). Utile pour les plus court chemin</p>
+<p><abbr title="Depth First Search">DFS</abbr> : parcours en profondeur. O(m+n) avec une stack (LIFO). Utile pour calculer un ordre topologique DAG</p>
+<p><abbr title="Strongly Connected Components">SCC</abbr> : Kosaraju. O(m+n). basé sur DFS </p>
+<h3>Algorithme de <a href="http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra</a></h3>
+<p>Single-Source Shortest Path. Implémentation naïve : O(mn). Implémentation avec une heap : O(mlog n). 
+Permet de souligner l'importance de l'utilisation d'une structure de données adaptée. Ne fonctionne pas avec des longueurs négatives.</p>
+<h3>Heap</h3>
+<p>insert et extract-min en O(log n). Permet de souligner l'importance de l'utilisation d'une structure de données adaptée. <code>PriorityQueue</code> in Scala. 
+Application : maintenir la médiane en utilisant 2 heaps.</p>
+<h3><abbr title="Balanced Search Tree">BST</abbr></h3>
+<p>Comme des tableaux triés mais supporte aussi l'insertion et la suppression en O(log n) au lieu de O(n). 
+La plupart des opération dans un arbre sont en O(height), c'est à dire entre O(n) dans le cas d'une chaine et O(log n) dans le cas d'un arbre parfaitement balancé. 
+C'est pour cela que les arbres balancés sont intéressants, comme les Red-black trees.</p>
+<p>Les BST peuvent être stocké dans un tableau.</p>
+<p>Il y a les <a href="http://en.wikipedia.org/wiki/Red%E2%80%93black_tree">Red-black tree</a> mais aussi : AVL tree, …, <a href="http://en.wikipedia.org/wiki/B-tree">B-tree</a>.
+<h3>Hashing</h3>
+<p>Hash table : insert, delete, lookup in O(1). Application : de-duplication, 2-SUM problem</p>
+<h3><a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloom filter</a></h3>
+<p>fast insert and lookup, plus économe en mémoire qu'une HashMap. Inconvénients : faux positif.</p>
+<p>Utilisation : correcteur d'orthographe, liste de mots de passe interdits, routeurs réseau</p>
+<h2>Deuxième partie</h2>
+<h3>Les algorithmes greedy (glouton)</h3>
+<ul>
+    <li>Facile de proposer de multiples algorithmes greedy pour plusieurs problèmes</li>
+    <li>Facile d'analyser le temps d'exécution</li>
+    <li>Difficile de prouver la justesse</li>
+</ul>
+<p>Attention : la plupart des algos greedy ne sont pas corrects (ex: Dijkstra avec des longueurs négatives).</p>
+<h3>Ordonnancement de tâches</h3>
+<p>Problème d'ordonnancement de tâches : dans quel ordre doit on exécuter des tâches pour minimiser la somme pondérée des temps d'achèvement.
+Trier par ordre décroissant de w<sub>j</sub>/l<sub>j</sub>. O(nlogn) : pour le tri.</p>
+<h3>Algorithme de <a href="http://en.wikipedia.org/wiki/Prim%27s_algorithm">Prim</a></h3>
+<p><a href="http://en.wikipedia.org/wiki/Minimum_spanning_tree">Minimum spanning tree</a>, Arbres couvrants minimaux. Le but est de connecter un ensemble de points au moindre cout.
+Il existe 2 algos très rapide, en O(m log n) : Prim et Kruskal. Le graphe en entrée est un graphe connexe et non orienté.
+L'algo de Prim passe de O(mn) en O(m log n) en utilisant une structure de donnée adaptée, à savoir une <i>heap</i> (tas).</p>
+<h3>Algorithme de <a href="http://en.wikipedia.org/wiki/Kruskal%27s_algorithm">Kruskal</a></h3>
+<p>L'algo de Kruskal utilise lui une structure de données Union-Find pour détecter les cycles. Cette structure permet de maintenir des partitions d'un ensemble d'objets.
+</p>
+<h3><a href="http://en.wikipedia.org/wiki/Cluster_analysis">Clustering</a></h3>
+<p>Il est aussi connu sous le nom de <i>unsupervised learning</i>. Le but est classer n points en groupe cohérents.
+Soit k le nombre de clusters voulus, l'espace maximum d'un k-clustering est min<sub>separated p,q</sub> d(p,q).
+Le problème du <i>Max-spacing k-Clustering</i> : Soit une distance d et un nombre k, déterminer le k-Clustering avec l'espace maximum.
+</p>
+<h3><a href="http://en.wikipedia.org/wiki/Huffman_coding">Huffman code</a></h3>
+<p>Un code binaire est une association entre chaque caractère d'un alphabet et une chaine binaire. Un code binaire peut-être vu comme un arbre binaire.
+Le but est de déterminer le meilleur encodage binaire. 
+Définition : étant la probabilité pour chaque caractère, déterminer une arbre qui minimise la longueur d'encodage moyenne.
+L'idée de l'algo est de construire l'arbre du bas vers le haut (<i>bottom-up</i>) en effectuant des fusions successives.</p>
+<h3>Introduction à la programmation dynamique</h3>
+<p>Le problème du Weighted Independant Set (WIS) permet d'introduire la programmation dynamique.
+Soit un chemin avec des poids sur les nœuds, il faut choisir un ensemble de nœuds non adjacents maximisant la somme des poids.
+Voici les ingrédients clés de la programmation dynamique : 
+1. identifier un petit nombre de sous problèmes 
+2. peut rapidement et correctement résoudre de plus grand sous-problème à partir des solutions de plus petits sous problèmes.
+3. aprés avoir résolut tous les sous-problèmes, pouvoir construire la solution finale
+<h3><a href="http://en.wikipedia.org/wiki/Knapsack_problem">The Knapsack problem</a></h3>
+<p>(problème du sac à dos) : Définition : soit un ensemble d'objets avec une valeur et un poids, 
+le but est choisir un sous ensemble d'objets dont la valeur totale est maximale sans dépasser un poids donné.
+Algo dynamique en O(nW).
+</p>
+<h3><a href="http://en.wikipedia.org/wiki/Sequence_alignment">sequence alignment</a></h3>
+<p>Aligner 2 chaines en minimisant la pénalité totale. Utilisation du score de Needleman-Wunsch pour mesurer la similarité entre 2 chaines.</p>
+<h3>Algorithme de <a href="http://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm">Bellman-Ford</a></h3>
+<p>Il permet de résoudre le Single Source Shortest Path (SSSP), plus courts chemins à origine unique. 
+Étant donné un graphe orienté et un nœud source, le but est de calculer la longueur du plus court chemin pour chaque destination.
+L'avantage de cet algorithme est qu'il fonctionne avec des arcs de longueur négative. Temps d'exécution : O(mn) 
+</p>
+<h3>All-Pairs Shortest Path (APSP)</h3>
+<p>calcul la longueur du plus court chemin pour chaque couple de nœud.
+L'algorithme de <a href="http://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm">Floyd-Warshall</a> : O(n<sup>3</sup>)
+L'algorithme de <a href="http://en.wikipedia.org/wiki/Johnson%27s_algorithm">Johnson</a> : une invocation de Bellman-Ford puis n invocation de Dijkstra. O(mnlog n)
+</p>
+
+<h3>Problèmes NP-complet</h3>
+<p>Commençons par 2 exemples de problèmes : plus courts chemins sans cycle dans un graphe avec des cycles négatifs et Knapsack.
+Il est largement conjecturé que P ≠ NP mais ça n'a jamais été prouvé, il existe même une récompense de 1 million de dollar à celui qui trouvera la démonstration.
+Il existe 3 stratégies quand on est confronté à de tels problèmes :</p>
+<ul>
+    <li>se concentrer sur des cas spéciaux</li>
+    <li>heuristique : algorithme rapide mais pas toujours correct</li>
+    <li>solution en temps exponentiel meilleure que brute force</li>
+</ul>
+<p>NP complet : un problème pour lequel il n'existe pas de solution en temps polynomial</p>
+<h3>Algorithmes exacts</h3>
+<p><a href="http://en.wikipedia.org/wiki/Vertex_cover">Vertex cover</a>, problème de couverture minimum de sommets. 
+Étant donné un graphe non orienté, le but est de déterminer un sous ensemble de sommets qui contient au moins une extrémité de chaque arc.
+Il existe un algo de programmation dynamique en O(n<sup>2</sup>2<sup>n</sup>).</p>
+<p><a href="http://en.wikipedia.org/wiki/Travelling_salesman_problem">Traveling Salesman Problem</a> (TSP), le problème du voyageur de commerce : 
+Étant donné un graphe complet et non orienté, le but est de déterminer le plus court trajet qui passe une fois par chaque nœud.
+En brute force, le cout est O(n!) mais il existe une solution en programmation dynamique en O(n<sup>2</sup>2<sup>n</sup>).</p>
+<h3>Algorithmes approximatifs</h3>
+<p>Idéalement, ils fournissent une garantie de performance.</p>
+<h3>Algorithmes de recherche locale</h3>
+<p><a href="http://en.wikipedia.org/wiki/Maximum_cut">Maximum cut problem</a></p>
+<h3>Bonus</h3>
+<p>Le paradoxe des anniversaires est le nombre de personnes que l'on doit réunir pour avoir une chance sur deux que deux personnes de ce groupe aient leur anniversaire le même jour de l'année. 
+Il se trouve que ce nombre est 23. Le message est qu'en algorithmie, il faut se méfier de ses intuitions.</p>
