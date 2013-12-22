@@ -63,4 +63,17 @@ g("42")
 Cette astuce combine l'appel implicite de la méthode <code>apply</code> du <i>companion object</i>, qui est une <abbr title="higher-order function">HOF</abbr> car elle retourne une méthode. 
 Cela permet d'implémenter élégamment le design pattern <i>Template method</i>.
 </p>
+<h3>Collection</h3>
+<p>Que renvoie le code suivant ?</p>
+<pre class="prettyprint">
+Array(42) == new Array(42)
+</pre>
+<p>Et oui, cela renvoie <code>false</code>. A gauche, cela appelle la méthode <code>apply</code> du <i>companion object</i> de <code>Array</code>, qui créé un <code>Array[Int]</code> avec un seul élément. A droite, ça appelle le constructeur de <code>Array</code> qui créé un tableau de taille 42.</p>
+<h3>Collection</h3>
+<p>Que font ces deux lignes ?</p>
+<pre class="prettyprint">
+val l : List[Any] = List[Int]()
+val a : Array[Any] = Array[Int]()
+</pre>
+<p>La première ligne ne pose pas de problème. En revanche, la deuxième ligne ne compile pas car le type <code>Array</code> est invariant.</p>
 <p>PS: Les plus attentifs auront surement remarqué une <a href="http://scala.io">publicité subliminale</a>.</p>
