@@ -21,7 +21,10 @@ Dans ce billet, nous allons voir comment configurer <a href="http://www.weechat.
 <pre class="prettyprint">
 /set irc.server.freenode.autoconnect on
 /set irc.server.freenode.autojoin "#weechat-fr,#archlinux-fr"
+/set irc.server.freenode.command "/msg nickserv identify {your password}"
 </pre>
+<p>La dernière ligne permet de s'identifier automatiquement. 
+Il faut avoir au préalable engistrer son pseudo sur NickServ <sup><a href="#cite1">1</a></sup>, ce que je vous conseille pour éviter qu'on usurpe votre identité.</p>
 
 <p>
     Pour ajouter des mappings (vimesques, évidemment)
@@ -41,17 +44,12 @@ Dans ce billet, nous allons voir comment configurer <a href="http://www.weechat.
 </pre>
 
 <p>
-    Pour fixer quelques problèmes avec le thème solarized.
-    <a href="https://gist.github.com/inhies/5145065/raw/7e6027766e719ab19161fd2788b5da924c29c28c/pimping.md">solarized</a>
+    Pour fixer quelques problèmes avec le thème solarized.<sup><a href="#cite3">3</a></sup>
 </p>
 <pre class="prettyprint">
 /set weechat.bar.status.color_bg 0
 /set weechat.bar.title.color_bg 0
-/set weechat.color.chat_nick_colors 1,2,3,4,5,6
-/set buffers.color.hotlist_message_fg 7
-/set buffers.color.hotlist_highlight_bg default
-/set buffers.color.hotlist_highlight_fg 5
-/set weechat.color.chat_highlight _5
+/set weechat.color.chat_inactive_buffer lightblue
 </pre>
 
 <p>Pour vos backups, la configuration de weechat est dans <code>~/.weechat</code></p>
@@ -80,7 +78,9 @@ register [pwd]
 <pre class="prettyprint">
 account add jabber [login]@gmail.com [pwd]
 account [id] on
+account [id] set nick_format [gtalk]-%full_name
 </pre>
+<p>La dernière commande permet d'afficher un préfixe (utile quand on a plusieurs comptes), suivi du nom complet (plus lisible que le login).</p>
 
 <p>Pour configurer mon compte pro</p>
 <pre class="prettyprint">
@@ -102,3 +102,11 @@ channel [id] set password [password]
 </pre>
 
 <p>Pour vos backups, la configuration de bitlbee est dans <code>/var/lib/bitlbee</code></p>
+
+<h2>Liens utiles</h2>
+<ol>
+    <li id="cite1"><a href="http://freenode.net/faq.shtml#nicksetup">Configurer son pseudo IRC</a></li>
+    <li><a href="http://www.weechat.org/files/doc/stable/weechat_quickstart.fr.html">Guide de démarrage rapide WeeChat</a></li>
+    <li id="cite3"><a href="https://gist.github.com/inhies/5145065/raw/7e6027766e719ab19161fd2788b5da924c29c28c/pimping.md">Pimping solarized</a></li>
+    
+</ol>
