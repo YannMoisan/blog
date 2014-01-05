@@ -38,10 +38,47 @@ $description=Mes astuces Vim
             <td><code>JD</code></td>
             <td>supprimer la ligne du dessous</td>
         </tr>
+        <tr>
+            <td><code>2dd</code></td>
+            <td><code>dj</code></td>
+            <td>supprimer la ligne courant et celle du dessous</td>
+        </tr>
+        <tr>
+            <td><code>f)</code></td>
+            <td><code>%</code></td>
+            <td>aller à la prochaine parenthèse fermante</td>
+        </tr>
     </tbody>
 </table>
 
-<h3>Opérateurs commençant par g</h3>
+<h3>Quelques commandes Ex</h3>
+<p>Commençons par un rappel historique : Vim est le successeur de Vi qui est lui même le successeur de Ex.</p>
+<table>
+    <thead>
+        <tr>
+            <th>normal</th>
+            <th>commande</th>
+            <th>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>jdd</code></td>
+            <td><code>:+d</code></td>
+            <td>supprimer la ligne du dessous</td>
+        </tr>
+        <tr>
+            <td><code>yyjp</code></td>
+            <td><code>:t+</code></td>
+            <td>Copier la ligne courante en dessous de la ligne du dessous</td>
+        </tr>
+        <tr>
+            <td><code>ddggP</code></td>
+            <td><code>:m0</code></td>
+            <td>Déplacer la ligne courante au début du fichier</td>
+        </tr>
+    </tbody>
+</table><h3>Opérateurs commençant par g</h3>
 <p>Avec Vim, il suffit de doubler les opérateurs pour qu'ils s'appliquent à la ligne courante. Par exemple : <code>dd</code>. Et pour certains opérateurs, il existe même une syntaxe raccourcie.</p>
 <table>
     <thead>
@@ -122,7 +159,7 @@ $description=Mes astuces Vim
             <td>en mode insertion, complétion pour une ligne entière</td>
         </tr>
         <tr>
-            <td><code>&lt;C-n&gt; ou &lt;C-p&gt;</code></td>
+            <td><code>&lt;C-n&gt;</code> / <code>&lt;C-p&gt;</code></td>
             <td>en mode insertion, insérer le mot suivant/précédent correspondant (complétion)</td>
         </tr>
         <tr>
@@ -130,8 +167,13 @@ $description=Mes astuces Vim
             <td>revenir au dernier emplacement visité</td>
         </tr>
         <tr>
-            <td><code>&lt;C-a&gt; / &lt;C-x&gt;</code></td>
+            <td><code>&lt;C-a&gt;</code> / <code>&lt;C-x&gt;</code></td>
             <td>en mode normal, incrémenter / décrémenter le prochaine nombre sur la ligne</td>
         </tr>
     </tbody>
 </table>
+
+<h3>Entourer un mot</h3>
+<p>Pour entourer un mot avec des parenthèses, nous faisons généralement en mode normal <code>i(&lt;Esc&gt;ea)&lt;Esc&gt;</code>, ce qui fait 7 touches. Mais il existe plus efficace : <code>cw()&lt;Esc&gt;P</code>, ce qui fait 6 touches.</p>
+<p>Malheureusement, ce n'est pas rejouable avec la commande <code>.</code>. Pour pallier à cela, on peut faire <code>cw(&lt;c-r&gt;&lt;c-o&gt;")</code></p>
+<pre class="prettyprint">:h i_CTRL-R_CTRL-O</pre>
