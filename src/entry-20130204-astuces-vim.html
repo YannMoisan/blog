@@ -168,7 +168,7 @@ $description=Mes astuces Vim
         </tr>
         <tr>
             <td><code>&lt;C-a&gt;</code> / <code>&lt;C-x&gt;</code></td>
-            <td>en mode normal, incrémenter / décrémenter le prochaine nombre sur la ligne</td>
+            <td>en mode normal, incrémenter / décrémenter le prochain nombre sur la ligne</td>
         </tr>
     </tbody>
 </table>
@@ -177,3 +177,8 @@ $description=Mes astuces Vim
 <p>Pour entourer un mot avec des parenthèses, nous faisons généralement en mode normal <code>i(&lt;Esc&gt;ea)&lt;Esc&gt;</code>, ce qui fait 7 touches. Mais il existe plus efficace : <code>cw()&lt;Esc&gt;P</code>, ce qui fait 6 touches.</p>
 <p>Malheureusement, ce n'est pas rejouable avec la commande <code>.</code>. Pour pallier à cela, on peut faire <code>cw(&lt;c-r&gt;&lt;c-o&gt;")</code></p>
 <pre class="prettyprint">:h i_CTRL-R_CTRL-O</pre>
+<p>
+    Dernière possibilité, utiliser le plugin <a
+        href="https://github.com/tpope/vim-surround">vim-surround</a> de Tim Pope.
+    Il suffit alors de faire <code>veS"</code>.
+</p>
