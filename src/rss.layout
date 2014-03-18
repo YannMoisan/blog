@@ -10,6 +10,7 @@
             <description>$title</description>
             <link>http://www.yannmoisan.com/$fout</link>
             <guid>http://www.yannmoisan.com/$fout</guid>
+            <pubDate>$date</pubDate>
         </item>
         #e
     </channel>

@@ -57,11 +57,6 @@ for ((i=0;i<l;i++));do
 
     cat xx00 > $out
 
-    # RSS
-    appendContent $src_dir/rss.layout $dst_dir/rss.xml
-    sed -i "s/\$title/$title/" $dst_dir/rss.xml
-    sed -i "s/\$fout/$fout/" $dst_dir/rss.xml
-    
     # Sitemap
     appendContent $src_dir/sitemap.layout $dst_dir/sitemap.xml
     sed -i "s/\$fout/$fout/" $dst_dir/sitemap.xml
@@ -122,6 +117,14 @@ for ((i=l-1;i>=0;i--));do
     appendContent $src_dir/index.layout $dst_dir/index.html
     sed -i "s/\$fout/$fout/" $dst_dir/index.html
     sed -i "s/\$day/$day/" $dst_dir/index.html
+
+    # RSS
+    appendContent $src_dir/rss.layout $dst_dir/rss.xml
+    sed -i "s/\$title/$title/" $dst_dir/rss.xml
+    sed -i "s/\$fout/$fout/" $dst_dir/rss.xml
+    pubDate=`date -R -d $year$month$day`
+    sed -i "s/\$date/$pubDate/" $dst_dir/rss.xml
+    
     
     month_index=`expr $month - 1`
     month_name=${short_months[$month_index]}
