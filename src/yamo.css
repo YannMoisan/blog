@@ -169,10 +169,14 @@ a:hover {
     background: #eee8d5; 
 }
 table {
+    border-collapse:collapse;
     width: 100%;
 }
 th {
     text-align: left;
+}
+table, td, th {
+    border: 1px solid;
 }
 td, th {
     padding: 8px;
