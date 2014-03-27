@@ -2,7 +2,8 @@ $title=Système de recommandation avec Apache Mahout
 $description=Retour d'expérience sur la conception d'un système de recommandation avec Apache Mahout
 -----
 <p>
-Sur mon dernier projet, j'ai eu la chance de travailler sur un système de
+Sur mon dernier projet, <a
+    href="http://www.bluekiwi-software.com/fr/">BlueKiwi</a>, j'ai eu la chance de travailler sur un système de
 recommandation.  C'est une plateforme de gestion de contenu, et donc un
 utilisateur peut lire ou noter des articles. Le but est donc de recommander des
 articles à un utilisateur, en se basant sur ses interactions passées avec la
@@ -13,6 +14,20 @@ plateforme. Cela s'appelle du filtrage collaboratif (<i>collaborative
 <p>La librairie choisie est <a href="http://mahout.apache.org/">Apache
     Mahout</a></p>
 
+<h2>La préférence</h2>
+<p>
+Les algorithmes utilisent une collection de triplets : utilisateur, article,
+préférence. La préférence est optionnelle, elle indique la préférence de
+l'utilisateur pour l'article. Dans notre cas, le produit étant assez riche, un utilisateur peut effectuer
+plusieurs actions sur un article donné (lire, commenter, noter, …). La
+préférence est donc calculée avec une fonction <i>maison</i>. Son choix est très important : cela a
+ un impact sur l'éparpillement des données (par ex., un utilisateur lit
+plus qu'il ne commente). La difficulté est qu'il est impossible de comparer les
+performances de différentes fonctions car elles modifient le
+jeu de données en entrée.
+</p>
+
+<h2>La similarité</h2>
 <p>
 Le fonctionnement interne de ces algorithmes utilise une fonction de
 similarité pour déterminer la distance entre deux utilisateurs. Il en existe
@@ -33,7 +48,7 @@ format (user, item, préférence) :
 2,106,4
 </pre>
 
-<h3>Correlation de Pearson</h3>
+<h3>Corrélation de Pearson</h3>
 <p>
 mesure la tendance de deux utilisateurs a évolué ensemble proportionnellement.
 </p>
