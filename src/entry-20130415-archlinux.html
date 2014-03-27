@@ -1,6 +1,7 @@
 $title=Les pièges à éviter avec Archlinux
 $description=Les pièges à éviter avec Archlinux
 -----
+<p>update 2014-03-27 : Garmin Forerunner 305 et serveur d'impression Freebox</p>
 <p>
 Je suis passé sur Archlinux, car j'ai été déçu par Ubuntu (<a href="ubuntu-12-10.html">comme je l'ai déjà expliqué</a>). Je cherchais une distribution plus configurable et on (<a href="https://twitter.com/OlivierCroisier">Olivier</a>, <a href="https://twitter.com/FreakyNadley">Nahir</a>, Alkino) m'a conseillé Archlinux.
 Cela permet de revenir à plus de simplicité. Je profite d'ailleurs de cette expérience pour tester i3, un tiling window manager.
@@ -39,3 +40,55 @@ bind 121 exec amixer -q set Master toggle
 </pre>
 <h2>Réseau</h2>
 <p>Je gère aussi le réseau à la main. J'utilise le programme wifi-menu pour le wifi et j'utilise la commande suivante pour me connecter en ethernet <code>netcfg -u ethernet-dhcp</code>, ce qui correspond au profil dans mon répertoire <code>etc/network.d/</code>.</p>
+<h2>Le serveur d'impression de la Freebox</h2>
+<p>En tant que possesseur d'une Freebox Révolution et d'une imprimante USB, je
+peux bénéficier du serveur d'impression de la Freebox en branchant mon imprimante
+en USB dessus.</p>
+<p>Première étape, activez le <b>Partage Windows</b> et le <b>Partage d'imprimante</b> dans
+l'interface de configuration de la Freebox.</p>
+<p>Deuxième étape, qui m'a fait pas mal galérer : configurer cups. Dans l'interface Web de cups, faire
+<b>Administration &gt; Add printer</b>. Cocher la case <b>Window Printer via SAMBA</b>. Et l'URI est
+<code>smb://WORKGROUP/FREEBOX/Canon%20MX360%20series</code>. La partie Workgroup
+est obligatoire pour moi, contrairement à ce que l'on trouve sur le web.
+Pour vous aider à trouver l'URI, vous pouvez utiliser la commande suivante :
+</p>
+<pre class="prettyprint">
+    smbclient -L mafreebox.freebox.fr
+</pre>
+<p>Dans mon cas, cela affiche:</p>
+<pre class="prettyprint">
+        Sharename       Type      Comment
+        ---------       ----      -------
+        Disque dur      Disk      AutoShare of fbxhdiskd partition 2
+        Canon MX360 series Printer   
+        Canon MX360 series FAX Printer   
+        IPC$            IPC       IPC Service (Freebox Server)
+
+        Server               Comment
+        ---------            -------
+        FREEBOX              Freebox Server
+
+        Workgroup            Master
+        ---------            -------
+        WORKGROUP            FREEBOX
+</pre>
+<h2>Garmin Forerunner 305</h2>
+<p>Le Forerunner 305 est une montre GPS pour la pratique de la course à pied.
+Malheureusement, Garmin ne fournit pas de pilotes pour Linux, et la montre
+n'est pas vue comme un simple disque dur quand on la connecte en USB.</p>
+<p>Voici cependant la marche à suivre pour l'utiliser. Tout d'abord, il faut blacklister le module gps_garmin.
+Ensuite, il faut installer <a href="https://code.google.com/p/garmintools/">garmintools</a> et
+<a href="http://www.andreas-diesner.de/garminplugin">garminplugin</a>. Le premier est un ensemble d'outils en ligne de
+commande, qui implémente le protocole de communication avec la montre. Le second
+est un plugin Firefox, qui utilise le premier, afin de permettre le dialogue
+avec la montre depuis le navigateur. On peut alors récupérer automatiquement ses courses sur <a href="http://runkeeper.com">runkeeper</a>. A noter, le
+plugin ne fonctionne pas sur le site <a
+    href="http://connect.garmin.com">connect.garmin.com</a>.
+</p>
+<p>Il subsiste un énorme problème : nous ne possédons pas nos données. Or, on
+peut y remédier facilement avec l'option <code>BackupWorkout</code>, désactivée
+par défaut dans le fichier
+<code>$HOME/.config/garminplugin/garminplugin.xml</code>. Le plugin fera ainsi
+lors de chaque transfert une copie en local des données. On a alors un fichier par session, au format <a
+    href="http://en.wikipedia.org/wiki/Training_Center_XML">TCX</a>, qui est au format XML.
+</p>
