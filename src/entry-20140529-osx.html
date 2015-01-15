@@ -1,0 +1,146 @@
+$title=De Linux à OS X
+$description=Les difficultés du passage de Linux à OS X pour un développeur
+-----
+<p>Mon nouveau boulot me fournit gentiment un Mac Book Pro. Malgré mes réticences à utiliser un système d'exploitation
+propriétaire, j'ai décidé de relever le défi de mon collègue <a href="https://twitter.com/vbehar">Vincent</a> et d'utiliser OS X. Me voici donc sur la
+route de la transition de Linux vers OS X.</p>
+<h2>Clavier</h2>
+<p>
+La première difficulté est le clavier; les touches ⌘ Command et ⌥ Option sont inversées, et il n'y a qu'un seul Control,
+à contrario des règles d'ergonomie. Heureusement, j'utilise un
+clavier externe et ma disposition de clavier qwerty-lafayette est disponible sur OS X<sup><a href="#cite1">1</a></sup>, merci <a
+    href="https://twitter.com/fabi1cazenave">kaze</a> !
+</p>
+<p>
+Voici les raccourcis que j'utilise le plus :
+<table>
+    <tr>
+        <td>Command Tab</td>
+        <td>Sélectionne la prochaine application dans la liste des applications ouvertes</td>
+    </tr>
+    <tr>
+        <td>Command ←/→ </td>
+        <td>se déplace d'un onglet vers la gauche / droite dans iTerm2</td>
+    </tr>
+    <tr>
+        <td>Option Espace</td>
+        <td>Lance alfred, qui me sert de lanceur de programme</td>
+    </tr>
+    <tr>
+        <td>Command Enter</td>
+        <td>Affiche le terminal</td>
+    </tr>
+    <tr>
+        <td>Control ↓</td>
+        <td>Affiche toutes les fenêtres de l'application courante</td>
+    </tr>
+    <table>
+</p>
+
+
+<h2>Gestionnaire de paquet</h2>
+<p>
+Aussi bizarre que cela puisse paraitre à un utilisateur de Linux, OS X n'a pas de gestionnaire de paquets par défaut. Il faut
+installer <a href="http://brew.sh/">Homebrew</a> pour y remédier et ensuite installer ses <a href="mes-programmes-preferes.html">programmes
+    préférés</a> (ex: tig, ag, …).
+</p>
+
+<h2>Terminal</h2>
+<p>
+J'ai suivi les conseils et installé <a href="http://www.iterm2.com/#/section/home">iTerm2</a> pour remplacer le terminal par défaut.
+J'ai ensuite installé le thème solarized, configuré la touche Meta qui est désactivé par défaut ainsi qu'un raccourci
+clavier système pour avoir un terminal toujours rapidement accessible.
+</p>
+
+<h2>GNU vs BSD</h2>
+<p>
+OS X est un UNIX dérivé de BSD et les utilitaires de base ont de subtiles différences avec les versions GNU. Je vous recommande d'installer et
+d'utiliser les versions GNU.
+</p>
+
+<pre class="prettyprint">
+brew install coreutils
+</pre>
+
+<p>
+Pour avoir la coloration avec ls, c'est <code>--color=auto</code> pour GNU et <code>-G</code> pour BSD. On doit donc avoir dans sa config :
+</p>
+
+<pre class="prettyprint">
+if [[ $(uname -s) == "Darwin" ]]; then
+alias ls='ls -G'
+else 
+alias ls='ls --color=auto'
+fi
+</pre>
+
+<p>
+sed : le fonctionnement de l'option <code>-i</code> diffère par ex.
+Heureusement il est possible d'installer GNU sed et de remplacer la version OS X
+</p>
+<pre class="prettyprint">
+brew install gnu-sed --default-names
+</pre>
+
+<p>
+Et d'autres programmes ont aussi des différences pénibles comme date, csplit, awk …
+</p>
+
+<p>
+ctags semble aussi avoir des différences au niveau des expressions régulières. 
+J'ai remplacé <code>\s</code> par <code>[ \t]</code>.
+Ce qui se fait avec la commande suivante dans Vim : <code>:%s/\\s/[ \\t]/g</code>
+</p>
+
+<h2>Vim</h2>
+<p>
+La version de Vim installée par défaut est trop vieille<sup><a href="#cite2">2</a></sup>.
+</p>
+<pre class="prettyprint">
+brew install macvim --with-cscope --with-lua --override-system-vim
+</pre>
+
+<p>
+Le path de Vim diffère de celui du SHELL, ce qui fait que ctags ne fonctionne pas dans Vim. Voici la commande pour
+corriger cela<sup><a href="#cite3">3</a></sup> :
+</p>
+<pre class="prettyprint">
+sudo chmod ugo-x /usr/libexec/path_helper
+</pre>
+
+<p>
+Par défaut, ma configuration du clipboard ne fonctionnait pas<sup><a href="#cite4">4</a></sup>. J'ai remplacé :
+</p>
+<pre class="prettyprint">
+set clipboard=unnamedplus
+</pre>
+<p>
+par :
+</p>
+<pre class="prettyprint">
+set clipboard=unnamed,unnamedplus
+</pre>
+
+<h2>Conclusion</h2>
+<p>
+J'ai perdu pas mal de temps pour retrouver une utilisation similaire à celle que j'ai sous Linux, mais passée cette
+étape, mon <i>workflow</i> est sensiblement le même.
+</p>
+<p>
+Les regrets : le gestionnaire de fenêtre <a href="http://i3wm.org/">i3</a> me manque. En effet, je trouve Aqua inadapté pour des utilisateurs
+avancés, notamment car cette interface n'est pas conçue pour être pilotée au clavier.
+</p>
+<p>
+Pour être honnête, il faut aussi reconnaitre à OS X quelques qualités : une grande homogénéité de l'interface
+(Command-C / Command-V pour copier / coller fonctionne partout), certains programmes sont très pratiques (par ex. <a
+    href="http://kapeli.com/dash">Dash</a> pour centraliser les javadocs).</p>
+
+<h2>Liens</h2>
+<ol>
+    <li id="cite1"><a href="http://fabi1cazenave.github.io/qwerty-lafayette/">http://fabi1cazenave.github.io/qwerty-lafayette/</a></li>
+    <li id="cite2"><a href="https://github.com/dotphiles/dotzsh#mac-os-x">https://github.com/dotphiles/dotzsh#mac-os-x</a></li>
+    <li id="cite3"><a
+        href="http://www.codeography.com/2013/06/11/install-macvim-with-lua-support.html">http://www.codeography.com/2013/06/11/install-macvim-with-lua-support.html</a></li>
+    <li id="cite4"><a
+        href="http://vim.wikia.com/wiki/Mac_OS_X_clipboard_sharing">http://vim.wikia.com/wiki/Mac_OS_X_clipboard_sharing</a></li>
+</ol>
