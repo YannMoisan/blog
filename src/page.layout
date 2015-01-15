@@ -32,27 +32,26 @@
      <body onLoad="prettyPrint()">
 
          <div class="container">
-             <header class="clearfix header">
-             <div class="hleft">
+             <header class="header">
+             <div>
                  <h1 class="name">Yann Moisan</h1>
-             <p class="description">Scala, Web, Linux…</p>
+                 <p class="description">Scala, Web, Linux…</p>
              </div>
-             <div style="clear:both"> </div>
              <nav class="menu">
-             <ul>
-                 <li><a href="index.html">Billets</a></li>
-                 <li><a href="a-propos.html">A propos</a></li>
-                 <li><a href="cv.html">CV</a></li>
-             </ul>
-             <ul>
-                     <li><a href="https://twitter.com/yannmoisan"><span class="socicon">a</span></a></li>
-                     <li><a href="https://plus.google.com/u/0/+YannMoisan"><span class="socicon">c</span></a></li>
-                     <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><span class="socicon">j</span></a></li>
-                     <li><a href="rss.xml"><span class="socicon">,</span></a></li>
-                     <li><a href="mailto:yamo93+blog@gmail.com"><span class="socicon">@</span></a></li>
-                     <li><a href="http://stackoverflow.com/users/1437346/yann-moisan"><span class="socicon">(</span></a></li>
-                     <li><a href="https://github.com/YannMoisan"><span class="socicon">Q</span></a></li>
-             </ul>
+                 <div class="link">
+                     <a href="index.html">Billets</a>
+                     <a href="a-propos.html">A propos</a>
+                     <a href="cv.html">CV</a>
+                 </div>
+                 <div class="social">
+                     <a href="https://twitter.com/yannmoisan"><span class="socicon">a</span></a>
+                     <a href="https://plus.google.com/u/0/+YannMoisan"><span class="socicon">c</span></a>
+                     <a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><span class="socicon">j</span></a>
+                     <a href="rss.xml"><span class="socicon">,</span></a>
+                     <a href="mailto:yamo93+blog@gmail.com"><span class="socicon">@</span></a>
+                     <a href="http://stackoverflow.com/users/1437346/yann-moisan"><span class="socicon">(</span></a>
+                     <a href="https://github.com/YannMoisan"><span class="socicon">Q</span></a>
+                 </div>
              </nav>
              </header>
 
@@ -137,7 +136,7 @@ document.querySelector('nav a[href^="' + page[page.length-1] + '"]').classList.a
                      -->
                  </div>
                  <footer>
-                 <p id="copyright">&copy; 2012 Yann Moisan</p>
+                 <p id="copyright">&copy; 2015 Yann Moisan</p>
                  </footer>
              </div>
          </body>

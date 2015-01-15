@@ -1,4 +1,8 @@
 /*http://soqr.fr/vertical-rhythm*/
+/* margin ou padding
+ * overflow avec relative
+ * ne plus mettre des liens avec des ul/li */
+/* */
 /* inline avec padding ?
  http://css-tricks.com/snippets/jquery/add-active-navigation-class-based-on-url/ 
  */
@@ -160,6 +164,11 @@ samp {
 code {
     line-height: 1;
 }
+pre.prettyprint {
+   background-color: #EEE8D5;
+   padding: 16px;
+   border: 0;
+}
 table {
     margin-bottom: 1.5em;
 }
@@ -255,12 +264,11 @@ dl dt {
 dl dd {
     width: 75%;
 }
-.row, .hleft{
-    padding:0px 40px 0px 40px;
+.row{
+    padding:0px 40px 40px 40px;
     position:relative;
 }
 code {
-    border: 1px solid #AAAAAA;
     padding: 0 4px;
 }
 ol, ul {
@@ -275,79 +283,52 @@ ol, ul {
     clear: both;
 }*/
 /* for bkground color on header */
-.header {
+/*.header {
+    overflow: auto;
+}*/
+
+header {
     overflow: auto;
 }
-
-.container > header, .row {
+header, .row {
     background: #fdf6e3;
 }
+header > div {
+    padding: 0px 40px;
+}
+/* Navigation menu */
 .menu {
     background: #93a1a1;
     margin-top: 20px;
 }
-.menu > ul {
-    margin: 0;
-    padding: 10px 20px;
-    display: inline;
-}
 .active {
     background: #fdf6e3;
-}
-.menu ul:nth-child(1) {
-  float:left;
-}
-.menu ul:nth-child(2) {
-  float:right;
-}
-.menu:after {
-    clear: both;
-}
-.menu:after {
-    display: table;
-    content: "";
-}
-.menu > ul > li {
-    display: inline;
 }
 .menu a {
     padding: 0px 12px;
     color: #586E75;
     transition: color 400ms ease;
 }
-.menu ul:nth-child(1) a:hover {
+.link a:hover {
     background: #fdf6e3;
 }
-.menu ul:nth-child(2) a:hover {
-    background: #93a1a1;
+.social a:hover {
     color : #fdf6e3;
 }
-.hleft {
-    margin: 0 0 10px 0;
-}
-.hright {
-    float: right;
-    margin: 20px 20px 0 0;
-}
-.hright li {
-    display: inline;
-}
-.pager {
-    padding-left: 0px;
-}
-.pager > ul {
-    padding-left: 0px;
-}
-.pager > ul, .menu > ul, .unstyled, .hright > ul {
+.unstyled {
     list-style: none outside none;
 }
-.pager:after {
-    clear: both;
+.menu {
+    display:flex;
+    justify-content: space-between;
 }
-.pager:after {
-    display: table;
-    content: "";
+.link {
+    display:flex;
 }
+.social {
+    display:flex;
+}
+
 .previous a {
     float: left;
 }
@@ -389,15 +370,7 @@ ol, ul {
 }
 .socicon {
     font-family: 'socicon' !important;
-    font-size: 24px;
-}
-.pager a {
-    border: 1px solid #DDDDDD;
-    border-radius: 15px 15px 15px 15px;
-    padding: 5px 14px;
-}
-.pager a:hover {
-    background: #eee8d5;
+    font-size: 32px;
 }
 .time {
     float: left;
