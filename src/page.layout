@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title><!-- title -->|Yann Moisan</title>
         <meta name="description" content="<!-- description -->" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="prettify.css" type="text/css" rel="stylesheet" />
         <script type="text/javascript" src="prettify.js"></script>  
         <link media="all" href="yamo.css" type="text/css" rel="stylesheet" />
@@ -13,6 +14,7 @@
 
         <link rel="alternate" type="application/rss+xml" href="rss.xml" title="Billets" />
 
+        <link href='http://fonts.googleapis.com/css?family=Bree+Serif|Open+Sans' rel='stylesheet' type='text/css'>
         <script type="text/javascript">
 
             var _gaq = _gaq || [];
@@ -28,33 +30,36 @@
          </script>
      </head>
      <body onLoad="prettyPrint()">
+
          <div class="container">
              <header class="clearfix header">
              <div class="hleft">
-                 <h1>Yann Moisan</h1>
-             <p>Sur Java, les technos Web, Linux...</p>
+                 <h1 class="name">Yann Moisan</h1>
+             <p class="description">Scala, Web, Linux…</p>
              </div>
-             <div class="hright">
-                 <ul>
-                     <li><a href="rss.xml"><img width="32" height="32" alt="rss" src="rss.png"></a></li>
-                     <li><a href="mailto:yamo93+blog@gmail.com"><img width="32" height="32" alt="email" src="email.png"></a></li>
-                     <li><a href="https://twitter.com/yannmoisan"><img width="32" height="32" alt="twitter" src="twitter.png"></a></li>
-                     <li><a href="http://stackoverflow.com/users/1437346/yann-moisan"><img width="32" height="32" alt="stackoverflow" src="stackoverflow.png"></a></li>
-                     <li><a href="https://plus.google.com/u/0/+YannMoisan"><img width="32" height="32" alt="google-plus" src="google-plus.png"></a></li>
-                     <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><img width="32" height="32" alt="linkedin" src="linkedin.png"></a></li>
-                     <li><a href="https://github.com/YannMoisan"><img width="32" height="32" alt="github" src="github.png"></a></li>
-                 </ul>
-             </div>
-             </header>
+             <div style="clear:both"> </div>
              <nav class="menu">
              <ul>
-                 <li><a href="index.html">Accueil</a></li>
+                 <li><a href="index.html">Billets</a></li>
                  <li><a href="a-propos.html">A propos</a></li>
                  <li><a href="cv.html">CV</a></li>
-
+             </ul>
+             <ul>
+                     <li><a href="https://twitter.com/yannmoisan"><span class="socicon">a</span></a></li>
+                     <li><a href="https://plus.google.com/u/0/+YannMoisan"><span class="socicon">c</span></a></li>
+                     <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><span class="socicon">j</span></a></li>
+                     <li><a href="rss.xml"><span class="socicon">,</span></a></li>
+                     <li><a href="mailto:yamo93+blog@gmail.com"><span class="socicon">@</span></a></li>
+                     <li><a href="http://stackoverflow.com/users/1437346/yann-moisan"><span class="socicon">(</span></a></li>
+                     <li><a href="https://github.com/YannMoisan"><span class="socicon">Q</span></a></li>
              </ul>
              </nav>
+             </header>
 
+     <script>
+var page = location.pathname.split("/")
+document.querySelector('nav a[href^="' + page[page.length-1] + '"]').classList.add('active')
+     </script>
              <div class="row">
                      <!-- nav -->
                      <!-- entry -->
@@ -132,8 +137,7 @@
                      -->
                  </div>
                  <footer>
-                 <span id="copyright">&copy; 2012 Yann Moisan</span>
-                 <span id="web-standards">It's nice <a href="http://validator.w3.org/check/referer" title="Valid XHTML">XHTML</a></span>
+                 <p id="copyright">&copy; 2012 Yann Moisan</p>
                  </footer>
              </div>
          </body>

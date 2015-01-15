@@ -69,16 +69,14 @@ for ((i=0;i<l;i++));do
 #    sed -i "s/\$year/$year/" $dst_dir/index.html
 #    sed -i "s/\$title/$title/" $dst_dir/index.html
 
-    echo "<nav class=\"pager\">" >> $out
-    echo "<ul>"  >> $out
     if [ $i -ne 0 ];then
         prev=${entry_files[$i-1]#src/entry*-*-}
-        echo "<li class=\"previous\"><a href=\"$prev\">Billet précédent</a></li>" >> $out
+        echo "<a class=\"previous\" href=\"$prev\">←</a></li>" >> $out
     fi
 
     if [ $i -ne $((l-1)) ];then
         next=${entry_files[$i+1]#src/entry*-*-}
-        echo "<li class=\"next\"><a href=\"$next\">Billet suivant</a></li>" >> $out
+        echo "<a class=\"next\" href=\"$next\">→</a></li>" >> $out
     fi
     echo "</ul>"  >> $out
     echo "</nav>"  >> $out
@@ -165,3 +163,4 @@ for f in `find src/* -not -name "*.html" -not -name "*.layout"`
 do
     cp $f $dst_dir
 done
+cp -r src/font $dst_dir

@@ -1,5 +1,7 @@
 /*http://soqr.fr/vertical-rhythm*/
-
+/* inline avec padding ?
+ http://css-tricks.com/snippets/jquery/add-active-navigation-class-based-on-url/ 
+ */
 /*
 http://ethanschoonover.com/solarized
 
@@ -10,101 +12,138 @@ base 2:  #eee8d5 : background body
 base 3:  #fdf6e3 : background content
 yellow:  #b58900 : lien
 */
+/* http://www.lafermeduweb.net/billet/comment-choisir-les-bonnes-polices-d-ecritures-pour-son-site-web-874.html
+   serif : titre, sans serif : texte 
+*/
 /* 
 
 --- Vertical Rhythm Tool - http://soqr.fr/vertical-rhythm/ --- 
-           Font-size : 14px  Line-height : 1.5
+           Font-size : 16px  Line-height : 1.5
 
 */
 
-html{
+html {
     font-size: 62.5%;
 }
-body{
-    font-size: 1.4em;
+body {
+    font-size: 1.6em;
     line-height: 1.5;
 }
-p, ul, ol, dl, blockquote, pre, td, th, label, textarea {
-    font-size: 1em; /* equiv 14px */
-    line-height: 1.5em;
+p, 
+ul, 
+ol, 
+dl, 
+blockquote, 
+pre, 
+td, 
+th, 
+textarea {
+    font-size: 1em; /* equiv 16px */
+    line-height: 1.5;
     margin: 1.5em 0;
 }
-h1, .h1-like{
-    font-size:  1.8571em; /* equiv 26px */
-    line-height: 1.6154em;
-    margin:  1.6154em 0 .8077em 0;
+h1, 
+.h1-like {
+    font-size:  1.75em; /* equiv 28px */
+    line-height: 1.7142;
+    margin:  1.7142em 0 .8571em 0;
 }
-h2, .h2-like{
-    font-size:  1.7143em; /* equiv 24px */
-    line-height: 1.75em;
-    margin:  1.75em 0 .875em 0;
+h2, 
+.h2-like {
+    font-size:  1.625em; /* equiv 26px */
+    line-height: 1.8462;
+    margin:  1.8462em 0 .9231em 0;
 }
-h3, .h3-like{
-    font-size:  1.5714em; /* equiv 22px */
-    line-height: 1.909em;
-    margin:  1.909em 0 .9545em 0;
+h3, 
+.h3-like {
+    font-size:  1.5em; /* equiv 24px */
+    line-height:  1;
+    margin:  2em 0  1em 0;
 }
-h4, .h4-like{
-    font-size:  1.4286em; /* equiv 20px */
-    line-height:  1.05em;
-    margin:  2.1em 0  1.05em 0;
+h4, 
+.h4-like {
+    font-size:  1.375em; /* equiv 22px */
+    line-height:  1.0909;
+    margin:  2.1818em 0  1.0909em 0;
 }
-h5, .h5-like{
-    font-size:  1.2857em; /* equiv 18px */
-    line-height:  1.1667em;
-    margin:  2.3334em 0  1.1667em 0;
+h5, 
+.h5-like {
+    font-size:  1.25em; /* equiv 20px */
+    line-height:  1.2;
+    margin:  2.4em 0  1.2em 0;
 }
-h6, .h6-like{
-    font-size:  1.1429em; /* equiv 16px */
-    line-height:  1.3125em;
-    margin:  2.625em 0  1.3125em 0;
+h6, 
+.h6-like {
+    font-size:  1.125em; /* equiv 18px */
+    line-height:  1.3333;
+    margin:  2.6666em 0  1.3333em 0;
 }
-.smaller{
-    font-size: .7143em; /* equiv 10px */
-    line-height:  2.1em;
-    margin:  2.1em 0  2.1em 0;
+.smaller {
+    font-size: .75em; /* equiv 12px */
+    line-height:  2;
+    margin:  2em 0  2em 0;
 }
-.small{
-    font-size: .8571em; /* equiv 12px */
-    line-height:  1.75em;
-    margin:  1.75em 0  1.75em 0;
+.small {
+    font-size: .875em; /* equiv 14px */
+    line-height:  1.7143;
+    margin:  1.7143em 0  1.7143em 0;
 }
-.big{
-    font-size:  1.1429em; /* equiv 16px */
-    line-height:  1.3125em;
-    margin:  1.3125em 0  1.3125em 0;
+.big {
+    font-size:  1.125em; /* equiv 18px */
+    line-height:  1.3333;
+    margin:  1.3333em 0  1.3333em 0;
 }
-.bigger{
-    font-size:  1.2857em; /* equiv 18px */
-    line-height:  1.1667em;
-    margin:  1.1667em 0  1.1667em 0;
+.bigger {
+    font-size:  1.25em; /* equiv 20px */
+    line-height:  1.2;
+    margin:  1.2em 0  1.2em 0;
 }
-.biggest{
-    font-size:  1.4286em; /* equiv 20px */
-    line-height:  1.05em;
-    margin:  1.05em 0  1.05em 0;
+.biggest {
+    font-size:  1.375em; /* equiv 22px */
+    line-height:  1.0909;
+    margin:  1.0909em 0  1.0909em 0;
 }
 /* avoid collapsing margins
 you might need this, depending on your design
 */
 /*
-h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
+h1:first-child, 
+h2:first-child, 
+h3:first-child, 
+h4:first-child, 
+h5:first-child, 
+h6:first-child {
     margin-top: 0;
 }
 */
 /* avoid last-child bottom margin */
-p:last-child, ul:last-child, ol:last-child, dl:last-child, blockquote:last-child, pre:last-child, table:last-child  {
+p:last-child, 
+ul:last-child, 
+ol:last-child, 
+dl:last-child, 
+blockquote:last-child, 
+pre:last-child, 
+table:last-child {
     margin-bottom: 0;
 }
 
 
 /* avoid supp margin on nested elements */
-li p, li ul{
+li p,
+li ul {
     margin-top: 0;
     margin-bottom: 0;
 }
 /* you shall not pass */
-textarea, table, td, th, code, pre, samp, div, p {
+textarea,
+table, 
+td, 
+th, 
+code, 
+pre, 
+samp, 
+div, 
+p {
     word-wrap: break-word;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
@@ -112,25 +151,48 @@ textarea, table, td, th, code, pre, samp, div, p {
     -o-hyphens: auto;
     hyphens: auto;
 }
-code, pre, samp {
+code, 
+pre, 
+samp {
     white-space: pre-wrap;
     font-family: consolas, 'DejaVu Sans Mono', courier, monospace;
 }
-code{
-    line-height: 1em;
+code {
+    line-height: 1;
 }
-table{
+table {
     margin-bottom: 1.5em;
 }
+// END --- Vertical Rhythm Tool - http://soqr.fr/vertical-rhythm/ --- 
+
 * {
     margin: 0;
     padding: 0;
 }
+/* font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; */
 body {
     background: #eee7d5;
     margin: 0;
     color: #657b83;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: 'Open Sans', sans-serif;
+}
+/*    font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif */
+h1, h2, h3, h4, .entry-title {
+    font-family: 'Bree Serif', serif;
+}
+.name {
+    margin-bottom: 0px;
+}
+.description {
+    margin-top:0px;
+    margin-right:48px;
+    margin-bottom:24px;
+}
+.entry-title {
+    margin-bottom: 0px;
+}
+.entry-date {
+    color: #9a9a9a;
 }
 /*blockquote {
     color: #383838;
@@ -194,18 +256,18 @@ dl dd {
     width: 75%;
 }
 .row, .hleft{
-    padding:0px 40px 0px 40px
+    padding:0px 40px 0px 40px;
+    position:relative;
 }
 code {
     border: 1px solid #AAAAAA;
     padding: 0 4px;
 }
-
-ul {
+ol, ul {
     padding-left: 40px;
 }
 .container {
-    width: 940px;
+    max-width: 940px;
     margin: 0 auto;
 }
 
@@ -219,15 +281,31 @@ ul {
 
 .container > header, .row {
     background: #fdf6e3;
-    border: 1px solid #93a1a1;
 }
 .menu {
     background: #93a1a1;
-    margin: 0px 0px 20px 0px;
+    margin-top: 20px;
 }
 .menu > ul {
     margin: 0;
     padding: 10px 20px;
+    display: inline;
+}
+.active {
+    background: #fdf6e3;
+}
+.menu ul:nth-child(1) {
+  float:left;
+}
+.menu ul:nth-child(2) {
+  float:right;
+}
+.menu:after {
+    clear: both;
+}
+.menu:after {
+    display: table;
+    content: "";
 }
 .menu > ul > li {
     display: inline;
@@ -235,13 +313,16 @@ ul {
 .menu a {
     padding: 0px 12px;
     color: #586E75;
+    transition: color 400ms ease;
 }
-.menu a:hover {
+.menu ul:nth-child(1) a:hover {
+    background: #fdf6e3;
+}
+.menu ul:nth-child(2) a:hover {
     background: #93a1a1;
     color : #fdf6e3;
 }
 .hleft {
-    float: left;
     margin: 0 0 10px 0;
 }
 .hright {
@@ -252,6 +333,9 @@ ul {
     display: inline;
 }
 .pager {
+    padding-left: 0px;
+}
+.pager > ul {
     padding-left: 0px;
 }
 .pager > ul, .menu > ul, .unstyled, .hright > ul {
@@ -270,6 +354,43 @@ ul {
 .next a {
     float: right;
 }
+.previous, .next {
+    position: absolute;
+    background-color: #93A1A1;
+    width: 40px;
+    height: 40px;
+    top: 60px;
+    color: #586E75;
+    text-align: center;
+    transition: transform 400ms ease;
+}
+.previous {
+    left: -40px;
+}
+.next {
+    right: -40px;
+}
+.previous:hover, .next:hover {
+    transform: scale(1.5);
+    /*width: 50px;
+    left: -50px;*/
+    background-color: #93A1A1;
+}
+@font-face {
+    font-family: 'socicon';
+    src: url('font/socicon-webfont.eot');
+    src: url('font/socicon-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/socicon-webfont.woff') format('woff'),
+         url('font/socicon-webfont.ttf') format('truetype'),
+         url('font/socicon-webfont.svg#sociconregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    text-transform: initial;
+}
+.socicon {
+    font-family: 'socicon' !important;
+    font-size: 24px;
+}
 .pager a {
     border: 1px solid #DDDDDD;
     border-radius: 15px 15px 15px 15px;
@@ -286,4 +407,7 @@ ul {
 }
 ol > li:target {
     background: none repeat scroll 0 0 #DDEEFF;
+}
+#copyright {
+    text-align:center;
 }
