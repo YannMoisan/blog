@@ -172,7 +172,7 @@ pre.prettyprint {
 table {
     margin-bottom: 1.5em;
 }
-// END --- Vertical Rhythm Tool - http://soqr.fr/vertical-rhythm/ --- 
+/* END --- Vertical Rhythm Tool - http://soqr.fr/vertical-rhythm/ --- */
 
 * {
     margin: 0;
@@ -189,6 +189,8 @@ body {
 h1, h2, h3, h4, .entry-title {
     font-family: 'Bree Serif', serif;
 }
+
+/* --- header --- */
 .name {
     margin-bottom: 0px;
 }
@@ -203,35 +205,50 @@ h1, h2, h3, h4, .entry-title {
 .entry-date {
     color: #9a9a9a;
 }
-/*blockquote {
-    color: #383838;
-    font-family: Georgia,serif;
-    font-size: 18px;
-    font-style: italic;
-    line-height: 1.45;
-    margin: 0.25em 0;
-    padding: 0.25em 40px;
-    position: relative;
-    width: 500px;
+/* for background color on header */
+header {
+    overflow: auto;
 }
-blockquote:before {
-    color: #7A7A7A;
-    content: "“";
-    display: block;
-    font-size: 80px;
-    left: -20px;
-    position: absolute;
-    top: -20px;
+header, .row {
+    background: #fdf6e3;
 }
-blockquote cite {
-    color: #999999;
-    display: block;
-    font-size: 14px;
-    margin-top: 5px;
+header > div {
+    padding: 0px 40px;
 }
-blockquote cite:before {
-    content: "— ";
-}*/
+/* Navigation menu */
+.menu {
+    background: #93a1a1;
+    margin-top: 20px;
+}
+.active {
+    background: #fdf6e3;
+}
+.menu a {
+    padding: 0px 12px;
+    color: #586E75;
+    transition: color 400ms ease;
+}
+.link a:hover {
+    background: #fdf6e3;
+}
+.social a:hover {
+    background: #93a1a1;
+    color : #fdf6e3;
+}
+.unstyled {
+    list-style: none outside none;
+}
+.menu {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: space-between;
+}
+.link {
+    display:flex;
+}
+.social {
+    display:flex;
+}
 a {
     color: #b58900;
     text-decoration: none;
@@ -262,7 +279,12 @@ dl dt {
     width: 20%;
 }
 dl dd {
+    border-left: 1px solid rgb(51, 51, 51);
+    padding-left: 10px;
     width: 75%;
+}
+dl h4, dl h5 {
+    margin-top: 0px;
 }
 .row{
     padding:0px 40px 40px 40px;
@@ -277,56 +299,6 @@ ol, ul {
 .container {
     max-width: 940px;
     margin: 0 auto;
-}
-
-/*.clearfix {
-    clear: both;
-}*/
-/* for bkground color on header */
-/*.header {
-    overflow: auto;
-}*/
-
-header {
-    overflow: auto;
-}
-header, .row {
-    background: #fdf6e3;
-}
-header > div {
-    padding: 0px 40px;
-}
-/* Navigation menu */
-.menu {
-    background: #93a1a1;
-    margin-top: 20px;
-}
-.active {
-    background: #fdf6e3;
-}
-.menu a {
-    padding: 0px 12px;
-    color: #586E75;
-    transition: color 400ms ease;
-}
-.link a:hover {
-    background: #fdf6e3;
-}
-.social a:hover {
-    color : #fdf6e3;
-}
-.unstyled {
-    list-style: none outside none;
-}
-.menu {
-    display:flex;
-    justify-content: space-between;
-}
-.link {
-    display:flex;
-}
-.social {
-    display:flex;
 }
 
 .previous a {

@@ -71,15 +71,13 @@ for ((i=0;i<l;i++));do
 
     if [ $i -ne 0 ];then
         prev=${entry_files[$i-1]#src/entry*-*-}
-        echo "<a class=\"previous\" href=\"$prev\">←</a></li>" >> $out
+        echo "<a class=\"previous\" href=\"$prev\">←</a>" >> $out
     fi
 
     if [ $i -ne $((l-1)) ];then
         next=${entry_files[$i+1]#src/entry*-*-}
-        echo "<a class=\"next\" href=\"$next\">→</a></li>" >> $out
+        echo "<a class=\"next\" href=\"$next\">→</a>" >> $out
     fi
-    echo "</ul>"  >> $out
-    echo "</nav>"  >> $out
 
     cat src/entry.layout >> $out
     tail -n +4 $in > $out.filtered
