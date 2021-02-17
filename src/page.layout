@@ -9,12 +9,12 @@
         <script type="text/javascript" src="prettify.js"></script>  
         <link media="all" href="yamo.css" type="text/css" rel="stylesheet" />
 
-        <link rel="shortcut icon" href="http://www.yannmoisan.com/favicon.ico" />
-        <link rel="icon" type="image/x-icon" href="http://www.yannmoisan.com/favicon.ico" />
+        <link rel="shortcut icon" href="https://www.yannmoisan.com/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="https://www.yannmoisan.com/favicon.ico" />
 
         <link rel="alternate" type="application/rss+xml" href="rss.xml" title="Billets" />
 
-        <link href='http://fonts.googleapis.com/css?family=Bree+Serif|Open+Sans' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Bree+Serif|Open+Sans' rel='stylesheet' type='text/css'>
         <script type="text/javascript">
 
             var _gaq = _gaq || [];
@@ -46,10 +46,10 @@
                  <div class="social">
                      <a href="https://twitter.com/yannmoisan"><span class="socicon">a</span></a>
                      <a href="https://plus.google.com/u/0/+YannMoisan"><span class="socicon">c</span></a>
-                     <a href="http://www.linkedin.com/pub/yann-moisan/46/717/17"><span class="socicon">j</span></a>
+                     <a href="https://www.linkedin.com/pub/yann-moisan/46/717/17"><span class="socicon">j</span></a>
                      <a href="rss.xml"><span class="socicon">,</span></a>
                      <a href="mailto:yamo93+blog@gmail.com"><span class="socicon">@</span></a>
-                     <a href="http://stackoverflow.com/users/1437346/yann-moisan"><span class="socicon">(</span></a>
+                     <a href="https://stackoverflow.com/users/1437346/yann-moisan"><span class="socicon">(</span></a>
                      <a href="https://github.com/YannMoisan"><span class="socicon">Q</span></a>
                  </div>
              </nav>
