@@ -91,48 +91,6 @@ document.querySelector('nav a[href^="' + page[page.length-1] + '"]').classList.a
 
                          <!-- entry -->
 
-<!--
-                     </div>-->
-<!--                     <div class="span4">
-                         <aside>    
-                         <p>Me contacter</p>
-                         <ul><li>yamo93[AT]gmail[DOT]com</li></ul>
-                         <p>Me suivre</p>
-                         <ul><li><a href="rss.xml">RSS</a></li></ul>
-                         <p>Me retrouver ailleurs</p>
-                         <ul>
-                             <li><a href="https://twitter.com/YannMoisan">Twitter</a></li>
-                             <li><a href="http://www.linkedin.com/pub/yann-moisan/46/717/17">LinkedIn</a></li>
-                             <li><a href="https://github.com/YannMoisan">GitHub</a></li>
-                             <li><a href="http://knowledgeblackbelt.com/UserView.wwa?userId=13810326#!User/yamo93/forcePublicView=true">Blackbelt</a></li>
-                         </ul>
-                         </aside>
-                     </div>
-                     <div class="span4">
-                         <aside>
-                         <p>Liens externes - Blog perso</p>
-                         <ul>
-                             <li><a href="http://www.standblog.org">Standblog</a></li>  
-                             <li><a href="http://www.touilleur-express.fr/">Le touilleur express</a></li>
-                             <li><a href="http://thecodersbreakfast.net/">The Coder's Breakfast</a></li>
-                             <li><a href="http://blog.javabien.net/">Java Bien!</a></li>
-                         </ul>
-                         <p>Liens externes - Blog entreprise</p>
-                         <ul>
-                             <li><a href="http://blog.xebia.fr/">Xebia</a></li>
-                             <li><a href="http://blog.octo.com/">Octo</a></li>
-                             <li><a href="http://blog.zenika.com/">Zenika</a></li>
-                             <li><a href="http://blog.ippon.fr/">Ippon</a></li>
-                         </ul>
-                         <p>Liens externes - Design Web</p> 
-                         <ul>
-                             <li><a href="http://openweb.eu.org/">Openweb</a></li>
-                             <li><a href="http://www.pompage.net/">Pompage</a></li>
-                             <li><a href="http://www.alsacreations.com/">Alsa creations</a></li>
-                         </ul>
-                         </aside>    
-                     </div>
-                     -->
                  </div>
                  <footer>
                  <p id="copyright">&copy; 2015 Yann Moisan</p>
