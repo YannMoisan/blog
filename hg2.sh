@@ -1,1 +1,1 @@
-rsync -a -e ssh target penguen:/var/
+rsync -a target/ blog:/var/www/yannmoisan.com
