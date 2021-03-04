@@ -59,7 +59,7 @@ class RomanTest extends FunSuite {
 ```
 
 Nous allons maintenant pouvoir tester. C'est maintenant que tmux va être utile pour séparer l'écran
-en 2 &lt;Ctrl-b&gt; " et aller en bas.
+en 2 <Ctrl-b> " et aller en bas.
 
 ```
 $ sbt

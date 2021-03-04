@@ -9,7 +9,7 @@ memory footprint of a program.
 ## Reminder on the JVM
 
 Every object on the JVM has a header. It consists of a mark word and a klass pointer. On 64 bit
-architectures with a heap &lt; 32G (i.e. with compressed oops), the header has a size of 12 bytes.
+architectures with a heap < 32G (i.e. with compressed oops), the header has a size of 12 bytes.
 
 Java objects are 8-byte aligned by default. This can be changed with a JVM flag.
 

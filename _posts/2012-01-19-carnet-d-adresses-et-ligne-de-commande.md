@@ -6,8 +6,8 @@ layout: blog
 Un bon développeur, comme tout bon artisan, doit utiliser les bons outils et les maitriser. L'outil
 incontournable, en raison notamment de sa puissance, est la ligne de commande. Afin de m'exercer,
 j'ai écrit une commande d'une ligne pour trier mes contacts par jour et mois de naissance. Avant
-toute chose, j'exporte le carnet d'adresses de Thunderbird au format CSV : Tools &gt; Adress Book
-puis Tools &gt; Export.
+toute chose, j'exporte le carnet d'adresses de Thunderbird au format CSV : Tools > Adress Book
+puis Tools > Export.
 
 Voici le code :
 

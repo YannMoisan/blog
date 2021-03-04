@@ -75,7 +75,7 @@ Première étape, activez le **Partage Windows** et le **Partage d'imprimante** 
 configuration de la Freebox.
 
 Deuxième étape, qui m'a fait pas mal galérer : configurer cups. Dans l'interface Web de cups, faire
-**Administration &gt; Add printer**. Cocher la case **Window Printer via SAMBA**. Et l'URI est
+**Administration > Add printer**. Cocher la case **Window Printer via SAMBA**. Et l'URI est
 `smb://WORKGROUP/FREEBOX/Canon%20MX360%20series`. La partie Workgroup est obligatoire pour moi,
 contrairement à ce que l'on trouve sur le web. Pour vous aider à trouver l'URI, vous pouvez utiliser
 la commande suivante :
