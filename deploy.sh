@@ -1,1 +1,1 @@
-rsync -a target/ blog:/var/www/yannmoisan.com
+rsync -a _site/ blog:/var/www/yannmoisan.com
