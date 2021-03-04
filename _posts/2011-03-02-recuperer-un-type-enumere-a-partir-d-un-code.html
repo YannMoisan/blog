@@ -1,0 +1,86 @@
+---
+title: Récupérer un type énuméré à partir d'un code
+description: Récupération d'un type énuméré à partir d'un code, de la bonne utilisation des Generics de Java 5
+layout: blog
+---
+<h2>La problématique</h2>
+<p>Le but de ce billet est d'implémenter un besoin très classique : plusieurs types avec un ensemble de valeurs finies, accessibles à partir d'un code. Cela permet de représenter des statuts, des états, …</p> 
+<h2>La solution</h2>
+<p>Préambule : cet article fait référence à l'excellent livre de Joshua Bloch : Effective Java, 2nd Edition.</p>
+<p>Pour chaque type, un <code>Enum</code> est créé (cf Item 30 : Use enums instead of int constants) avec une méthode servant de factory static (cf Item 1 : Consider static factory methods instead of constructors).
+Afin de respecter le principe <abbr title="Don't Repeat Yourself">DRY</abbr>, nous allons mettre en place un mécanisme afin de ne pas dupliquer le code de cette méthode dans chaque type.
+Premièrement, une interface <code>Reference</code> est créée (cf Item 34 : Emulate extensible enums with interfaces). 
+Ensuite, une classe utilitaire <code>References</code> est créée afin de servir de dictionnaire; 
+c'est à dire pour stocker toutes les valeurs de tous les types (cf Item 29 : Consider heterogeneous containers).
+</p>
+<p>Reference</p>
+<pre class="prettyprint">
+public interface Reference {
+    public int getCode();
+}
+</pre>
+
+<p>References</p>
+<pre class="prettyprint">
+public class References {
+    private static final Map&lt;String, Map&lt;Integer, Reference&gt;&gt; DICTIONARIES;
+
+    static {
+        DICTIONARIES = new HashMap&lt;String, Map&lt;Integer, Reference&gt;&gt;();
+    }
+
+    public static &lt;T extends Enum&lt;T&gt; &amp; Reference&gt; void register(Class&lt;T&gt; clazz) {
+        Map&lt;Integer, Reference&gt; dictionary = new HashMap&lt;Integer, Reference&gt;();
+        for (Reference ref : clazz.getEnumConstants()) {
+            dictionary.put(ref.getCode(), ref);
+        }
+        DICTIONARIES.put(clazz.getName(), dictionary);
+    }
+
+    public static &lt;T extends Enum&lt;T&gt; &amp; Reference&gt; T fromCode(Class&lt;T&gt; clazz, int code) {
+        return clazz.cast(DICTIONARIES.get(clazz.getName()).get(code));
+    }
+
+}
+</pre>
+
+<p>ExampleReference</p>
+<pre class="prettyprint">
+public enum ExampleReference implements Reference {
+    FOO(1),
+
+    BAR(2);
+
+    private final int code;
+
+    private ExampleReference(int code) {
+        this.code = code;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    static {
+        References.register(ExampleReference.class);
+    }
+
+    public static ExampleReference fromCode(int code) {
+        return References.fromCode(ExampleReference.class, code);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(ExampleReference.fromCode(1));
+    }
+
+}
+</pre>
+
+<p>Cette implémentation présente les limites suivantes :</p>
+<ul>
+    <li>Un enum ne pouvant pas étendre une classe, l'attribut code ainsi que le constructeur et le getter associé sont dupliqués dans chaque enum</li>
+    <li>Chaque objet doit déclarer un constructeur statique</li>
+</ul>
+<p>Le lecteur remarquera au passage l'incroyable complexité des génériques, en particulier cette syntaxe indigeste : <code>&lt;T extends Enum&lt;T&gt; &amp; Reference&gt;</code>.</p>
+
+<p>N'hésitez pas à me contacter si vous avez des suggestions d'améliorations.</p>

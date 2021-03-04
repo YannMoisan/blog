@@ -1,0 +1,184 @@
+---
+title: Syntaxe des expressions régulières
+description: Syntaxe des expressions régulières
+layout: blog
+---
+<p>
+Cet article présente les différentes syntaxes d'expressions régulières.
+Ce n'est pas une introduction ou un tutoriel, il en existe déjà de
+très bons sur le web <sup><a href="#cite1">1</a></sup>, ainsi que des outils en ligne pour les tester <sup><a href="#cite2">2</a></sup>. Les expressions régulières sont un outil indispensable pour les développeurs et autres administrateurs système. 
+</p>
+
+<p>
+Comme d'habitude en informatique, il existe plusieurs syntaxes pour les déclarer : BRE, ERE, PCRE et
+celles de Vim. Les deux premières sont définies dans la norme POSIX et sont
+étendues par plusieurs programmes du projet GNU. Ces extensions offrent
+l'avantage d'homogénéiser ces deux variantes.
+Les PCRE sont plus riches et plus puissantes.
+Quant à Vim, il utilise pas moins de 4 syntaxes différentes (<code>\v</code> very magic, <code>\m</code>
+magic, <code>\M</code> nomagic, <code>\V</code> very nomagic).
+</p>
+
+<p>
+La différence principale entre ces variantes est que le backslash est utilisé
+tantôt pour activer la signification spéciale d'un méta caractère, tantôt pour
+la désactiver.
+</p>
+
+<p>
+Voici les syntaxes utilisées par différents outils :
+</p>
+
+<ul>
+    <li><code>sed</code>utilise BRE ou ERE (<code>sed -r</code>)</li>
+    <li><code>grep</code> utilise BRE, ERE (<code>grep -E</code> ou <code>egrep</code>) ou PCRE (<code>grep -P</code>).</li>
+    <li><code>ack</code> utilise PCRE</li>
+    <li>Les principaux langages de programmation utilisent PCRE</li>
+</ul>
+
+<p>
+Fort heureusement, certains concepts ne dépendent pas de la syntaxe.
+</p>
+
+<table>
+    <tr>
+        <td></td>
+        <td>BRE</td>
+        <td>ERE</td>
+        <td>PCRE</td>
+        <td>\v</td>
+        <td>\m</td>
+        <td>\M</td>
+        <td>\V</td>
+    </tr>
+    <tr>
+        <td>+</td>
+        <td style="color:#FF0000"><b>+</b></td>
+        <td>+</td>
+        <td>+</td>
+        <td>+</td>
+        <td>\+</td>
+        <td>\+</td>
+        <td>\+</td>
+    </tr>
+    <tr>
+        <td>?</td>
+        <td style="color:#FF0000"><b>?</b></td>
+        <td>?</td>
+        <td>?</td>
+        <td>?</td>
+        <td>\?</td>
+        <td>\?</td>
+        <td>\?</td>
+    </tr>
+    <tr>
+        <td>expression intervalle</td>
+        <td>\{n,m\}</td>
+        <td>{n,m}</td>
+        <td>{n,m}</td>
+        <td>{n,m}</td>
+        <td>\{n,m}</td>
+        <td>\{n,m}</td>
+        <td>\{n,m}</td>
+    </tr>
+    <tr>
+        <td>groupe et capture</td>
+        <td>\(\)</td>
+        <td>()</td>
+        <td>()</td>
+        <td>()</td>
+        <td>\(\)</td>
+        <td>\(\)</td>
+        <td>\(\)</td>
+    </tr>
+    <tr>
+        <td>références arrières</td>
+        <td>\n</td>
+        <td style="color:#FF0000">\n</td>
+        <td>\n</td>
+        <td>\n</td>
+        <td>\n</td>
+        <td>\n</td>
+        <td>\n</td>
+    </tr>
+    <tr>
+        <td>alternation</td>
+        <td style="color:#FF0000"><b>\|</b></td>
+        <td>|</td>
+        <td>|</td>
+        <td>|</td>
+        <td>\|</td>
+        <td>\|</td>
+        <td>\|</td>
+    </tr>
+    <tr>
+        <td>capture de mot</td>
+        <td style="color:#FF0000"><b>\<\></b></td>
+        <td style="color:#FF0000"><b>\<\></b></td>
+        <td>\b</td>
+        <td><></td>
+        <td>\<\></td>
+        <td>\<\></td>
+        <td>\<\></td>
+    </tr>
+    <tr>
+        <td>positive lookahead</td>
+        <td></td>
+        <td></td>
+        <td>(?=...)</td>
+        <td>@=</td>
+        <td>\@=</td>
+        <td>\@=</td>
+        <td>\@=</td>
+    </tr>
+    <tr>
+        <td>negative lookahead</td>
+        <td></td>
+        <td></td>
+        <td>(?!...)</td>
+        <td>@!</td>
+        <td>\@!</td>
+        <td>\@!</td>
+        <td>\@!</td>
+    </tr>
+    <tr>
+        <td>positive lookbehind</td>
+        <td></td>
+        <td></td>
+        <td>(?&lt;=...)</td>
+        <td>@&lt;=</td>
+        <td>\@&lt;=</td>
+        <td>\@&lt;=</td>
+        <td>\@&lt;=</td>
+    </tr>
+    <tr>
+        <td>negative lookbehind</td>
+        <td></td>
+        <td></td>
+        <td>(?&lt;!...)</td>
+        <td>@&lt;!</td>
+        <td>\@&lt;!</td>
+        <td>\@&lt;!</td>
+        <td>\@&lt;!</td>
+    </tr>
+</table>
+
+<p>
+En rouge, les extensions GNU à la norme POSIX
+</p>
+
+<h2>Conclusion</h2>
+<p>Je vous conseille d'utiliser au maximum une syntaxe proche de Perl car c'est
+la plus puissante. Avec Vim, utiliser le mode very magic en utilisant ce mapping.
+<pre class="prettyprint">
+nnoremap / /\v
+</pre>
+<p>Utiliser aussi <code>sed -r</code> car la syntaxe ERE est plus proche de PCRE que BRE.
+Enfin, remplacer <code>grep</code> par <code>ack</code> qui utilise la syntaxe de Perl.</p>
+
+<h2>Liens utiles</h2>
+<ol>
+    <li id="cite1"><a
+        href="http://www.regular-expressions.info/">regular-expression.info</a></li>
+    <li id="cite2"><a href="http://regex101.com/">regex101</a></li>
+</ol>

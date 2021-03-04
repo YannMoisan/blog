@@ -1,0 +1,186 @@
+---
+title: How-to run tests in parallel with sbt
+description: How-to run tsets in parallel with sbt
+layout: blog
+---
+<p>The aim of this post is to clarify how to run tests in parallel with sbt.</p>
+<p>The initial motivation is to speed up testing on a Spark project.</p>
+<h2 id="2-level-of-parallelism">2 level of parallelism</h2>
+<p>A frequent source of confusion is that there are multiple levels of parallelism involved.</p>
+<h3 id="inside-a-project">inside a project</h3>
+<p>sbt maps each test class to a task. sbt runs tasks in parallel and within the same JVM by default.</p>
+<p>Serial execution can be forced with :</p>
+<pre class="prettyprint"><code>parallelExecution in Test := false</code></pre>
+<h3 id="cross-project">cross-project</h3>
+<p>There is a second level of parallelism. If your build is a cross-project build, sbt also runs tasks from different project in parallel.</p>
+<p>sbt can limit task concurrency based on tags. The task test is tagged by default and this tag is propagated to each child task created for each test class.</p>
+<p>To restrict the number of concurrently executing tests in all projects, use:</p>
+<pre class="prettyprint"><code>Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
+</code></pre>
+<p>Here is a short recap</p>
+<table>
+<thead>
+<tr>
+<th>Tags.Test</th>
+<th>parallelExecution</th>
+<th>behaviour (cross-project / inside project)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#cores (default)</td>
+<td>true</td>
+<td>parallel / parallel</td>
+</tr>
+<tr>
+<td>#cores (default)</td>
+<td>false</td>
+<td>parallel / sequentially</td>
+</tr>
+<tr>
+<td>1</td>
+<td>true</td>
+<td>sequentially / sequentially (because we limit globally to one task, i.e. one test class, at once)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>false</td>
+<td>WARNING : tests are still run in parallel across projects !!! This is because sbt currently does not tag the generated test task when parallelExecution in Test is set to false. cf <a href="https://github.com/sbt/sbt/issues/2425">#2425</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="forking-">Forking ?</h2>
+<p>By default, tests are executed in the same JVM than sbt.</p>
+<p>This can be changed with :</p>
+<pre class="prettyprint"><code>
+fork in Test := true
+</code></pre>
+<p>Hence, all tests will be executed in a single external JVM. By default, tests executed in a forked JVM are executed sequentially.</p>
+<p>This can be changed with : (the equivalent of parallelExecution)</p>
+<pre class="prettyprint"><code>
+Test / testForkedParallel := true
+</code></pre>
+<p>Moreover, in forked mode, each project will spawn its own JVM (I did not found a way to run tests from all projects in the same forked JVM, the only workaround is to create a dedicated test project and put all tests inside it).</p>
+<p>By default, all tests are in the same group. It&#39;s possible to change that with <code>testGrouping</code></p>
+<p>For example, if you want each test to be in its own group.</p>
+<pre class="prettyprint"><code>
+testGrouping in Test := (testGrouping in Test).value.flatMap { group =>
+  group.tests map (test => Group(test.name, Seq(test), SubProcess(ForkOptions()))
+}
+</code></pre>
+<p>It&#39;s possible to run multiple forked JVM at the same time :</p>
+<pre class="prettyprint"><code>
+concurrentRestrictions := Seq(Tags.limit(Tags.ForkedTestGroup, 2))
+</code></pre>
+<p>Here is a short recap</p>
+<table>
+<thead>
+<tr>
+<th>Tags.ForkedTestGroup</th>
+<th>testForkedParallel</th>
+<th>testGrouping</th>
+<th>behaviour (#JVM / cross-project / inside project)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (default)</td>
+<td>false (default)</td>
+<td><default> (default)</td>
+<td>one JVM per project / sequentially / sequentially</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td>one JVM per project / parallel / sequentially</td>
+</tr>
+<tr>
+<td></td>
+<td>true</td>
+<td></td>
+<td>one JVM per project / sequentially / parallel</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>single</td>
+<td>one JVM per test</td>
+</tr>
+</tbody>
+</table>
+<h2>Back to Spark</h2>
+<p>The issue with Spark is that it costs a lot to create a <code>SparkContext</code>. So, some libraries allow to reuse it across multiple tests (e.g. <a href="https://github.com/holdenk/spark-testing-base">spark-testing-base</a>).</p>
+<p>But it's not thread safe ! Using what we have learned in the previous sections, there are two possibilities :</p>
+<p>1. Forking. But each project will have its own JVM and its own SparkContext.</p>
+<p>2. Stay in the same JVM and execute all tests sequentially (with parallelExecution = true AND Tags.Test = 1). Warning: the configuration given <a href="https://github.com/holdenk/spark-testing-base#special-considerations">here</a> doesn't work in case of multi-project.</p>
+<h2 id="why-should-i-trust-you">Why should I trust you</h2>
+<p>I have created a tiny project to test all these configurations : <a
+    href="https://github.com/YannMoisan/sbt-parallel">https://github.com/YannMoisan/sbt-parallel</a></p>
+<p>It&#39;s a project with 2 subprojects and 2 test classes in each project : Foo(1|2) in project foo and Bar(1|2) in project bar. Each test print 5 messages with a 1s delay between them. So we can see how it&#39;s interleaved. Each message contains the class name, the index of the iteration and the pid of the JVM</p>
+<p>Run <code>sbt test</code> to see the default behaviour :</p>
+<p>The format is ClassName[iteration][pid]</p>
+
+<p>Here is the output for default behaviour</p>
+<pre class="prettyprint"><code>
+Foo1[1][39324]
+Foo2[1][39324]
+Bar2[1][39324]
+Bar1[1][39324]
+
+Bar1[2][39324]
+Foo2[2][39324]
+Bar2[2][39324]
+Foo1[2][39324]
+
+Foo1[3][39324]
+Foo2[3][39324]
+Bar2[3][39324]
+Bar1[3][39324]
+
+Bar1[4][39324]
+Foo1[4][39324]
+Foo2[4][39324]
+Bar2[4][39324]
+
+Foo2[5][39324]
+Bar2[5][39324]
+Bar1[5][39324]
+Foo1[5][39324]
+</code></pre>
+
+<p>Here is the output with forked. As expected, there are 2 different pids (one by project)</p>
+<pre class="prettyprint"><code>
+Foo1[1][76860]
+Foo1[2][76860]
+Foo1[3][76860]
+Foo1[4][76860]
+Foo1[5][76860]
+
+Foo2[1][76860]
+Foo2[2][76860]
+Foo2[3][76860]
+Foo2[4][76860]
+Foo2[5][76860]
+
+Bar2[1][76861]
+Bar2[2][76861]
+Bar2[3][76861]
+Bar2[4][76861]
+Bar2[5][76861]
+
+Bar1[1][76861]
+Bar1[2][76861]
+Bar1[3][76861]
+Bar1[4][76861]
+Bar1[5][76861]
+</code></pre>
+
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://www.scala-sbt.org/1.x/docs/Testing.html">sbt official doc : Testing</a></li>
+<li><a href="https://www.scala-sbt.org/1.x/docs/Forking.html">sbt official doc : Forking</a></li>
+<li><a href="https://www.scala-sbt.org/1.x/docs/Multi-Project.html">sbt official doc : Multi-Project</a></li>
+<li><a href="https://www.scala-sbt.org/1.x/docs/Parallel-Execution.html">sbt official doc : Parallel-Execution</a></li>
+<li><a href="https://github.com/sbt/sbt/issues/2425">issue 2425</a></li>
+</ul>

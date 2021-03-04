@@ -1,0 +1,52 @@
+---
+title: Naviguer efficacement depuis le terminal
+description: Naviguer efficacement dans l'arborescence, depuis le terminal (uniquement pour bash)
+layout: blog
+---
+<p>Voici quelques astuces pour naviguer plus efficacement dans l'arborescence, depuis un terminal bash.
+<h2>CDPATH</h2>
+<p>CDPATH permet d'aller facilement dans les sous répertoires d'un répertoire donné.
+Le cas d'utilisation classique pour un développeur est le répertoire projects contenant tous ses projets.</p>
+<p>Il faut déclarer la variable shell <code>CDPATH</code> dans le <code>.bashrc</code>, sans oublier d'indiquer le répertoire courant.</p>
+<pre class="prettyprint">
+CDPATH=.:~:/mnt/data/backup/dev/projects/
+</pre>
+<p>Ainsi, je peux taper depuis n'importe quel répertoire :</p>
+<pre class="prettyprint">
+[yamo:/opt] $ cd .vim
+/home/yamo/.vim
+[yamo:~/.vim] $ 
+</pre>
+<p>Cela fonctionne avec la complétion (à condition d'avoir installé le paquet <code>bash-completion</code>), c'est d'ailleurs cela qui le rend puissant et addictif.</p>
+
+<h2>cdspell</h2>
+<p>Il est aussi possible de corriger automatiquement de petites erreurs de frappe, il suffit d'ajouter dans le <code>.bashrc</code> :</p>
+<pre class="prettyprint">
+shopt -s cdspell
+</pre>
+<p>Ainsi, ces erreurs seront automatiquement corrigées.</p>
+<pre class="prettyprint">
+[yamo:~] $ cd vim
+.vim
+[yamo:~/.vim] $
+</pre>
+<pre class="prettyprint">
+[yamo:~] $ cd .vin
+.vim
+[yamo:~/.vim] $
+</pre>
+<p>A noter, cela ne se cumule pas avec CDPATH.</p>
+
+<h2>completion-ignore-case</h2>
+<p>Cette dernière astuce permet d'avoir la complétion insensible à la casse, en ajoutant dans le <code>.inputrc</code></p>
+<pre class="prettyprint">
+set completion-ignore-case
+</pre>
+<p>Ainsi, on peut commencer à taper :</p>
+<pre class="prettyprint">
+cat ~/.xre&lt;Tab&gt;
+</pre>
+<p>et ce sera corrigé en .Xresources</p>
+<h2>Conclusion</h2>
+<p>Tout cela est standard, sans installation de programme supplémentaire, donc utilisable dès maintenant.</p>
+<p>source: http://www.caliban.org/bash/</p>

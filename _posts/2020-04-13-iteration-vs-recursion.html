@@ -1,0 +1,66 @@
+---
+title: "A rant on programming styles : iteration vs recursion"
+description: "A rant on programming styles : iteration vs recursion"
+layout: blog
+---
+<p>In computer science, there are often many ways to obtain the same result. And this is true when it comes to writing a program. Depending on the programming language, different styles could be used. In this post, we will see how to write a simple program in Scala : decomposing a number using base 10.</p>
+
+<h2 id="toc_0">Iteration</h2>
+
+<p>The most obvious implementation seems to be a simple loop, because most of us learned to program in iterative style.</p>
+
+<div><pre class="prettyprint"><code class="language-none">def decompose(n: Int): List[Int] = {
+  var history = List[Int]()
+  var next = n
+  while (next &gt; 0) {
+    history = next % 10 :: history
+    next = next / 10
+  }
+  history
+}</code></pre></div>
+
+<p>What are the cons ?</p>
+
+<p>Immutable programs are easier to reason about. Here, there is mutability but it remains local to the method. Nevertheless, it makes the code a bit fragile. For example, if we switch the two lines inside the <code>while</code> instruction, the result becomes wrong.</p>
+
+<h2 id="toc_1">Recursion</h2>
+
+<p>It exists an interesting property : we can rewrite any loop with a recursive call. This refactoring, <a href="https://www.refactoring.com/catalog/replaceIterationWithRecursion.html">Replace Iteration with Recursion</a>, is described in the great catalog of refactorings written by Martin Fowler.</p>
+
+<p>The main trick is to pass variables that are modified inside the loop as parameters of the function.</p>
+
+<div><pre class="prettyprint"><code class="language-none">def decompose(n: Int): List[Int] = decompose(n, Nil)
+
+@tailrec
+def decompose(n: Int, history: List[Int]): List[Int] = {
+  if (n &gt; 0) {
+    decompose(n / 10, n % 10 :: history)
+  } else
+    history
+}</code></pre></div>
+
+<h2 id="toc_2">Going further</h2>
+
+<p>In the recursive approach, two concerns are still mixed : the computation and the history.</p>
+
+<p>Scala 2.13 introduced a new method <code>Iterator.unfold</code> that we can take advantage of. Let&#39;s start with an intuition : <code>fold</code> allows to convert multiple values into a single value (like a sum). <code>unfold</code> is the opposite : convert a single value into multiple values. </p>
+
+<p>The documentation says :</p>
+
+<div><pre class="prettyprint"><code class="language-none">def unfold[A, S](init: S)(f: (S) =&gt; Option[(A, S)]): Iterator[A]
+    Creates an Iterator that uses a function f to produce elements of type A 
+    and update an internal state of type S.</code></pre></div>
+
+<p>So we have to determine what are elements of type <code>A</code> and what is the internal state. As often, it may be solved by following the types. We are interested in  remainders, so they are elements of type <code>A</code>. And the internal state is the next number to consider.</p>
+
+<div><pre class="prettyprint"><code class="language-none">def decompose(n: Int): List[Int] =
+  Iterator
+    .unfold(n) { n =&gt;
+      if (n &gt; 0) { Some(n % 10, n / 10) } else None
+    }
+    .toList
+    .reverse</code></pre></div>
+
+<h2 id="toc_3">Conclusion</h2>
+
+<p>There are really many ways to implement even such a trivial program. Scala offers a rich collection API and so we can replace custom code by a built-in function, which increases readability and reduces the surface for bugs.</p>

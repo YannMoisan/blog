@@ -1,0 +1,85 @@
+---
+title: Tests de débit réseau avec une Freebox
+description: Tests de débit réseau avec une Freebox
+layout: blog
+---
+<p>
+Depuis un moment, je me posais des questions sur la configuration de mon réseau
+à la maison, et notamment les débits pour déterminer ce qu'il est possible de
+faire …
+</p>
+
+
+<h2>Introduction</h2>
+<p>
+Je possède une Freebox Révolution (V6), qui contient un disque dur réseau (NAS) de 250
+Go et permet de se connecter en filaire (Ethernet, via un switch Gigabit : 
+1000Mbit/s maximum) et sans fil (Wifi, 802.11n, 300Mb/s). La norme 802.11n est
+récente (à la maison, mes vieux ordinateurs portables ont une carte Wifi
+802.11b/g),
+elle fait suite aux normes 802.11b et 802.11g qui offraient des débits inférieurs.
+</p>
+
+<p>
+Le NAS peut être accédé par un partage Windows, ou par FTP (il semble que les
+performances soient équivalentes).
+</p>
+
+<h2>Les tests</h2>
+<h3>PC - NAS Freebox - Wifi 20Mhz - ftp</h3>
+<pre class="prettyprint">
+wget -O /dev/null ftp://mafreebox.freebox.fr/Disque%20dur/grosfichier
+</pre>
+<p>Résultat : 1,96M/s</p>
+
+<h3>PC - NAS Freebox - Wifi 40Mhz - ftp</h3>
+<pre class="prettyprint">
+wget -O /dev/null ftp://mafreebox.freebox.fr/Disque%20dur/grosfichier
+</pre>
+<p>Résultat : 4,2M/s</p>
+
+<h3>PC - NAS Freebox - Ethernet - ftp</h3>
+<pre class="prettyprint">
+wget -O /dev/null ftp://mafreebox.freebox.fr/Disque%20dur/grosfichier
+</pre>
+<p>Résultat : 58,7M/s</p>
+
+<h3>PC - Internet - Wifi - download</h3>
+<pre class="prettyprint">
+wget -O /dev/null http://debit.k-net.fr/700Mo
+</pre>
+<p>Résultat : 841KB/s</p>
+
+<h3>PC - Internet - Wifi - upload</h3>
+<pre class="prettyprint">
+iperf -c debit.k-net.fr -i 1 -t 30
+</pre>
+<p>Résultat : 872Kbits/s</p>
+
+<h2>Conclusion</h2>
+<p>
+Dans le cas d'une connection à Internet, on voit clairement que le Wifi n'est pas
+le goulot d'étranglement. Et malheureusement la vitesse d'upload est tellement
+lente que ça rend impossible les sauvegardes sur un serveur dédié.
+</p>
+
+<p>
+Dans le cas d'une sauvegarde sur le NAS, il est 
+intéressant de brancher un cable (c'est au moins 10 fois plus rapide). Et l'astuce du 40mhz (cf liens) permet de
+doubler le débit en Wifi. Il est tout à fait possible d'écouter de la musique
+sur le NAS, même en Wifi.
+</p>
+
+<h2>Liens</h2>
+<ul>
+    <li><a
+        href="http://www.maisondunumerique.com/cest-quoi-un-reseau-domestique/comparatif-ethernet-wifi-cpl">Comparatif
+        entre les connexions Ethernet, WiFi et CPL</a></li>
+    <li><a
+        href="http://www.samn0.fr/index.php/tag/40-mhz-canal-inferieur">FreeBox
+    Server WiFI - 40 Mhz</a></li>
+    <li><a
+        href="http://www.freebox-v6.fr/wiki/index.php?title=Freebox_Server">Freebox
+        Server</a></li>
+    <li><a href="http://debit.k-net.fr/">Test de débit K-Net</a></li>
+</ul>
