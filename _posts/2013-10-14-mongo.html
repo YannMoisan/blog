@@ -1,0 +1,90 @@
+---
+title: Retour d'expérience sur MongoDB
+description: "Retour d'expérience sur MongoDB : indexation, aggregation, mongo shell."
+layout: blog
+---
+<p>MongoDB est une base de données NoSQL, très facile à prendre en main.</p>
+<p>Comme toujours, il existe quelques subtilités que l'on rencontre avec les vrais projets de la vraie vie.
+Le but de ce billet est de vous en présenter quelques unes :
+</p>
+<h2>Les index pour les requêtes de mise à jour</h2>
+<p>
+Généralement, nous pensons naturellement aux index pour les requêtes en lecture.
+Les requêtes de mise à jour ont la syntaxe suivante :
+</p>
+<pre class="prettyprint">
+db.collection.update(
+  &lt;query&gt;,
+  &lt;update&gt;,
+  {
+    upsert: &lt;Boolean&gt;,
+    multi: &lt;Boolean&gt;,
+  }
+)
+</pre>
+<p>Et bien, ces requêtes peuvent aussi tirer parti d'un index, qui sera utilisé pour la requête <code>query</code>.</p>
+
+<h2>Recherche sur un sous-document</h2>
+<p>
+MongoDB supporte les documents imbriqués.
+Considérons le document suivant <code>{parent: {child1: 1, child2: 2}}</code>
+<br>Cette requête renvoie bien le document ci-dessus :
+</p>
+<pre class="prettyprint">
+db.test.find({"parent.child1": 1})
+</pre>
+<p>Par contre, cette requête ne renvoie pas le document ci-dessus :</p>
+<pre class="prettyprint">db.test.find({"parent": {"child1": 1}})</pre>
+<p>Seule la notation avec le point permet de spécifier une correspondance partielle sur un sous-document. 
+Dans le deuxième cas, MongoDB cherche une correspondance sur l'intégralité du sous-document.</p>
+
+<h2>Aggregation avec des $match successifs</h2>
+<p>Nous utilisons un index sur a et b : <code>{"a": 1, "b": 1}</code>
+Avec le framework d'aggregation, si nous utilisons 2 <code>$match</code> dans le pipeline, la requête est lente.</p>
+<pre class="prettyprint">
+{$match:{"a": xxx}}, {$match:{"b": xxx}}
+</pre>
+Si nous utilisons un seul match, la requête est rapide :
+<pre class="prettyprint">
+{$match:{"a": xxx, "b": xxx}}
+</pre>
+<p>Ces deux requêtes sont équivalentes mais dans le premier cas, l'index ne sert pas à filtrer sur b.</p>
+
+<h2>Aggregation et performance</h2>
+<p>MongoDB offre une méthode <code>explain</code> sur un curseur pour obtenir des informations sur l'exécution de la requête : temps d'exécution, index utilisé, …
+Malheureusement, cette méthode n'existe pas pour le framework d'aggregation.
+A en croire cette <a href="https://jira.mongodb.org/browse/SERVER-4504">issue</a>, cela sera disponible en 2.6.</p>
+
+<h2>Ne pas utiliser use dans un script</h2>
+<p>Dans mon premier script, j'ai utilisé l'instruction <code>use</code>, comme j'ai l'habitude de le faire dans la console. 
+Et là, c'est le drame : le client renvoie une erreur peu explicite :</p>
+<pre class="prettyprint">
+Thu Oct 17 10:29:21.451 SyntaxError: Unexpected identifier at test.js
+</pre>
+<p>J'ai mis un peu de temps à comprendre que use est un <i>helper</i> fourni par la console, que ce n'est pas une instruction JavaScript valide, et donc que ça ne fonctionne pas 
+dans un script. La liste exhaustive des <i>helpers</i> avec leurs l'équivalents js est décrite sur le site (cf source).
+
+<h2>Ecrire un script bloquant</h2>
+<p>Par défaut, les opérations d'écriture sont asynchrones dans un script (ce qui est le comportement opposé à celui des drivers).
+Le script va donc rendre la main alors que le traitement tourne encore en base. Pour attendre la fin, il suffit d'ajout <code>db.getLastError()</code> à la fin du script.</p>
+
+<h2>Passer des paramètres à un script</h2>
+<p>Nous pouvons exécuter un fichier JavaScript en utilisant mongo shell sur le serveur. Cela nous permet notamment de scripter la création des index.
+Nous englobons cela dans un script shell et il est parfois utile de passer des paramètres du script shell au JavaScript.
+Une petite astuce, non présente dans la documentation, est nécessaire.
+Voici le script shell : monscript.sh
+</p>
+<pre class="prettyprint">
+mongo --eval "var mavar='$1'" monscript.js
+</pre>
+<p>Et voici le script.js</p>
+<pre class="prettyprint">
+printjson(mavar);
+</pre>
+<p>L'idée est d'utiliser l'option <code>--eval</code>, qui permet de passer au shell un bout de JavaScript, pour déclarer une variable globale qui sera accessible dans le script.</p>
+
+<h2>Source:</h2>
+<ul>
+    <li><a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/#query-subdocuments">query subdocuments</a></li>
+    <li><a href="http://docs.mongodb.org/manual/tutorial/write-scripts-for-the-mongo-shell/">write scripts for the mongo shell</a></li>
+</ul>

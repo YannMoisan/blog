@@ -1,0 +1,110 @@
+---
+title: Introduction à Ranger
+description: Introduction à Ranger
+layout: blog
+---
+<p>
+<a href="http://ranger.nongnu.org/">Ranger</a> est un gestionnaire de fichiers
+en CLI, avec des raccourcis clavier à la Vim.
+Il offre une vue en 3 parties : le répertoire parent sur la gauche, le répertoire
+courant au centre, et un aperçu du fichier courant sur la droite.
+Pour ce faire, Ranger s'appuie sur divers programmes :
+<ul>
+    <li>atool : pour les archives.</li>
+    <li>highlight : pour le code source</li>
+    <li>pdftotext : pour les PDFs</li>
+    <li>img2txt : pour les images en Ascii Art, ce qui est tout à fait inutile donc indispensable</li>
+</ul>
+</p>
+
+<p>
+Voici quelques raccourcis pour bien débuter. <code>?</code> affiche l'aide. <code>h</code> <code>j</code> <code>k</code> <code>l</code> navigue dans l'arborescence.
+<code>&lt;espace&gt;</code> marque un fichier en vue d'une action future.
+<code>S</code> ouvre un shell dans Ranger.
+A l'instar de Vim, certains raccourcis utilisent 2 touches. Après la saisie de la
+première, Ranger affiche toutes les possibilités pour la deuxième. Les
+raccourcis en <code>g</code> permettent soit de sauter dans l'arborescence (<code>gh</code>, comme go home, pour aller dans son répertoire $HOME
+), soit de manipuler les onglets (<code>gn</code> ouvre un nouvel onglet, <code>gt</code> change
+d'onglet).
+<code>zh</code> affiche les fichiers cachés (<code>ctrl h</code> fait la même chose mais entraine la
+mort de bébés chats).
+Dernier exemple, il est possible d'ajouter un marque page avec <code>m{x}</code> et d'y accéder avec <code>'{x}</code>.
+Ces marques pages sont persistés entre plusieurs lancements dans le fichier <code>~/.config/ranger/bookmarks</code>
+</p>
+
+<p>
+Ranger rend difficile d'accès les actions difficiles à annuler, i.e. elles ne
+sont pas accessibles via un raccourci clavier mais nécessite
+une commande, comme <code>:rename</code> pour renommer, <code>:delete</code> pour supprimer ou <code>:bulkrename</code> pour renommer un
+ensemble de fichiers, en bénéficiant de la puissance de Vim.
+</p>
+
+<p>
+Ranger est très configurable et extensible.
+La configuration se trouve dans le répertoire <code>~/.config/ranger</code>.
+Pour personnaliser sa configuration, tapez la commande suivante
+</p>
+<pre class="prettyprint">
+    % ranger --copy-config=all
+    creating: /home/yamo/.config/ranger/rifle.conf
+    creating: /home/yamo/.config/ranger/commands.py
+    creating: /home/yamo/.config/ranger/rc.conf
+    creating: /home/yamo/.config/ranger/scope.sh
+</pre>
+<p>
+Comme indiqué, cette commande créé les 4 fichiers suivants :
+</p>
+<ul>
+    <li><code>rifle.conf</code> (anciennement <code>apps.py</code>) : ouvreur de fichiers</li>
+    <li><code>commands.py</code> : le code source en python des commandes. Pour en ajouter, je recommande de ne pas forker le fichier pour faciliter les futures montées de version.</li>
+    <li><code>rc.conf</code> : raccourcis clavier</li>
+    <li><code>scope.sh</code> : pour l'aperçu</li>
+</ul>
+<p>
+Vous pouvez retrouver ma config sur github.
+J'ai configuré la ligne de commande pour ouvrir feh, et ajouter une commande
+pour extraire les archives.
+</p>
+<p>
+Il est aussi possible de configurer le thème de couleur en créant un répertoire
+<code>~/.config/.ranger/colorschemes</code>. J'utilise le thème <a href="https://github.com/tannhuber/themes/tree/master/ranger">solarized</a> :
+
+</p>
+
+<p>
+Voici les points qui ont attirés mon attention dans les dernières versions :
+<ul>
+    <li>1.6.1</li>
+    <ul>
+        <li>ouverture de toutes les images d'un répertoire. Avant, il fallait un script comme <code>feh_browser.sh</code></li>
+        <li>support les outils de gestion de version : <code>set vcs_aware true</code></li>
+    </ul>
+    <li>1.6.0.</li>
+    <ul>
+        <li>affichage des images en <i>true color</i> dans la console : <code>set preview_images true</code></li>
+        <li>modification de la config</li>
+        <li>ajout d'un lanceur externe : rifle</li>
+    </ul>
+</ul>
+</p>
+
+<p>
+Normalement, vous devriez devenir accroc à Ranger. C'est alors naturellement que
+vous voudrez remplacer le gestionnaire de fichiers de Vim par Ranger. Ranger
+vient avec des fichiers d'exemples, et notamment <code>vim_file_chooser.vim</code> qui
+indique les lignes à ajouter dans son <code>.vimrc</code>
+</p>
+
+<p>
+Ranger a l'avantage d'être très léger et de faire une seule chose mais de le faire bien. 
+Ainsi, l'utilisation conjointe de Ranger et de feh remplace avantageusement un logiciel comme gthumb. 
+En effet, bien que gthumb possède une fonctionnalité native de gestion de fichiers, elle est loin d'égaler celle de Ranger.
+</p>
+
+<p>Liens :
+<ul>
+    <li><a href="https://github.com/YannMoisan/dotfiles/tree/master/ranger">ma conf ranger sur Github</a></li>
+    <li><a href="https://github.com/YannMoisan/dotfiles/blob/master/.vimrc">ma conf vim sur Github</a></li>
+    <li><a href="https://wiki.archlinux.org/index.php/ranger">La page dédiée à ranger sur le wiki archlinux</a></li>
+</ul>
+</p>

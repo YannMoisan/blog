@@ -1,0 +1,114 @@
+---
+title: Configurer weechat et bitlbee
+description: Configurer weechat et bitlbee
+layout: blog
+---
+<p>
+Dans ce billet, nous allons voir comment configurer <a href="http://www.weechat.org/">WeeChat</a>, un client IRC en ncurses et <a href=http://www.bitlbee.org">bitlbee</a>, une passerelle entre IRC et les protocoles de messageries instantanées.
+</p>
+<h2>Weechat</h2>
+<p>
+    Passer l'installation et le premier lancement, on peut taper <code>/help</code> pour commencer la configuration.
+</p>
+<p>
+    Pour se connecter à un serveur et rejoindre un canal
+</p>
+<pre class="prettyprint">
+/connect freenode
+/join #[canal]
+</pre>
+<p>
+    Pour automatiser cela entre deux lancements
+</p>
+<pre class="prettyprint">
+/set irc.server.freenode.autoconnect on
+/set irc.server.freenode.autojoin "#weechat-fr,#archlinux-fr"
+/set irc.server.freenode.command "/msg nickserv identify {your password}"
+</pre>
+<p>La dernière ligne permet de s'identifier automatiquement. 
+Il faut avoir au préalable engistrer son pseudo sur NickServ <sup><a href="#cite1">1</a></sup>, ce que je vous conseille pour éviter qu'on usurpe votre identité.</p>
+
+<p>
+    Pour ajouter des mappings (vimesques, évidemment)
+</p>
+<pre class="prettyprint">
+/key bind meta-j /buffer +1
+/key bind meta-k /buffer -1
+</pre>
+
+<p>
+    Pour installer des plugins, comme <code>buffer.pl</code> et <code>beep.pl</code> pour déclencher un beep lors d'un highlight.
+    Ce beep est intercepté par mon WM pour me highlither le workspace.
+</p>
+<pre class="prettyprint">
+/script install buffer.pl
+/script install beep.pl
+</pre>
+
+<p>
+    Pour fixer quelques problèmes avec le thème solarized.<sup><a href="#cite3">3</a></sup>
+</p>
+<pre class="prettyprint">
+/set weechat.bar.status.color_bg 0
+/set weechat.bar.title.color_bg 0
+/set weechat.color.chat_inactive_buffer lightblue
+</pre>
+
+<p>Pour vos backups, la configuration de weechat est dans <code>~/.weechat</code></p>
+
+<h2>Bitlbee</h2>
+<p>
+    Tout d'abord, installer bitlbee et démarrer le service.
+</p>
+<p>
+    Pour se connecter (weechat créé alors un buffer &bitlbee)
+</p>
+<pre class="prettyprint">
+/connect localhost
+</pre>
+<p>
+    Comme pour weechat, l'aide est incluse en tapant help dans le buffer &bitlbee.
+</p>
+<p>
+    Pour s'enregistrer (afin de sauvegarder sa configuration sur le serveur bitlbee)
+</p>
+<pre class="prettyprint">
+register [pwd]
+</pre>
+
+<p>Pour configurer mon compte gmail</p>
+<pre class="prettyprint">
+account add jabber [login]@gmail.com [pwd]
+account [id] on
+account [id] set nick_format [gtalk]-%full_name
+</pre>
+<p>La dernière commande permet d'afficher un préfixe (utile quand on a plusieurs comptes), suivi du nom complet (plus lisible que le login).</p>
+
+<p>Pour configurer mon compte pro</p>
+<pre class="prettyprint">
+account add jabber [login]@jabber.portaildulibre.fr [pwd]
+</pre>
+
+<p>Pour configurer une chatroom</p>
+<pre class="prettyprint">
+chat add [account] osc@conference.jabber.portaildulibre.fr
+channel [id] set password [password]
+/join #osc
+</pre>
+
+<p>Pour se connecter automatiquement</p>
+<pre class="prettyprint">
+/server add im localhost -autoconnect
+/set irc.server.im.command "/msg &bitlbee identify YOUR_PASS"
+/set irc.server.im.autojoin "#osc"
+</pre>
+
+<p>Pour vos backups, la configuration de bitlbee est dans <code>/var/lib/bitlbee</code></p>
+
+<h2>Liens utiles</h2>
+<ol>
+    <li id="cite1"><a href="http://freenode.net/faq.shtml#nicksetup">Configurer son pseudo IRC</a></li>
+    <li><a href="http://www.weechat.org/files/doc/stable/weechat_quickstart.fr.html">Guide de démarrage rapide WeeChat</a></li>
+    <li id="cite3"><a href="https://gist.github.com/inhies/5145065/raw/7e6027766e719ab19161fd2788b5da924c29c28c/pimping.md">Pimping solarized</a></li>
+    
+</ol>

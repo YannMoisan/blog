@@ -1,0 +1,53 @@
+---
+title: Sauvegarde
+description: Stratégie de sauvegarde d'un ordinateur personnel
+layout: blog
+---
+<p>Nos données sont précieuses. La <a href="http://fr.wikipedia.org/wiki/Sauvegarde_%28informatique%29">sauvegarde</a> est donc un sujet critique, qu'il faut maitriser parfaitement. 
+Je fuis donc les applications graphiques qui masquent certaines choses. La sauvegarde doit s'effectuer automatiquement, le plus rapidement possible et en conservant si possible un historique des dernières versions.
+</p>
+<p>Je sauvegarde sur un disque USB externe. La vitesse d'<i>upload</i>, limité à 100k, ne permettant pas de réaliser confortablement des sauvegardes en ligne.</p>
+<p>L'outil de prédilection est rsync, disponible sur la plupart des distributions Linux. C'est un outil de sauvegarde incrémentale, rapide, avec une syntaxe très simple : rsync options source dest.</p>
+<p>Mais rsync dispose aussi de nombreuses options.</p>
+<h2>Sauvegarde différentielle</h2>
+<p>Le principe est de ne stocker que la différence avec la sauvegarde précédente.</p>
+<p>Commençons par mettre les mains dans le cambouis pour se familiariser avec l'outil :</p>
+<pre class="prettyprint">
+mkdir rsynctest
+cd rsynctest
+mkdir {src,dst,bkp}
+echo a &gt; src/a
+echo b &gt; src/b
+rsync -a --delete -b --backup-dir=/home/yamo/rsynctest/bkp ~/rsynctest/src/ ~/rsynctest/dst
+ll -R
+rm src/b
+echo a &gt;&gt; src/a
+rsync -a --delete -b --backup-dir=/home/yamo/rsynctest/bkp ~/rsynctest/src/ ~/rsynctest/dst
+ll -R
+cat bkp/*
+cat dst/*
+</pre>
+<ul>
+    <li>L'option <code>--backup-dir</code> ne supporte pas le <code>~</code></li>
+    <li>L'option <code>-a</code>, comme archive, pour préserver la plupart des caractéristiques des fichiers.</li>
+    <li>L'option <code>--delete</code> permet de supprimer un fichier de la destination quand il est supprimé de la source</li>
+    <li>L'option <code>-b</code> permet de garder un historique</li>
+    <li>A savoir : le / à la fin de la source est important, il indique de copier le contenu du répertoire.</li>
+    <li>A savoir : les liens symboliques sont préservés mais pas les liens matériel</li>
+</ul>
+<p>Avec ce système, il est possible d'avoir un répertoire backup par jour de la semaine. Le problème est que la restauration n'est pas immédiate : il faut rejouer la sauvegarde complète puis les sauvegardes différentielles.</p>
+<h2>Sauvegarde incrémentielle de type snapshot</h2>
+<p>C'est la Rolls-Royce de la sauvegarde. C'est une sauvegarde incrémentielle et qui apparait comme un snapshot (c.-à-d. chaque sauvegarde semble complète) 
+Ainsi, il suffit juste de recopier le répertoire 
+pour restaurer. Le secret réside dans l'utilisation de l'option <code>--link-dest</code> et une rotation des répertoires.</p>
+<pre class="prettyprint">
+rsync -av --delete --link-dest=$destdir/backup.1 $element $destdir/backup.0
+</pre>
+
+<p>Le script complet est sur <a href="https://github.com/YannMoisan/dotfiles/blob/master/scripts/backup/">GitHub</a>
+</p>
+<p>Source :</p>
+<ul>
+    <li><a href="http://www.mikerubel.org/computers/rsync_snapshots/">http://www.mikerubel.org/computers/rsync_snapshots/</a></li>
+    <li><a href="http://doc.ubuntu-fr.org/sauvegarde">http://doc.ubuntu-fr.org/sauvegarde</a></li>
+</ul>   

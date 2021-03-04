@@ -1,5 +1,3 @@
-target
-xx*
+_site
+.jekyll-cache
 *.swp
-src/index.html
-hg.sh

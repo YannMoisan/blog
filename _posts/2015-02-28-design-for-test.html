@@ -1,0 +1,88 @@
+---
+title: Design for test
+description: Design for test
+layout: blog
+---
+<p>Nous allons voir un exemple de code legacy <em>Scala</em> qui n'est pas testable. C'est une problématique
+assez simple et indépendante pour un court article.</p>
+<pre class="prettyprint">
+object SUT {
+  def isEnabled = ResourceBundle.getBundle("design").getString("enabled").toBoolean
+  def methodToTest(name: String) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
+}
+</pre>
+<p>Le problème est qu'il n'est pas possible de tester le comportement de la méthode pour tous les valeurs
+de <code>isEnabled</code>. Le but de cet article est de voir ce que l'on peut faire pour résoudre ce problème, sans modifier
+le code client de cet objet.</p>
+
+<h2>parameter</h2>
+<p>Le plus simple est d'ajouter un paramètre à la fonction.</P>
+<pre class="prettyprint">
+object SUT {
+  def isEnabled = ResourceBundle.getBundle("design").getString("enabled").toBoolean
+  def methodToTest(name: String, isEnabled: Boolean = isEnabled) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
+}
+</pre>
+<p>La valeur par défaut permet ainsi au code client de continuer à fonctionner sans modification. Voici alors le code de test.</p>
+<pre class="prettyprint">
+test("should work when isEnabled is true") {
+  assertResult("Hello Test")(SUT.methodToTest("Test", true))
+}
+
+test("should work when isEnabled is false") {
+  assertResult("Goodbye Test")(SUT.methodToTest("Test", false))
+}
+</pre>
+<p>L'inconvénient est qu'il est bizarre de passer en paramètre une information qui est accessible dans le scope
+et qu'il faut le faire pour chaque méthode qui a besoin de ce paramètre.</p>
+
+<h2>class</h2>
+<p>Il est aussi possible d'introduire une classe.</p>
+<pre class="prettyprint">
+class SUTC {
+  def isEnabled = ResourceBundle.getBundle("design").getString("enabled").toBoolean
+  def methodToTest(name: String) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
+}
+
+object SUT extends SUTC
+</pre>
+<p>Ce qui permet de surcharger le comportement par défaut dans le test.</p>
+<pre class="prettyprint">
+test("should work when isEnabled is true") {
+    val sut = new SUTC {
+      override def isEnabled: Boolean = true
+    }
+    assertResult("Hello Test")(sut.methodToTest("Test"))
+}
+
+test("should work when isEnabled is false") {
+    val sut = new SUTC {
+      override def isEnabled: Boolean = false
+    }
+    assertResult("Goodbye Test")(sut.methodToTest("Test"))
+}
+</pre>
+
+<h2>implicit parameter</h2>
+<p>La dernière possibilité est d'utiliser un paramètre implicite</p>
+
+<pre class="prettyprint">
+object SUT {
+  implicit val isEnabled: Boolean = ResourceBundle.getBundle("design").getString("enabled").toBoolean
+  def methodToTest(name: String)(implicit isEnabled: Boolean) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
+}
+</pre>
+<pre class="prettyprint">
+test("should work when isEnabled is true") {
+  assertResult("Hello Test")(SUT.methodToTest("Test")(true))
+}
+
+test("should work when isEnabled is false") {
+  assertResult("Goodbye Test")(SUT.methodToTest("Test")(false))
+}
+</pre>
+<p>L'inconvénient est que l'on doit modifier le code client pour importer l'implicit.</p>
+
+<h2>Conclusion</h2>
+<p>Il existe donc des solutions simples, loin du cake pattern et autres monades, pour résoudre cette problématique.
+Dans ce cas, la solution class me parait la plus propre.</p>

@@ -1,0 +1,408 @@
+---
+title: Continuous Integration for Reactive Web Applications
+description: Continuous Integration for Reactive Web Applications, leverage the power of Travis CI, Sauce Labs and Heroku
+layout: blog
+---
+<p>I've started a new pet project. It's an online board game, for two players.</p>
+
+<p>On the technical side, it uses Scala, PlayFramework, Akka and Javascript. For the testing part, I use jasmine for javascript unit testing and specs2 with FluentLenium (a library on top of Selenium) for functional testing. Thanks to sbt-web, I run all these test with one command : <code>sbt test</code></p>
+
+<p>As I'm a professional, I write unit tests and functional tests. So I want <a
+    href="http://www.martinfowler.com/articles/continuousIntegration.html">continous
+    integration</a> for my project, and also continuous deployment to a staging
+environment. The good news is you can have that for free, using Travis CI, Sauce Labs and Heroku. The bad news is that it's not that smooth to configure, and I have encountered a lot of issues. Yes, I really had ALL the following issues :</p>
+
+<h2>Writing Selenium Tests</h2>
+
+<h3>HTMLUnit support Javascript, really ?</h3>
+
+<p>PlayFramework provide an example in the documentation. Cool. Unfortunately, when I run my test, I have the following error</p>
+
+<pre class="prettyprint"><code>[error] Caused by com.gargoylesoftware.htmlunit.ScriptException: TypeError: Cannot find function addEventListener in object [object HTMLDocument]. (http://localhost:19001/assets/awale-ws.js#134)
+</code></pre>
+
+<p>By default, the test use <code>HTMLUnitDriver</code> that is not a real browser and do not support all  Javascript.</p>
+
+<p>The solution is to use <code>FirefoxDriver</code>.</p>
+
+<h3>FirefoxDriver fails with Play 2.3</h3>
+
+<pre class="prettyprint"><code>[error]    IllegalArgumentException: : No enum constant org.openqa.selenium.Platform.Windows 7  (Platform.java:30)
+</code></pre>
+
+<p>Solution : it's <a href="https://code.google.com/p/selenium/issues/detail?id=8083">a known bug</a>, you have to update selenium version</p>
+
+<h3>Numeric id</h3>
+
+<p>I use numeric <code>id</code>s in the HTML.</p>
+
+<pre class="prettyprint"><code> &lt;div id="0" class="col"&gt;4&lt;/div&gt;
+</code></pre>
+
+<p>In my test, I fire an event on this div with <code>browser.find("#0").click()</code> and the test fails</p>
+
+<pre class="prettyprint"><code>InvalidSelectorException: : The given selector #0 is either invalid or does not result in a WebElement.
+</code></pre>
+
+<p>Selenium doesn't support that, even if it's conform with the <a href="http://www.w3.org/TR/html5/dom.html#the-id-attribute">spec</a>.</p>
+
+<p>The workaround is to access the element by its position.</p>
+
+<h3>As it's a multiplayer game, how can I test with multiple browsers ?</h3>
+
+<p>After some search on the internet, the Selenium way seems to use multiple windows in the same browser instead of using multiple browsers.</p>
+
+<p>Selenium/FluentLenium doesn't provide a straightforward way to do that. The trick is to use a javascript method <code>window.open</code>.</p>
+
+<p>As I use this code a lot, I've written some helpers :</p>
+
+<pre class="prettyprint"><code>def goToInNewTab(url: String, windowName: String): Fluent = {
+  f.executeScript(s"window.open('${url}', '${windowName}');")
+  f.getDriver.switchTo().window(windowName)
+  f
+}
+</code></pre>
+
+
+<h3>Tests are executed sequentially</h3>
+
+<p>By reading the PlayFramework code, I see the following code.</p>
+
+<pre class="prettyprint"><code>  def running[T](testServer: TestServer)(block: =&gt; T): T = {
+    PlayRunners.mutex.synchronized {
+      try {
+        testServer.start()
+        block
+      } finally {
+        testServer.stop()
+      }
+    }
+  }
+</code></pre>
+
+<p>Specs2 support parallel execution of tests. But a mutex prevents parallel execution of tests. So tests are executed sequentially. And obviously, that will have a negative impact on the overall execution time of the test suite.</p>
+
+<p>Not solved for the moment</p>
+
+<h3>Akka issue</h3>
+
+<p>I got another strange issue : the first test succeed, but following tests fail.</p>
+
+<p>My code relies on Akka, and I kept a reference to an <code>ActorRef</code> in an ugly global state.</p>
+
+<p>Unfortunately, after each test, the actor system is restarted, making the reference invalid.</p>
+
+<p>It was solved by using actorSelection to avoid the ref</p>
+
+<pre class="prettyprint"><code>val games = context.actorSelection("/user/games")
+</code></pre>
+
+<p>and using Play <code>Global</code> object to have a hook at the application start-up.</p>
+
+<pre class="prettyprint"><code>object Global extends GlobalSettings {
+  override def onStart(app: Application) {
+    Akka.system.actorOf(Props[GamesActor], "games")
+  }
+}
+</code></pre>
+
+<h3>ChromeDriver fails</h3>
+
+<p>The gameplay use some animations, based on the javascript method <code>setTimeout</code>.</p>
+
+<p>By default, <code>ChromeDriver</code> doesn't display the window. And according to the best resource for web developers, <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout#Timeouts_in_inactive_tabs_clamped_to_%3E1000ms">MDN</a>,  browser have an optimisation that prevents  timer events to occur when the window is not visible.</p>
+
+<p>I'm still stuck with that one.</p>
+
+<h2>Travis CI</h2>
+
+<p>If you don't know Travis CI, it's a continuous integration solution with a simple GitHub integration.</p>
+
+<p>You can install the CLI with <code>gem install travis</code></p>
+
+<p>Travis CI has a decent<a
+    href="http://docs.travis-ci.com/user/languages/scala/">Scala support</a>.
+You just have to add a <code>.travis.yml</code> file in the root of your
+repository. And that's it. By default, travis will run <code>sbt test</code></p>
+
+<pre class="prettyprint"><code>language: scala
+scala:
+- 2.11.1
+</code></pre>
+
+<p>If you're lazy, you can generate this file by using <code>travis init</code></p>
+
+<h3>Java 8</h3>
+
+<p>Hum, here is a compilation issue : </p>
+
+<pre class="prettyprint"><code>[error] /home/travis/build/YannMoisan/awale/app/actors/EventStore.scala:3: object time is not a member of package java
+
+[error] import java.time.LocalDateTime
+</code></pre>
+
+<p>Let's check the travis console :</p>
+
+<pre class="prettyprint"><code>$ jdk_switcher use default
+Switching to Oracle JDK7 (java-7-oracle), JAVA_HOME will be set to /usr/lib/jvm/java-7-oracle
+</code></pre>
+
+<p>Bingo ! By default, Travis CI uses Java 7 and my application requires Java 8. Let's configure that :</p>
+
+<pre class="prettyprint"><code>jdk:
+- oraclejdk8
+</code></pre>
+
+<h3>GUI tests fails</h3>
+
+<p>Setup is really easy, isn't it ? I'm ready to run my first build and … TADA ! Here is the error :
+<code>
+Error: no display specified
+</code></p>
+
+<p>Hum. This one smells bad. Ready to install an X server ? Just kidding !</p>
+
+<p>Travis CI allow you to do some GUI tests. Firefox is installed by default and you just have to <a href="http://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-%28e.g.-a-Web-browser%29">configure Xvfb</a></p>
+
+<h3>Downloading the whole internet</h3>
+
+<p>At each build, sbt download the whole internet.</p>
+
+<p>Travis CI provides <a href="http://docs.travis-ci.com/user/caching/#Arbitrary-directories">caching</a>, let's configure that :</p>
+
+<pre class="prettyprint"><code>cache:
+  directories:
+    - $HOME/.m2/repository
+    - $HOME/.sbt
+    - $HOME/.ivy2
+</code></pre>
+
+<h3>GitHub release</h3>
+
+<p>I want to make a release after each build. So I can deploy easily to production each successfull build.</p>
+
+<p>It's feasible but not straightforward. There is a <a href="https://github.com/travis-ci/travis-ci/issues/1476">feature request</a>.</p>
+
+<p>As my project is on GitHub, it's a logic solution to use GitHub release.</p>
+
+<pre class="prettyprint"><code>travis setup releases
+</code></pre>
+
+<p>Here are the steps, with the matching travis configuration :</p>
+
+<ul>
+<li>build the artefact</li>
+</ul>
+
+
+<pre class="prettyprint"><code>- after_success:
+  - sbt dist
+</code></pre>
+
+<ul>
+<li>create a tag</li>
+</ul>
+
+
+<pre class="prettyprint"><code>- after_success:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - export GIT_TAG=build-$TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER
+  - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+  - git push origin $GIT_TAG
+</code></pre>
+
+<ul>
+<li>release</li>
+</ul>
+
+
+<pre class="prettyprint"><code>deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: …
+    file: target/universal/awale-1.0-SNAPSHOT.zip
+    on:
+      repo: YannMoisan/awale
+</code></pre>
+
+<h3>Heroku</h3>
+
+<p>Houra ! I have some tests to guarantee the quality of my builds. I'm therefore confident enough to deploy automatically on a staging environment.</p>
+
+<p>If you don't know Heroku, it's a PaaS, that support a lot of technology, including Scala and Playframework.</p>
+
+<p>Travis CI provides an <a href="http://docs.travis-ci.com/user/deployment/heroku/">Heroku integration</a>.</p>
+
+<pre class="prettyprint"><code>travis setup heroku
+</code></pre>
+
+<p>Traditionnaly, you setup a Git remote and each commit is deployed on Heroku (after a <code>git push</code>). The benefit of using Travis CI is, by design, you only deploy successfull build.</p>
+
+<h3>Multi provider issue</h3>
+
+<p>Travis CI supports deployment to multiple providers, but there is a <a href="https://github.com/travis-ci/travis.rb/issues/201">known issue</a> in the CLI : <code>travis setup</code> doesn't support it.</p>
+
+<h2>Sauce Labs</h2>
+
+<p>If you don't know SauceLabs, it's a cloud solution to test a web app on a lot of <a href="https://saucelabs.com/platforms/">OS/browser</a> combination. And it's free for <em>open source</em> project.</p>
+
+<p>Sauce Labs provides an integration with Travis CI, and Travis CI provide an integration with Sauce Labs.</p>
+
+<ul>
+<li><a href="https://docs.saucelabs.com/ci-integrations/travis-ci/">Sauce Labs doc</a></li>
+<li><a href="http://docs.travis-ci.com/user/sauce-connect/">Travis doc</a></li>
+</ul>
+
+
+<p>The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI ans Sauce Labs.</p>
+
+<pre class="prettyprint"><code>addons:
+  sauce_connect:
+    no_ssl_bump_domains: all
+</code></pre>
+
+<h3>Use Sauce Labs only for on CI</h3>
+
+<p>I want to use Sauce Labs only for Travis CI builds, and not for local builds. Locally, I only use Firefox Driver to have a quick feedback loop.</p>
+
+<p>PlayFramework doesn't provide built-in support for that.</p>
+
+<p>Travis CI set an environnement variable <code>CI</code>, so we can detect on which environnement the test is running.</p>
+
+<pre class="prettyprint"><code>trait EnvAwareDriver {
+  def localDrivers: Seq[String =&gt; WebDriver]
+  def remoteDrivers: Seq[String =&gt; WebDriver]
+
+  def drivers: Seq[String =&gt; WebDriver] = if (System.getenv("CI") != "true") 
+    localDrivers 
+  else 
+    remoteDrivers
+}
+</code></pre>
+
+<h3>Set the tunnel identifier, the build number and the name</h3>
+
+<p>You must set the tunnel identifier to allow communication between Travis CI and Sauce Labs. The build number and the name are usefull to generate a comprehensive dashboard.</p>
+
+<p>PlayFramework doesn't provide built-in support for that.</p>
+
+<p>As previously, Travis CI set some environment variables that we can use. Let's do that with <em>Enhanced my library</em> pattern :</p>
+
+<pre class="prettyprint"><code>object SauceLabs {
+  implicit class SauceLabsCapabilities(caps: DesiredCapabilities) {
+    def setSauceLabs(name: String) = {
+      caps.setCapability("tunnelIdentifier", System.getenv("TRAVIS_JOB_NUMBER"))
+      caps.setCapability("build", System.getenv("TRAVIS_BUILD_NUMBER"))
+      caps.setCapability("name", name)
+    }
+}  
+</code></pre>
+
+<p>The full code is provided below.</p>
+
+<p>For the name, I propagate to the driver factory the label of the <em>specs2</em> example.</p>
+
+<pre class="prettyprint"><code>"my example" in ((s: String) =&gt; new WithBrowser(driver(s)) {
+</code></pre>
+
+<h3>Timeout</h3>
+
+<p>Some tests fails, client are disconnected for unknown reason. Nothing in the log, the kind of situation that developers hate.</p>
+
+<pre class="prettyprint"><code>Command duration or timeout: 85 milliseconds
+</code></pre>
+
+<p>One more time, I've spent a lot of time to fix this one. The root cause was instantiation of all <code>RemoteWebDriver</code> at the beggining of the suite. Unfortunately, an HTTP connection is created during the object construction.</p>
+
+<p>And Sauce Labs timeout connections after 90 seconds.</p>
+
+<h3>The revenge of the timeout</h3>
+
+<p>Some tests fails, client are disconnected for unknown reason. Nothing in the log, the kind of situation that developers hate.</p>
+
+<p>After wasting a lot of time to investigate, I've found that it was due to timeout. In fact, when you use WebSocket, there is a magic option for Sauce Connect, not documented that you SHOULD have !</p>
+
+<pre class="prettyprint"><code>no_ssl_bump_domains: all
+</code></pre>
+
+<p>Good to know : I've reported an <a href="https://github.com/travis-ci/travis-ci/issues/4927">issue</a> :  <code>travis lint</code> reports a false negative with this option.</p>
+
+<h3>How can I run a test against multiple drivers</h3>
+
+<p>The PlayFramework provides an example, but it runs with only one driver.</p>
+
+<p>And the specs2 source code is not as easy to read. I've come up with this trait :</p>
+
+<pre class="prettyprint"><code>trait MultiBrowser {
+  self : Specification =&gt;
+
+  def drivers : Seq[String =&gt; WebDriver]
+
+  def browsers(u: (String =&gt; WebDriver) =&gt; Unit) = examplesBlock {
+    for (driver &lt;- drivers) {
+      u(driver)
+    }
+  }
+}
+</code></pre>
+
+<h3>Network latency</h3>
+
+<p>Locally, the browser and the server runs on the same machine. So far so good.</p>
+
+<p>But in CI env, it is not the case anymore, and latency appears, especially when your application uses WebSocket. So some tests that have always passed locally, fail randomly remotely. Personally, I've found this issue is really tough and sometimes makes GUI testing time consuming.</p>
+
+<p>The workaround is to use <code>await</code> method.</p>
+
+<pre class="prettyprint"><code>browser.await().atMost(5, TimeUnit.SECONDS).until("#invitation").areDisplayed()
+</code></pre>
+
+<h3>Problem : Status unknown</h3>
+
+<p>Now it's configured, you want to display the information on your <code>README</code> page. So you add the snippet as explained in the Sauce Labs documentation and … the status is unknown !</p>
+
+<p>PlayFramework doesn't provide built-in support for Sauce Labs, you have to update the status of each test manually by using the <a href="https://docs.saucelabs.com/reference/test-configuration/#job-annotation-with-the-rest-api">REST API</a> provided by Sauce Labs.</p>
+
+<h2>Conclusion</h2>
+
+<p>It's awesome to reap the benefit from these tools, and moreover for free because I do open source. Sauce Labs provides also free support, and it rocks (thanks guys for your help)!</p>
+
+<p>These cloud-based tools makes my life a lot easier : I receive a mail when a build fails (once, i received an email by getting my kids to school), I can check the overall status of my project on the <a href="https://github.com/yannmoisan/awale">README</a>. Releases and deployments are fully automated.</p>
+
+<h2>Helpers methods</h2>
+
+<p>I've started to implement some helpers methods. There are still too much boilerplate in the tests and I definitely need to improve the design.</p>
+
+<pre class="prettyprint"><code>abstract class WithBrowserAndSauceLabsUpdater[WEBDRIVER &lt;: WebDriver](
+                                                                       webDriver: WebDriver = WebDriverFactory(Helpers.HTMLUNIT),
+                                                                       app: FakeApplication = FakeApplication(),
+                                                                       port: Int = Helpers.testServerPort) extends WithBrowser(webDriver, app, port) {
+
+  // call synchronously the Sauce Labs REST API
+  def updateJob(sessionId: SessionId, passed: Boolean) = {
+    val holder: WSRequestHolder = WS.url(s"https://saucelabs.com/rest/v1/yamo93/jobs/${sessionId}")
+    val data = Json.obj("passed" -&gt; passed)
+    val f = holder.withAuth("yamo93", "xxx", WSAuthScheme.BASIC).put(data).map(t =&gt; {println(t.body)})
+    Await.result (f, Duration(5, TimeUnit.SECONDS))
+  }
+
+  def getSessionId() : Option[SessionId] = webDriver match {
+    case remote : RemoteWebDriver =&gt; Some(remote.getSessionId)
+    case _ =&gt; None
+  }
+
+  override def around[T: AsResult](t: =&gt; T): Result = {
+    var maybeResult : Option[Result] = None
+    val maybeSessionId = getSessionId()  // call before browser.quit() in super.around
+    try {
+      maybeResult = Some(super.around(t))
+      maybeResult.get
+    }
+    finally {
+      maybeSessionId.foreach { updateJob(_, maybeResult.map(_.isSuccess).getOrElse(false)) }
+    }
+  }
+}
+</code></pre>

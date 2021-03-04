@@ -1,0 +1,81 @@
+---
+title: Scala Puzzles
+description: Scala Puzzles
+layout: blog
+---
+<p>Quelques petites bizarreries ou astuces, issues de mon expérience.
+Je vous encourage à réfléchir un peu avant de tester dans le REPL. 
+Et j'en profite pour vous donner une petite astuce que je viens de découvrir : <code>:paste</code> permet de coller plusieurs lignes dans le REPL.
+</p>
+<h3>Division par zéro</h3>
+Commençons par une venant de Java :
+<pre class="prettyprint">
+0/0
+0d/0
+</pre>
+<p>Qu'affichent ces deux lignes ?</p>
+<p>
+La première ligne lève une <code>java.lang.ArithmeticException</code> alors que la deuxième affiche <code>NaN</code>.
+Cela peut paraitre étrange mais c'est conforme au standard <a href="http://fr.wikipedia.org/wiki/IEEE_754">IEEE 754</a> pour la représentation des nombres à virgule flottante.
+NaN est le résultat d'une opération invalide.
+</p>
+<h3>Pattern matching</h3>
+<p>Considérons la méthode suivante :</p>
+<pre class="prettyprint">
+def f(a: Any) = a match {
+  case ints: List[Int]    =&gt; println("int")
+  case strs: List[String] =&gt; println("string")
+}
+</pre>
+<p>Qu'affiche le code suivant ?</p>
+<pre class="prettyprint">
+f(List(42))
+f(List("scala.io"))
+</pre>
+<p>
+Les deux lignes affichent <code>int</code>.
+Le <i>pattern matching</i> est fait à l'exécution, l'information de type n'est donc plus disponible en raison du <i>type erasure</i> de la JVM.
+</p>
+<h3>Pattern matching</h3>
+<pre class="prettyprint">
+case class A(x: Int, y: Int)
+def f: A =&gt; Int = { a =&gt; a.x + a.y }
+def g: A =&gt; Int = { case A(x, y) =&gt; x + y }
+</pre>
+<p>Qu'affiche le code suivant ?</p>
+<pre class="prettyprint">
+f(A(21, 21))
+g(A(21, 21))
+</pre>
+<p>Même si la syntaxe de la deuxième méthode est surprenante, les deux méthodes sont équivalentes.
+Scala permet d'utiliser le <i>pattern matching</i>, et donc la déstructuration pour les paramètres d'entrée d'une fonction anonyme.
+</p>
+<h3>Un pattern courant</h3>
+<pre class="prettyprint">
+object Action { def apply(f: String =&gt; Int) = { s: String =&gt; println("s = " + f(s)) } }
+val f = Action { _.length }
+val g = Action { _.toInt }
+</pre>
+<p>Qu'affiche le code suivant ?</p>
+<pre class="prettyprint">
+f("42")
+g("42")
+</pre>
+<p>
+Cette astuce combine l'appel implicite de la méthode <code>apply</code> du <i>companion object</i>, qui est une <abbr title="higher-order function">HOF</abbr> car elle retourne une méthode. 
+Cela permet d'implémenter élégamment le design pattern <i>Template method</i>.
+</p>
+<h3>Collection</h3>
+<p>Que renvoie le code suivant ?</p>
+<pre class="prettyprint">
+Array(42) == new Array(42)
+</pre>
+<p>Et oui, cela renvoie <code>false</code>. A gauche, cela appelle la méthode <code>apply</code> du <i>companion object</i> de <code>Array</code>, qui créé un <code>Array[Int]</code> avec un seul élément. A droite, ça appelle le constructeur de <code>Array</code> qui créé un tableau de taille 42.</p>
+<h3>Collection</h3>
+<p>Que font ces deux lignes ?</p>
+<pre class="prettyprint">
+val l : List[Any] = List[Int]()
+val a : Array[Any] = Array[Int]()
+</pre>
+<p>La première ligne ne pose pas de problème. En revanche, la deuxième ligne ne compile pas car le type <code>Array</code> est invariant.</p>
+<p>PS: Les plus attentifs auront surement remarqué une <a href="http://scala.io">publicité subliminale</a>.</p>
