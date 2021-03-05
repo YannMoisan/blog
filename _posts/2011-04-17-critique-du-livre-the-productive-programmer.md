@@ -28,7 +28,7 @@ La deuxième partie est plus orientée développement. Voici quelques exemples d
 
 -   Le TDD.
 -   Les outils d'analyse de code.
--   Le principe d'encapusultation et, par conséquent, les méchants getter/setter.
+-   Le principe d'encapsulation et, par conséquent, les méchants getter/setter.
 -   La mauvaise habitude de certains consistant à développer des fonctionnalités non demandées, au
     cas où !
 

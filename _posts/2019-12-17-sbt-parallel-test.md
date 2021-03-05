@@ -1,6 +1,6 @@
 ---
 title: How-to run tests in parallel with sbt
-description: How-to run tsets in parallel with sbt
+description: How-to run tests in parallel with sbt
 layout: blog
 ---
 The aim of this post is to clarify how to run tests in parallel with sbt.
@@ -63,7 +63,7 @@ This can be changed with : (the equivalent of parallelExecution)
 Test / testForkedParallel := true
 ```
 
-Moreover, in forked mode, each project will spawn its own JVM (I did not found a way to run tests
+Moreover, in forked mode, each project will spawn its own JVM (I did not find a way to run tests
 from all projects in the same forked JVM, the only workaround is to create a dedicated test project
 and put all tests inside it).
 
@@ -98,13 +98,13 @@ The issue with Spark is that it costs a lot to create a `SparkContext`. So, some
 reuse it across multiple tests (e.g.
 [spark-testing-base](https://github.com/holdenk/spark-testing-base)).
 
-But it's not thread safe ! Using what we have learned in the previous sections, there are two
+But it's not thread-safe ! Using what we have learned in the previous sections, there are two
 possibilities :
 
 1. Forking. But each project will have its own JVM and its own SparkContext.
 
 2. Stay in the same JVM and execute all tests sequentially (with parallelExecution = true
-AND Tags.Test = 1). Warning: the configuration given
+AND Tags.Test = 1). Warning: the configuration given
 [here](https://github.com/holdenk/spark-testing-base#special-considerations) doesn't work in case of
 multi-project.
 
@@ -181,7 +181,7 @@ Bar1[5][76861]
 
 ## Links
 
--   [sbt official doc : Testing](https://www.scala-sbt.org/1.x/docs/Testing.html)
+-   [sbt official doc : Testing](https://www.scala-sbt.org/1.x/docs/Testing.html)
 -   [sbt official doc : Forking](https://www.scala-sbt.org/1.x/docs/Forking.html)
 -   [sbt official doc : Multi-Project](https://www.scala-sbt.org/1.x/docs/Multi-Project.html)
 -   [sbt official doc :

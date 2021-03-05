@@ -12,7 +12,7 @@ des tâches répétitives. Et les données Exif présentes dans les images perme
 classement automatiquement. Utilisant Ubuntu, un système d'exploitation convivial, il est tout
 naturel d'automatiser ce processus grâce à un script shell.
 
-Je classe mes photos ainsi : un premier niveau de répertoire par année, et un second niveau par
+Je classe mes photos ainsi : un premier niveau de répertoire par an, et un second niveau par
 jour. Je ne change pas le nom du fichier créé par l'appareil : IMGxxxx.jpg. Ce classement respecte
 l'ordre chronologique et il serait fastidieux de nommer chaque photo en fonction de son contenu.
 
@@ -24,7 +24,7 @@ l'ordre chronologique et il serait fastidieux de nommer chaque photo en fonction
 
 ## Comment automatiser ?
 
-Je suis sous Ubuntu 10.10, mon appareil photo est un Canon IXUS xxx. Il est donc detecté
+Je suis sous Ubuntu 10.10, mon appareil photo est un Canon IXUS xxx. Il est donc détecté
 automatiquement lors que je le connecte à l'ordinateur par USB. Précision importante : à l'ouverture
 de la pop-up, cliquer sur Démonter.
 

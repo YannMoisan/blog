@@ -1,5 +1,5 @@
 ---
-title: Creer une archive .tar.gz
+title: Créer une archive .tar.gz
 description: Création d'une archive .tar.gz en Java
 layout: blog
 ---

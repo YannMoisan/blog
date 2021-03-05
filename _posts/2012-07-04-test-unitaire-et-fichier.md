@@ -7,7 +7,7 @@ Nous allons voir comment tester unitairement un composant basé sur la lecture d
 utiliser de fichier. Cette approche peut sembler étrange mais elle offre plusieurs avantages : le
 test sera ainsi plus rapide, plus lisible (car le contenu à tester est dans le même fichier que le
 test) et indépendant du système de fichier. Pour l'exemple, nous allons implémenter en java un
-programme qui compte le nombre de ligne d'un fichier. L'astuce consiste à utiliser dans le code la
+programme qui compte le nombre de lignes d'un fichier. L'astuce consiste à utiliser dans le code la
 classe `java.io.Reader` et d'injecter un `java.io.StringReader` à la place du `java.io.FileReader`
 dans le test.
 

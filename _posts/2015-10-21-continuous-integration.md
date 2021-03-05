@@ -142,7 +142,7 @@ integration.
 
 You can install the CLI with `gem install travis`
 
-Travis CI has a decent[Scala support](http://docs.travis-ci.com/user/languages/scala/). You just
+Travis CI has a decent[Scala support](http://docs.travis-ci.com/user/languages/scala/). You just
 have to add a `.travis.yml` file in the root of your repository. And that's it. By default, travis
 will run `sbt test`
 
@@ -156,7 +156,7 @@ If you're lazy, you can generate this file by using `travis init`
 
 ### Java 8
 
-Hum, here is a compilation issue : 
+Hum, here is a compilation issue : 
 
 ```
 [error] /home/travis/build/YannMoisan/awale/app/actors/EventStore.scala:3: object time is not a member of package java
@@ -183,7 +183,7 @@ jdk:
 Setup is really easy, isn't it ? I'm ready to run my first build and … TADA ! Here is the error :
 ` Error: no display specified`
 
-Hum. This one smells bad. Ready to install an X server ? Just kidding !
+Hum. This one smells bad. Ready to install an X server ? Just kidding !
 
 Travis CI allow you to do some GUI tests. Firefox is installed by default and you just have to
 [configure
@@ -206,7 +206,7 @@ cache:
 
 ### GitHub release
 
-I want to make a release after each build. So I can deploy easily to production each successfull
+I want to make a release after each build. So I can deploy easily to production each successful
 build.
 
 It's feasible but not straightforward. There is a [feature
@@ -265,8 +265,8 @@ Travis CI provides an [Heroku integration](http://docs.travis-ci.com/user/deploy
 travis setup heroku
 ```
 
-Traditionnaly, you setup a Git remote and each commit is deployed on Heroku (after a `git push`).
-The benefit of using Travis CI is, by design, you only deploy successfull build.
+Traditionnaly, you set up a Git remote and each commit is deployed on Heroku (after a `git push`).
+The benefit of using Travis CI is, by design, you only deploy successful build.
 
 ### Multi provider issue
 
@@ -284,7 +284,7 @@ Labs.
 
 -   [Travis doc](http://docs.travis-ci.com/user/sauce-connect/)
 
-The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI ans
+The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI and
 Sauce Labs.
 
 ```
@@ -318,7 +318,7 @@ trait EnvAwareDriver {
 ### Set the tunnel identifier, the build number and the name
 
 You must set the tunnel identifier to allow communication between Travis CI and Sauce Labs. The
-build number and the name are usefull to generate a comprehensive dashboard.
+build number and the name are useful to generate a comprehensive dashboard.
 
 PlayFramework doesn't provide built-in support for that.
 
@@ -346,7 +346,7 @@ For the name, I propagate to the driver factory the label of the *specs2* exampl
 
 ### Timeout
 
-Some tests fails, client are disconnected for unknown reason. Nothing in the log, the kind of
+Some tests fail, client are disconnected for unknown reason. Nothing in the log, the kind of
 situation that developers hate.
 
 ```
@@ -354,14 +354,14 @@ Command duration or timeout: 85 milliseconds
 ```
 
 One more time, I've spent a lot of time to fix this one. The root cause was instantiation of all
-`RemoteWebDriver` at the beggining of the suite. Unfortunately, an HTTP connection is created during
+`RemoteWebDriver` at the beginning of the suite. Unfortunately, an HTTP connection is created during
 the object construction.
 
 And Sauce Labs timeout connections after 90 seconds.
 
 ### The revenge of the timeout
 
-Some tests fails, client are disconnected for unknown reason. Nothing in the log, the kind of
+Some tests fail, client are disconnected for unknown reason. Nothing in the log, the kind of
 situation that developers hate.
 
 After wasting a lot of time to investigate, I've found that it was due to timeout. In fact, when you
@@ -371,7 +371,7 @@ use WebSocket, there is a magic option for Sauce Connect, not documented that yo
 no_ssl_bump_domains: all
 ```
 
-Good to know : I've reported an [issue](https://github.com/travis-ci/travis-ci/issues/4927) :
+Good to know : I've reported an [issue](https://github.com/travis-ci/travis-ci/issues/4927) :
 `travis lint` reports a false negative with this option.
 
 ### How can I run a test against multiple drivers
@@ -398,9 +398,9 @@ trait MultiBrowser {
 
 Locally, the browser and the server runs on the same machine. So far so good.
 
-But in CI env, it is not the case anymore, and latency appears, especially when your application
+But in CI env, it is not the case anymore, and latency appears, especially when your application
 uses WebSocket. So some tests that have always passed locally, fail randomly remotely. Personally,
-I've found this issue is really tough and sometimes makes GUI testing time consuming.
+I've found this issue is really tough and sometimes makes GUI testing time consuming.
 
 The workaround is to use `await` method.
 
@@ -436,7 +436,7 @@ abstract class WithBrowserAndSauceLabsUpdater[WEBDRIVER <: WebDriver](
                                                                        app: FakeApplication = FakeApplication(),
                                                                        port: Int = Helpers.testServerPort) extends WithBrowser(webDriver, app, port) {
 
-  // call synchronously the Sauce Labs REST API
+  // call synchronously the Sauce Labs REST API
   def updateJob(sessionId: SessionId, passed: Boolean) = {
     val holder: WSRequestHolder = WS.url(s"https://saucelabs.com/rest/v1/yamo93/jobs/${sessionId}")
     val data = Json.obj("passed" -> passed)

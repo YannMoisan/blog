@@ -81,7 +81,7 @@ public class Child1Builder extends ParentBuilder {
 }
 ```
 
-Malheureusement, ce code ne compile pas car la méthode `setParentProperty` renvoit une instance de
+Malheureusement, ce code ne compile pas car la méthode `setParentProperty` renvoie une instance de
 `ParentBuilder` et il n'est pas possible de chainer l'appel à `setChildProperty`. La méthode
 setParentProperty a besoin de renvoyer le type de la classe dérivée. L'astuce consiste à utiliser
 une méthode getThis().
@@ -121,7 +121,7 @@ public class Child1Builder extends ParentBuilder<Child1Builder> {
 Bien que ce code fonctionne, il est possible de l'améliorer. Le paramètre générique T doit être une
 sous-classe de ParentBuilder. Cela donne donc l'expression class ParentBuilder<T extends
 ParentBuilder<T>> qui peut paraitre étrange et montre la complexité des génériques qui se
-cache derrière leur apparente simplicité. C'est ce que l'on apelle un self-bound generic type.
+cache derrière leur apparente simplicité. C'est ce que l'on appelle un self-bound generic type.
 
 Source :
 

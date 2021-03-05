@@ -8,7 +8,7 @@ memory footprint of a program.
 
 ## Reminder on the JVM
 
-Every object on the JVM has a header. It consists of a mark word and a klass pointer. On 64 bit
+Every object on the JVM has a header. It consists of a mark word and a klass pointer. On 64-bit
 architectures with a heap < 32G (i.e. with compressed oops), the header has a size of 12 bytes.
 
 Java objects are 8-byte aligned by default. This can be changed with a JVM flag.
@@ -31,7 +31,7 @@ a huge overhead)
 ## Tools
 
 Apache Spark, a tool for large-scale data processing, has a class to measure the size of an object
-: SizeEstimator.estimate
+: SizeEstimator.estimate
 
 I use ammonite, a better Scala REPL that allow to dynamically load dependencies
 
@@ -60,8 +60,8 @@ case class IntInt(i: Int, j: Int)
 
 The size is
 
--   object header : 12 bytes
--   2 int fields : 2 \* 4 = 8 bytes
+-   object header : 12 bytes
+-   2 int fields : 2 \* 4 = 8 bytes
 -   total = 20 bytes, so 24 bytes with alignment
 
 But it will be awkward to create classes for all combinaison of types, so let's create a generic
@@ -80,9 +80,9 @@ the constructor need to be boxed to java.lang.Integer objects.
 
 Let's check the number by hand. The size is
 
--   object header : 12 bytes
--   2 reference fields : 2 \* 4 = 8 bytes
--   2 Integers : 2 \* 16 = 32 bytes
+-   object header : 12 bytes
+-   2 reference fields : 2 \* 4 = 8 bytes
+-   2 Integers : 2 \* 16 = 32 bytes
 -   total = 52 bytes, so 56 bytes with alignment
 
 In order to reduce the overhead due to boxing, Scala has a feature called specialized.
@@ -134,13 +134,13 @@ res11: Array[Class[?0] forSome { type ?0 }] = Array(class java.lang.Object, clas
 
 Unfortunately, the superclass has 2 fields of type Object, that will always be null for a
 specialized instance. Nevertheless, a reference field with a null value on the JVM take the same
-space than a non-null reference.
+space as a non-null reference.
 
 so the size is
 
--   object header : 12 bytes
--   2 reference fields : 2 \* 4 = 8 bytes
--   2 ints : 2 \* 4 = 8 bytes
+-   object header : 12 bytes
+-   2 reference fields : 2 \* 4 = 8 bytes
+-   2 ints : 2 \* 4 = 8 bytes
 -   total = 28 bytes, so 32 bytes with alignment. (Q.E.D.)
 
 We can double check with jol, another interesting tool when it comes to understand memory
@@ -179,9 +179,9 @@ res15: Long = 24L
 
 The size is
 
--   object header : 12 bytes
--   length fields : 4 byte
--   2 ints : 2 \* 4 = 8 bytes
+-   object header : 12 bytes
+-   length fields : 4 byte
+-   2 ints : 2 \* 4 = 8 bytes
 -   total = 24 bytes
 
 ## Conclusion

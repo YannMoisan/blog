@@ -47,7 +47,7 @@ Voici ma configuration :
 
 Afin de monter automatiquement les partitions au démarrage, il suffit de les ajouter au fichier
 `/etc/fstab` de chaque distribution. Dans ce fichier, chaque partition est représentée par son UUID,
-que l'on obtient grâce à la commande `ls -l /dev/disk/by-uuid/`. A titre d'exemple, voici le contenu
+que l'on obtient grâce à la commande `ls -l /dev/disk/by-uuid/`. À titre d'exemple, voici le contenu
 de mon fichier `/etc/fstab`.
 
 ```

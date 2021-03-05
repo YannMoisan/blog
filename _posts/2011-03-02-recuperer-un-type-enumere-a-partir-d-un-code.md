@@ -18,7 +18,7 @@ méthode servant de factory static (cf Item 1 : Consider static factory methods 
 constructors). Afin de respecter le principe DRY, nous allons mettre en place un mécanisme afin de
 ne pas dupliquer le code de cette méthode dans chaque type. Premièrement, une interface `Reference`
 est créée (cf Item 34 : Emulate extensible enums with interfaces). Ensuite, une classe utilitaire
-`References` est créée afin de servir de dictionnaire; c'est à dire pour stocker toutes les valeurs
+`References` est créée afin de servir de dictionnaire; c'est-à-dire pour stocker toutes les valeurs
 de tous les types (cf Item 29 : Consider heterogeneous containers).
 
 Reference

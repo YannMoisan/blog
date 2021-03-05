@@ -31,7 +31,7 @@ install Ubuntu', je coche les cases Download updates while installing Install th
 software Sur l'écran 'Allocate Drive Space', je choisis Install ubuntu alongside pour le dual-boot
 avec Windows. L'installation a créé 3 partitions :
 
--   une partion étendue
+-   une partition étendue
 -   une partition pour la racine (/) en ext4
 -   une partition de swap
 
@@ -40,7 +40,7 @@ fonction, le touchpad. Le seul problème rencontré est que le double tap LED po
 touchpad ne fonctionne pas. Les logiciels non libres (flash et MP3) fonctionne aussi après
 l'installation.
 
-## 2ème problème: l'amorçage
+## 2ème problème : l'amorçage
 
 Pour vérifier le bon fonctionnement du dual boot, je démarre Windows. Pas de problème. Puis je
 démarre à nouveau Ubuntu. Le menu de Grub s'affiche bien mais le système reste bloqué pendant le
@@ -49,7 +49,7 @@ détriment de Grub 2. Il suffit de désactiver le service HP Software Framework 
 et de restaurer Grub 2. Au menu de grub, sélectionner recovery mode et, au recovery menu,
 sélectionner Update grub bootloader.
 
-## 3ème problème: la carte graphique
+## 3ème problème : la carte graphique
 
 L'ordinateur possède deux cartes graphiques : une carte intégrée au processeur et une carte AMD
 Radeon HD 6470M dédiée. Le but est d'optimiser la consommation d'énergie en basculant sur la carte
@@ -58,7 +58,7 @@ Linux car le serveur X a besoin d'un redémarrage pour le switch.
 
 Après une mise à jour du système, le système reste bloqué pendant le démarrage. Après recherche,
 c'est lié à la carte graphique. Une solution, assez bourrine, consiste à désactiver Switchable
-Graphics dans le BIOS. Ainsi, le système n'utilise que la carte embarqué avec le processeur, comme
+Graphics dans le BIOS. Ainsi, le système n'utilise que la carte embarquée avec le processeur, comme
 l'indique la commande `lspci|grep VGA`.
 
 ## 4ème problème: la carte Wifi
@@ -75,7 +75,7 @@ Tous les problèmes étant maintenant résolus, on va faire quelques réglages :
 
 ## Paramétrage du BIOS
 
-Par rapport à mon précédent portable, le BIOS offre beaucoup plus de paramètres.C'est en partie lié
+Par rapport à mon précédent portable, le BIOS offre beaucoup plus de paramètres. C'est en partie lié
 au passage à UEFI et HP qui permet la configuration de ses programmes dans le BIOS. Ces programmes
 ne sont pas compatibles avec Linux. J'aime désactiver les choses que je n'utilise pas. J'ai donc
 décoché les options suivantes :
@@ -84,7 +84,7 @@ décoché les options suivantes :
     -   USB Legacy Support
     -   HP Day Starter
     -   HP Quick Web
-    -   Numlock On (coché), mais malheureusement çà ne fonctionne pas!
+    -   Numlock On (coché), mais malheureusement ça ne fonctionne pas !
 -   Built-in Device Options:
     -   Embedded Bluetooth Device
     -   Wake on LAN (disable)
@@ -108,7 +108,7 @@ démarrage par défaut de programmes que je n'utilise pas. J'ai donc décoché d
 -   Visual Assistance
 -   Zeitgeist Datahub (mais malheureusement le service démarre quand même)
 
-Après le démarrage, le système consomme 400Mo de RAM (4 fois moins que Win 7 !!!)
+Après le démarrage, le système consomme 400 Mo de RAM (4 fois moins que Win 7 !!!)
 
 ## Quelques pistes à faire après l'installation
 

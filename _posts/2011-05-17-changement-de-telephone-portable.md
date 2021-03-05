@@ -21,11 +21,11 @@ L'étape suivante consiste à récupérer les données dans mon nouveau téléph
 les contacts uniquement. Ils sont sauvegardés dans la mémoire du téléphone, et j'ai enregistré
 plusieurs numéros pour certains. Fort heureusement, le téléphone possède une fonctionnalité de
 transfert des contacts de la mémoire vers la carte SIM. Je vais donc dans Contacts > Options >
-Avancées > Copier vers SIM. Et je sélectionne Copier tout. Le noms des contacts a été suffixés
+Avancées > Copier vers SIM. Et je sélectionne Copier tout. Le nom des contacts a été suffixés
 par /W ou par /M (Work ou Mobile). J'ai donc récupéré tous les numéros, même pour les contacts ayant
 plusieurs numéros. Cependant, afin de simplifier les transferts futurs, je vous recommande de
 s'aligner sur les limites du système le plus contraignant, ce qui donne la règle
-suivante:**enregistrer un seul numéro par contact**.
+suivante :**enregistrer un seul numéro par contact**.
 
 ## Le traitement de l'ancien téléphone
 

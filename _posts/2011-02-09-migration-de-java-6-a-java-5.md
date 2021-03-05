@@ -3,7 +3,7 @@ title: Migration de Java 6 à Java 5.
 description: Migration d'une application de Java 6 à Java 5
 layout: blog
 ---
-Sur mon projet actuel, nous avons du retrograder la version de Java utilisée. Seulement trois
+Sur mon projet actuel, nous avons dû rétrograder la version de Java utilisée. Seulement trois
 problèmes se sont posés :
 
 ## @Override
@@ -19,8 +19,8 @@ find . -name "*.java" -exec sed -i '/@Override/d' {} \
 
 ## JAXB
 
-Nous utilisons JAXB, qui a été intégré dans Java 6. La solution consite à ajouter les librairies
-suivantes au classpath:
+Nous utilisons JAXB, qui a été intégré dans Java 6. La solution consiste à ajouter les librairies
+suivantes au classpath :
 
 -   activation.jar
 -   jaxb-api.jar
@@ -30,7 +30,7 @@ suivantes au classpath:
 
 ## HSQLDB
 
-Nous utilisons HSQLDB 2.0 pour les tests unitaires. A l'execution, le code lance la classique
+Nous utilisons HSQLDB 2.0 pour les tests unitaires. À l'exécution, le code lance la classique
 exception suivante : `java.lang.UnsupportedClassVersionError: Bad version number in .class file`.
 L'explication est simple : depuis la version 2, le binaire est compilé avec Java 6. La solution
 consiste à récupérer la version snapshot qui est disponible pour java 6 et java 5 [sur le site

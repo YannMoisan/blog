@@ -77,7 +77,7 @@ scala> List(1, 2).flatMap(x => List(3, 4).map(y => (x, y)))
 res1: List[(Int, Int)] = List((1,3), (1,4), (2,3), (2,4))
 ```
 
-Interessons nous à fonction imbriquée :
+Intéressons-nous à fonction imbriquée :
 
 ```
 scala> (x: Int) => List(3, 4).map(y => (x, y))
