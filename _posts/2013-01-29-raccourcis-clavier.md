@@ -16,7 +16,7 @@ milieu. Très utile comme vous avez un touchpad mais pas de souris.
 
 ### Readline
 
-Readline est le programme utilisé dans bash pour lire la ligne courante
+`readline` est le programme utilisé dans bash pour lire la ligne courante
 
 Ctrl+R : Rechercher dans l'historique la dernière commande contenant les caractères saisis
 

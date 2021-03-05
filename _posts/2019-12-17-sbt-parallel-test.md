@@ -101,10 +101,10 @@ reuse it across multiple tests (e.g.
 But it's not thread-safe ! Using what we have learned in the previous sections, there are two
 possibilities :
 
-1. Forking. But each project will have its own JVM and its own SparkContext.
+1. Forking. But each project will have its own JVM and its own `SparkContext`.
 
-2. Stay in the same JVM and execute all tests sequentially (with parallelExecution = true
-AND Tags.Test = 1). Warning: the configuration given
+2. Stay in the same JVM and execute all tests sequentially (with `parallelExecution = true`
+and `Tags.Test = 1`). Warning: the configuration given
 [here](https://github.com/holdenk/spark-testing-base#special-considerations) doesn't work in case of
 multi-project.
 
@@ -120,7 +120,7 @@ the JVM
 
 Run `sbt test` to see the default behaviour :
 
-The format is ClassName\[iteration\]\[pid\]
+The format is `ClassName[iteration][pid]`
 
 Here is the output for default behaviour
 

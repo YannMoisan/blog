@@ -14,8 +14,8 @@ découvrir de nouveaux concepts.
 ## Java et les maths
 
 Je choisis évidemment Java pour l'implémentation. Malheureusement, le JDK offre peu de méthodes pour
-les mathématiques. En effet, il n'y a que la classe Math, les types primitifs et les wrappers :
-Integer, Long, BigInteger, … Cependant, il existe plusieurs librairies, en voici quelques-unes :
+les mathématiques. En effet, il n'y a que la classe `Math`, les types primitifs et les wrappers :
+`Integer`, `Long`, `BigInteger`, … Cependant, il existe plusieurs librairies, en voici quelques-unes :
 
 -   [Google guava](https://github.com/google/guava)
 -   [Apache math](http://commons.apache.org/math/)

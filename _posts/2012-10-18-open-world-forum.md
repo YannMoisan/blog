@@ -13,7 +13,7 @@ mon attention et pas un CR détaillé de l'événement.
 
 Le déroulement est le suivant : 4 speakers se succèdent et une table ronde clot la session.
 
-### Romain Chaumais (Ysance): “Big Data : noSql, Map&Reduce, RDBMS - Quoi utiliser et quand ?”
+### Romain Chaumais (Ysance) : “Big Data : noSql, Map&Reduce, RDBMS - Quoi utiliser et quand ?”
 
 Cette présentation, à destination du béotien, commence par une introduction de Big Data en rappelant
 quelques chiffres sur l'explosion des volumes (1 milliard de like facebook depuis 2009). Mais Big

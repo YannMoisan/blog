@@ -12,7 +12,7 @@ héberge et sponsorise.
 En début de séance, Ugo a rappelé la règle : c'est un format ouvert donc c'est aux participants de
 faire vivre la soirée. Rapidement, Jon explique quelques notions théoriques poilues : les monades,
 la covariance (+A) et la contravariance (-A), tout en illustrant son propos par une courageuse
-session de live coding. Il nous préconise ensuite l'utilisation de SBT et nous montre comment
+session de _live coding_. Il nous préconise ensuite l'utilisation de SBT et nous montre comment
 l'installer et l'utiliser : `run`, `console`, `~run` pour le run incrémental. Je repars donc avec une
 installation fonctionnelle sur mon laptop.
 
@@ -22,7 +22,7 @@ Il parle ensuite des macros et de quelques projets qui en tirent parti :
 -   [scalaxy](http://code.google.com/p/scalaxy/) : un framework masquant l'utilisation de scalacl
 
 On parle alors de `Option` et de sa sous classe `None` qui permet de ne pas retourner `null` et
-ainsi éviter la fameuse `NullPointerException`. Puis des case classes qui génère automatiquement
+ainsi éviter la fameuse `NullPointerException`. Puis des `case class` qui génèrent automatiquement
 tout un tas de méthodes utilitaires : `equals`, `hashCode`, `toString`.
 
 Après la pause pizza, des groupes plus informels se forment pour discuter. Une personne (désolé,
