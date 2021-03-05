@@ -1,6 +1,6 @@
 ---
 title: Jersey vs Spring MVC
-description: Comparatif entre Jersey et Spring MVC, deux frameworks Java pour l'implementation de services REST
+description: Comparatif entre Jersey et Spring MVC, deux frameworks Java pour l'implémentation de services REST
 layout: blog
 ---
 En Java, il existe de nombreux frameworks pour implémenter un service REST : Spring MVC, Jersey,
@@ -15,14 +15,14 @@ de Fibonacci.
 ## Introduction
 
 Jersey est l'implémentation de référence de la JSR-311 (JAX-RS). Spring MVC, bien que n'implémentant
-pas cette JSR, couvre quasimment les mêmes fonctionnalités. J'ai utilisé les dernières versions
+pas cette JSR, couvre quasiment les mêmes fonctionnalités. J'ai utilisé les dernières versions
 disponibles, à savoir 1.12 pour Jersey et 3.1.1 pour Spring. Depuis la version 3.0, il est conseillé
 d'utiliser la nouvelle manière de créer des services en utilisant conjointement `@ResponseBody` avec
 `HttpMessageConverter`<sup>[2](#note2)</sup>.
 
 ## Aperçu du code
 
-Regardons à présent ce qui intéresse tous les développpeurs, le code du service.
+Regardons à présent ce qui intéresse tous les développeurs, le code du service.
 
 Jersey
 
@@ -90,9 +90,9 @@ Le code est assez ressemblant, seul les termes changent. Par exemple, `@Path` es
 
 ## Transformation en JSON
 
-Jersey a un module jersey-json pour la transformation en JSON, qui offre 3 approches différents :
+Jersey a un module jersey-json pour la transformation en JSON, qui offre 3 approches différentes :
 POJO, JAXB et bas niveau. Dans notre exemple, on utilise l'approche POJO, la plus simple, basée sur
-jackson. Il suffit simplement d'activer le paramètre `POJOMappingFeature` sur la servlet.
+jackson. Il suffit d'activer le paramètre `POJOMappingFeature` sur la servlet.
 
 ```
 <init-param>
@@ -182,7 +182,7 @@ public class FibControllerTest {
 
 ## Tests de bout en bout
 
-Les tests de bout en bout permettent de vérifier que le résulat est identique, avec les 2 webapps
+Les tests de bout en bout permettent de vérifier que le résultat est identique, avec les 2 webapps
 déployées sur un serveur tomcat.
 
 ```

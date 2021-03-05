@@ -6,8 +6,8 @@ layout: blog
 ## La problématique
 
 Nous utilisons Oracle en production et HSQLDB pour les tests unitaires. Ces deux produits
-n'utilisent pas toujours la même syntaxe SQL. A titre d'exemple, voici la syntaxe pour récuperer la
-prochaine valeur d'une séquence.  
+n'utilisent pas toujours la même syntaxe SQL. À titre d'exemple, voici la syntaxe pour récupérer la
+prochaine valeur d'une séquence. 
 Avec HSQL :
 
 ```

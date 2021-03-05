@@ -63,8 +63,8 @@ mutability is a bad bad thing. Let's fix that
   }
 ```
 
-It's better, `foldLeft` allow to abstract over the traversal logic. But all countings are mixed
-together and we must respect the single responsability principle. Let's separate the concerns.
+It's better, `foldLeft` allow abstracting over the traversal logic. But all countings are mixed
+together and we must respect the single responsibility principle. Let's separate the concerns.
 
 ```
   def wordcount4(s: String) : (Int, Int, Int) = {
@@ -114,7 +114,7 @@ compose functions. Let's combine the 3 fold.
   }
 ```
 
-As a functional programer, I really enjoy the way that we can create new combinator from existing
+As a functional programmer, I really enjoy the way that we can create new combinator from existing
 functions. But wait, some more powerful abstractions exists, like `Foldable` and `Traversable` (for
 counting words, because it's a stateful process) …
 
@@ -204,6 +204,6 @@ The main points are :
 
 ## Conclusion
 
-We've seen many different ways to solve the same problem. Functional programming offer powerful
-abstraction to decouple things and allow to compose small parts together to build complex system. So
+We've seen many ways to solve the same problem. Functional programming offer powerful
+abstraction to decouple things and allow composing small parts together to build complex system. So
 it's worth to spend some times to understand those concepts in order to write better programs.

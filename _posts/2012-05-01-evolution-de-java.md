@@ -1,6 +1,6 @@
 ---
 title: Évolution de Java
-description: "A travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala"
+description: "À travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala"
 layout: blog
 ---
 J'ai déjà parlé du [projet euler](librairie-mathematiques.html). Dans ce billet, nous allons voir
@@ -116,7 +116,7 @@ Ce code utilise deux nouveautés de Java 8 : les lambda expressions et les méth
 virtuelles. La syntaxe retenue pour les lambda est celle du C\#. Le code est lisible et assez proche
 de Scala. Voici quelques précisions techniques :
 
--   Les méthodes d'extension virtuelles permettent d'adresser le problème de l'évolution des API
+-   Les méthodes d'extension virtuelles permettent de traiter un problème de l'évolution des API
     existantes, et notamment l'API Collection. Elles permettent d'ajouter une implémentation par
     défaut sur les interfaces. L'interface `Iterable` gagne ainsi une méthode `filter` qui prend en
     paramètre un `Predicate` et possède une implémentation par défaut.

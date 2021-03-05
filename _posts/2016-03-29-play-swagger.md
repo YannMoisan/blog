@@ -5,7 +5,7 @@ layout: blog
 ---
 The starting point of this post is the need to document an existing REST APIs. I want the
 documentation to live with my code because I think it's the only way to have an up-to-date doc.
-Swagger seems to be a defacto standard. This post is not a tutorial, it's just to share some issues
+Swagger seems to be a de facto standard. This post is not a tutorial, it's just to share some issues
 I faced. So let's get the party started.
 
 I use PlayFramework and Scala. Thankfully, an integration already exists :

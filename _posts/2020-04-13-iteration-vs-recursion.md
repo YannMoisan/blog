@@ -57,7 +57,7 @@ def decompose(n: Int, history: List[Int]): List[Int] = {
 In the recursive approach, two concerns are still mixed : the computation and the history.
 
 Scala 2.13 introduced a new method `Iterator.unfold` that we can take advantage of. Let's start with
-an intuition : `fold` allows to convert multiple values into a single value (like a sum). `unfold`
+an intuition : `fold` allows converting multiple values into a single value (like a sum). `unfold`
 is the opposite : convert a single value into multiple values.
 
 The documentation says :

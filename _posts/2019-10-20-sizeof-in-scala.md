@@ -8,7 +8,7 @@ memory footprint of a program.
 
 ## Reminder on the JVM
 
-Every object on the JVM has a header. It consists of a mark word and a klass pointer. On 64 bit
+Every object on the JVM has a header. It consists of a mark word and a klass pointer. On 64-bit
 architectures with a heap < 32G (i.e. with compressed oops), the header has a size of 12 bytes.
 
 Java objects are 8-byte aligned by default. This can be changed with a JVM flag.
@@ -134,7 +134,7 @@ res11: Array[Class[?0] forSome { type ?0 }] = Array(class java.lang.Object, clas
 
 Unfortunately, the superclass has 2 fields of type Object, that will always be null for a
 specialized instance. Nevertheless, a reference field with a null value on the JVM take the same
-space than a non-null reference.
+space as a non-null reference.
 
 so the size is
 

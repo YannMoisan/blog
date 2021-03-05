@@ -6,7 +6,7 @@ layout: blog
 J'ai assisté à l'[OWF](http://www.openworldforum.org/), le premier forum Open Source en Europe
 vendredi dernier. Cette conférence contenait une track dédiée à Java, et plusieurs présentations sur
 Big Data. Cette conférence est gratuite et un stand O'Reilly permettait même de s'approvisionner en
-bouquins avec un discount de 40%. Disclaimer : ce qui suit est une liste de points qui ont retenu
+bouquins avec un discount de 40 %. Disclaimer : ce qui suit est une liste de points qui ont retenu
 mon attention et pas un CR détaillé de l'événement.
 
 ## 10:30 Big Data & Open Source
@@ -16,7 +16,7 @@ Le déroulement est le suivant : 4 speakers se succèdent et une table ronde clo
 ### Romain Chaumais (Ysance): “Big Data : noSql, Map&Reduce, RDBMS - Quoi utiliser et quand ?”
 
 Cette présentation, à destination du béotien, commence par une introduction de Big Data en rappelant
-quelques chiffres sur l'explosion des volumes (1 milliards de like facebook depuis 2009). Mais Big
+quelques chiffres sur l'explosion des volumes (1 milliard de like facebook depuis 2009). Mais Big
 Data n'est pas qu'une question de volume : règles des 3V : Volume, Vélocité et Variété. Il rappelle
 ensuite [le théorème CAP](http://en.wikipedia.org/wiki/CAP_theorem) et l'origine d'Hadoop des grands
 du Web (Yahoo, Facebook, Twitter, LinkedIn).
@@ -28,30 +28,30 @@ Il présente ensuite l'écosystème :
 -   Admin : [Zookeeper](http://zookeeper.apache.org/), [Oozie](http://oozie.apache.org/), Hue
 -   Distribution : [Cloudera](http://www.cloudera.com/), [HortonWorks](http://hortonworks.com/)
 
-### Florian Douetteau (Dataiku): "Open Source et science de la donnée". Comment la science de la donnée, les outils open source et la maîtrise de grands volumes permettent d'améliorer les performances fonctionnelles et commerciales d'une application, d'un site, d'un jeu…
+### Florian Douetteau (Dataiku) : "Open Source et science de la donnée". Comment la science de la donnée, les outils open source et la maîtrise de grands volumes permettent d'améliorer les performances fonctionnelles et commerciales d'une application, d'un site, d'un jeu…
 
-Le social gaming génère de gros volumes de données : 30 GB de logs par jour, 10 TB par an.
+Le social gaming génère de gros volumes de données : 30 Go de logs par jour, 10 To par an.
 
-Il présente ensuite les outils qu'il a utilisé pour manipuler ces données :
+Il présente ensuite les outils qu'il a utilisés pour manipuler ces données :
 
 -   Framework Open Source en Python : PyBabe
 -   Column Stores: [actian](http://www.actian.com/), [InfiniDB](http://infinidb.org/)
 -   Clustering : R
--   Visualiation : Gephi
+-   Visualisation : Gephi
 -   Dashboard : NodeJS, MongoDB, D3.js
 
 Cette diversité engendre donc des architectures techniques complexes. Le speaker travaille donc pour
 offrir une solution, via une offre de DataScience on demand : dataiku.
 
-### Emmanuel Keller (Open Search Server): "Big Data et technologies de Search" - Le moteur de recherche, inspirateur technologique du Big Data ? Immersion et vulgarisation de techniques clés des moteurs de recherche, et prospective sur de nouveaux terrains à défricher.
+### Emmanuel Keller (Open Search Server) : "Big Data et technologies de Search" - Le moteur de recherche, inspirateur technologique du Big Data ? Immersion et vulgarisation de techniques clés des moteurs de recherche, et prospective sur de nouveaux terrains à défricher.
 
 Il présente l'évolution de Google et notamment la sortie d'un papier en 2004 fondateur de
 Map/Reduce. Il rappelle la définition de l'informatique : le traitement automatique de l'information
 (Information + Automatique). Il pousse un coup de gueule contre Java, qui est moins adapté à ce type
 de tâche qu'un langage comme C, plus proche de la machine. Il recommande donc de jeter un coup
-d'oeil XtreemFS, Sector et Sphere, tous 3 développés en C/C++.
+d'œil XtreemFS, Sector et Sphere, tous 3 développés en C/C++.
 
-### Vincent Heuschling (Affini-Tech): “Comment les technologies bigdata/hadoop viennent au secours des données de Search Engine Optimisation”.
+### Vincent Heuschling (Affini-Tech) : “Comment les technologies bigdata/hadoop viennent au secours des données de Search Engine Optimisation”.
 
 Il rappelle les grandes phases métier d'un projet Big Data : collecter, traiter, analyser, stocker
 et visualiser. Il présente les outils utilisés, déjà cités lors de présentations précédentes.
@@ -72,7 +72,7 @@ son graphe d'utilisateurs et calculer la recommandation sociale.
 
 J'avais déjà vu Sacha à Devoxx France, mais il est tellement bon speaker que je l'ai revu avec
 plaisir. Il prend toujours l'exemple de LoseIt, une start-up avec des millions d'utilisateurs et
-seulement 4 employés : 2 développeurs et 2 marketteux. Il insiste sur le fait que que ce genre de
+seulement 4 employés : 2 développeurs et 2 marketteux. Il insiste sur le fait que ce genre de
 business model n'était pas possible il y a quelques années.
 
 ### 16h15 - 17h00 : Powering Hadoop and Big Data with Eclipse, Cédric Carbone, Talend
@@ -81,7 +81,7 @@ Pour être honnête, cette présentation m'a déçu car le with Eclipse s'est tr
 Open Studio.
 
 Et pour finir la journée, une série de présentations éclair, notamment une assez poilue sur les
-opérateurs secret de Perl.
+opérateurs secrets de Perl.
 
 ### Conclusion
 

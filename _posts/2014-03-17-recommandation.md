@@ -73,8 +73,8 @@ Voici la formule : Σxy/V(Σx²\*Σy²), ce qui donne : 1/V5
 Inconvénients
 
 -   Le calcul ne prend pas en compte le nombre de préférences en commun, et a donc tendance à
-    éloigner des utilisateurs avec beaucoup de préférences communes. Pour pallier à cela, il existe
-    une implémentation pondéré (*weighted*)
+    éloigner des utilisateurs avec beaucoup de préférences communes. Pour pallier cela, il existe
+    une implémentation pondérée (*weighted*)
 -   Il est impossible de calculer la similarité entre deux utilisateurs ayant une seule préférence
     en commun.
 
@@ -95,7 +95,7 @@ Inconvénients
 
 -   Elle pénalise les algorithmes qui font de bonnes recommandations, mais pour lesquelles
     l'utilisateur n'a pas encore exprimé de préférences.
--   Nous avons eu des divergences entre la qualité ressentie par les utilisateurs réelles et celle
+-   Nous avons eu des divergences entre la qualité ressentie par les utilisateurs réels et celle
     calculée automatiquement.
 -   Cela ne fonctionne pas bien quand les données sont éparpillées. La performance du système varie
     beaucoup entre deux tirs, et parfois elle ne peut pas être calculée :
@@ -104,7 +104,7 @@ Inconvénients
 ### Hadoop vs Taste
 
 Une des forces de Mahout est de fournir deux implémentations (mono machine et distribuée avec
-Hadoop) des mêmes algorithmes. Cependant, toutes les possibilités ne sont pas disponible en
+Hadoop) des mêmes algorithmes. Cependant, toutes les possibilités ne sont pas disponibles en
 distribuée, comme par ex. l'`IDRescorer` que nous utilisons pour filtrer les données à posteriori.
 
 ### Content based
@@ -112,14 +112,14 @@ distribuée, comme par ex. l'`IDRescorer` que nous utilisons pour filtrer les do
 Il est aussi possible d'utiliser un système de recommandation pour faire des recommandations basées
 sur le contenu. On parle alors de *content based*. Le fichier d'entrée a alors le format : document,
 term, tf idf. Le problème avec l'implémentation de Cosine est que deux documents avec un mot en
-commun auront une similarité de 1, c'est à dire la valeur maximum.
+commun auront une similarité de 1, c'est-à-dire la valeur maximum.
 
 ### Conclusion
 
 Lors de la conception d'un système de recommandation, il faut donc penser à choisir le meilleur
 algorithme de similarité, penser à l'évaluation de ce système, penser aux problèmes du démarrage à
 froid (*cold start*). Par ailleurs, l'affichage des voisinages calculés permet de comprendre les
-recommandation finales, utile en phase de debug.
+recommandations finales, utile en phase de debug.
 
 ### Liens
 

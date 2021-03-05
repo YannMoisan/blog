@@ -5,7 +5,7 @@ layout: blog
 ---
 Ce billet est un retour d'expérience du premier dojo Scala qui s'est déroulé le 5/6/2012. Je précise
 que je débute en Scala : merci donc de me remonter les erreurs et imprécisions dans mon propos.
-C'est la première fois que j'assiste à un évenement dédié à ce langage. Une vingtaine de personnes
+C'est la première fois que j'assiste à un évènement dédié à ce langage. Une vingtaine de personnes
 ont répondu présent à l'invitation d'Ugo Bourdon, un membre du Paris Scala User Group et Valtech
 héberge et sponsorise.
 
@@ -13,10 +13,10 @@ En début de séance, Ugo a rappelé la règle : c'est un format ouvert donc c'e
 faire vivre la soirée. Rapidement, Jon explique quelques notions théoriques poilues : les monades,
 la covariance (+A) et la contravariance (-A), tout en illustrant son propos par une courageuse
 session de live coding. Il nous préconise ensuite l'utilisation de SBT et nous montre comment
-l'installer et l'utiliser: `run`, `console`, `~run` pour le run incrémental. Je repars donc avec une
+l'installer et l'utiliser : `run`, `console`, `~run` pour le run incrémental. Je repars donc avec une
 installation fonctionnelle sur mon laptop.
 
-Il parle ensuite des macros et de quelques projets qui en tirent parti:
+Il parle ensuite des macros et de quelques projets qui en tirent parti :
 
 -   [expecty](https://github.com/pniederw/expecty) : un framework d'assertion
 -   [scalaxy](http://code.google.com/p/scalaxy/) : un framework masquant l'utilisation de scalacl
@@ -27,7 +27,7 @@ tout un tas de méthodes utilitaires : `equals`, `hashCode`, `toString`.
 
 Après la pause pizza, des groupes plus informels se forment pour discuter. Une personne (désolé,
 étant nouveau, je ne connais pas les prénoms) fait suite à ma demande et me montre comment faire
-cohabiter Java et Scala dans Eclipse et me donne quelques infos sur le `maven-scala-plugin`. On echange alors sur les
+cohabiter Java et Scala dans Eclipse et me donne quelques infos sur le `maven-scala-plugin`. On échange alors sur les
 pratiques de test et il m'indique l'existence d'un plugin eclipse pour ScalaTest et du projet
 [specs2](http://etorreborre.github.com/specs2/) plus orienté BDD.
 

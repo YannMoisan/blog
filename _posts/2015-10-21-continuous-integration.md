@@ -206,7 +206,7 @@ cache:
 
 ### GitHub release
 
-I want to make a release after each build. So I can deploy easily to production each successfull
+I want to make a release after each build. So I can deploy easily to production each successful
 build.
 
 It's feasible but not straightforward. There is a [feature
@@ -265,8 +265,8 @@ Travis CI provides an [Heroku integration](http://docs.travis-ci.com/user/deploy
 travis setup heroku
 ```
 
-Traditionnaly, you setup a Git remote and each commit is deployed on Heroku (after a `git push`).
-The benefit of using Travis CI is, by design, you only deploy successfull build.
+Traditionnaly, you set up a Git remote and each commit is deployed on Heroku (after a `git push`).
+The benefit of using Travis CI is, by design, you only deploy successful build.
 
 ### Multi provider issue
 
@@ -284,7 +284,7 @@ Labs.
 
 -   [Travis doc](http://docs.travis-ci.com/user/sauce-connect/)
 
-The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI ans
+The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI and
 Sauce Labs.
 
 ```
@@ -318,7 +318,7 @@ trait EnvAwareDriver {
 ### Set the tunnel identifier, the build number and the name
 
 You must set the tunnel identifier to allow communication between Travis CI and Sauce Labs. The
-build number and the name are usefull to generate a comprehensive dashboard.
+build number and the name are useful to generate a comprehensive dashboard.
 
 PlayFramework doesn't provide built-in support for that.
 
@@ -346,7 +346,7 @@ For the name, I propagate to the driver factory the label of the *specs2* exampl
 
 ### Timeout
 
-Some tests fails, client are disconnected for unknown reason. Nothing in the log, the kind of
+Some tests fail, client are disconnected for unknown reason. Nothing in the log, the kind of
 situation that developers hate.
 
 ```
@@ -354,14 +354,14 @@ Command duration or timeout: 85 milliseconds
 ```
 
 One more time, I've spent a lot of time to fix this one. The root cause was instantiation of all
-`RemoteWebDriver` at the beggining of the suite. Unfortunately, an HTTP connection is created during
+`RemoteWebDriver` at the beginning of the suite. Unfortunately, an HTTP connection is created during
 the object construction.
 
 And Sauce Labs timeout connections after 90 seconds.
 
 ### The revenge of the timeout
 
-Some tests fails, client are disconnected for unknown reason. Nothing in the log, the kind of
+Some tests fail, client are disconnected for unknown reason. Nothing in the log, the kind of
 situation that developers hate.
 
 After wasting a lot of time to investigate, I've found that it was due to timeout. In fact, when you

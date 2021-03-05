@@ -28,7 +28,7 @@ presse-papiers.
 ## Zathura
 
 Zathura est un lecteur de PDF léger et clavier centric, avec les raccourcis de Vim. Après
-l'installation, Zathura affiche un écran noir. A l'instar de Vim, les packageurs de Arch ont le
+l'installation, Zathura affiche un écran noir. À l'instar de Vim, les packageurs de Arch ont le
 souci de gérer les dépendances de manière minimale. Les moteurs de rendu pdf sont en dépendances
 optionnelles. Il faut donc en installer un à la main.
 
@@ -84,7 +84,7 @@ la commande suivante :
     smbclient -L mafreebox.freebox.fr
 ```
 
-Dans mon cas, cela affiche:
+Dans mon cas, cela affiche :
 
 ```
         Sharename       Type      Comment
@@ -115,7 +115,7 @@ gps\_garmin. Ensuite, il faut installer [garmintools](https://code.google.com/ar
 ligne de commande, qui implémente le protocole de communication avec la montre. Le second est un
 plugin Firefox, qui utilise le premier, afin de permettre le dialogue avec la montre depuis le
 navigateur. On peut alors récupérer automatiquement ses courses sur
-[runkeeper](http://runkeeper.com). A noter, le plugin ne fonctionne pas sur le site
+[runkeeper](http://runkeeper.com). À noter, le plugin ne fonctionne pas sur le site
 [connect.garmin.com](http://connect.garmin.com).
 
 Il subsiste un énorme problème : nous ne possédons pas nos données. Or, on peut y remédier

@@ -3,7 +3,7 @@ title: Hébergement sur un serveur dédié
 description: Les étapes à suivre pour passer d'un hébergement chez un prestataire web vers un hébergement sur son serveur dédié
 layout: blog
 ---
-Jusqu'ici, ce site était hebergé chez `www.hebergement-gratuit.com`,
+Jusqu'ici, ce site était hébergé chez `www.hebergement-gratuit.com`,
 qui offre un hébergement totalement gratuit, sans publicité. Le service est de bonne qualité, mais
 limité. Tout d'abord, ce prestataire impose l'utilisation de ses serveurs DNS. Il faut donc
 configurer une délégation DNS, ce qui se fait sans problème chez [Gandi](http://www.gandi.net), mon
@@ -24,9 +24,9 @@ Voici donc les limites qui, à la longue, peuvent devenir dérangeant pour un us
 -   impossible de configurer les redirections mail
 -   impossible d'avoir un compte SSH sur le serveur (pour synchroniser le contenu avec rsync, par
     exemple)
--   impossible de configurer un sous domaine au niveau DNS
+-   impossible de configurer un sous-domaine au niveau DNS
 
-J'ai donc décidé d'heberger sur mon serveur dédié. Pour la partie DNS, il suffit de reconfigurer les
+J'ai donc décidé d'héberger sur mon serveur dédié. Pour la partie DNS, il suffit de reconfigurer les
 DNS de Gandi et de modifier son fichier de zone pour pointer vers l'IP de son serveur (via les
 enregistrements de type A qui établissent le lien entre un nom et une adresse IPv4). Gandi permet de
 faire cela à travers une interface web. Voici les lignes modifiées :

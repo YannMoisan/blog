@@ -1,6 +1,6 @@
 ---
 title: How-to run tests in parallel with sbt
-description: How-to run tsets in parallel with sbt
+description: How-to run tests in parallel with sbt
 layout: blog
 ---
 The aim of this post is to clarify how to run tests in parallel with sbt.
@@ -63,7 +63,7 @@ This can be changed with : (the equivalent of parallelExecution)
 Test / testForkedParallel := true
 ```
 
-Moreover, in forked mode, each project will spawn its own JVM (I did not found a way to run tests
+Moreover, in forked mode, each project will spawn its own JVM (I did not find a way to run tests
 from all projects in the same forked JVM, the only workaround is to create a dedicated test project
 and put all tests inside it).
 
@@ -98,7 +98,7 @@ The issue with Spark is that it costs a lot to create a `SparkContext`. So, some
 reuse it across multiple tests (e.g.
 [spark-testing-base](https://github.com/holdenk/spark-testing-base)).
 
-But it's not thread safe ! Using what we have learned in the previous sections, there are two
+But it's not thread-safe ! Using what we have learned in the previous sections, there are two
 possibilities :
 
 1. Forking. But each project will have its own JVM and its own SparkContext.

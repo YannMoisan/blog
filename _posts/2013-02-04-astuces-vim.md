@@ -19,7 +19,7 @@ Voici quelques astuces que j'ai apprises en jouant à VimGolf
 
 ### Quelques commandes Ex
 
-Commençons par un rappel historique : Vim est le successeur de Vi qui est lui même le successeur de
+Commençons par un rappel historique : Vim est le successeur de Vi qui est lui-même le successeur de
 Ex.
 
 | normal  | commande | description                                                |
@@ -64,7 +64,7 @@ Pour entourer un mot avec des parenthèses, nous faisons généralement en mode 
 `i(<Esc>ea)<Esc>`, ce qui fait 7 touches. Mais il existe plus efficace : `cw()<Esc>P`, ce qui fait 6
 touches.
 
-Malheureusement, ce n'est pas rejouable avec la commande `.`. Pour pallier à cela, on peut faire
+Malheureusement, ce n'est pas rejouable avec la commande `.`. Pour pallier cela, on peut faire
 `cw(<c-r><c-o>")`
 
 ```

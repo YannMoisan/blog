@@ -19,7 +19,7 @@ de faire 3 sessions de 30 min en *pair programming* en changeant de binôme à c
 session et nous arrivons à 13, Cyrille rappelle pendant ce temps les bases de TDD : le fameux cycle
 Red, Green, Refactor ainsi que l'obligation de ne pas anticiper prématurément la suite. On repart de
 zéro avec Loic, ce qui permettra d'aller jusqu'à 39 en utilisant la récursivité. La soirée se
-termine par Cyrille et son binome (je ne connais pas son prénom) qui refont l'exercice en projetant
+termine par Cyrille et son binôme (je ne connais pas son prénom) qui refont l'exercice en projetant
 leur écran. Ils gagnent du temps en mettant le test et l'implémentation dans la même classe et nous
 rappellent l'existence des [tests paramétrés de
 JUnit](http://junit.sourceforge.net/javadoc/org/junit/runners/Parameterized.html).

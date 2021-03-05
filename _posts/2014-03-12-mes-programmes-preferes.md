@@ -5,7 +5,7 @@ layout: blog
 ---
 Ces derniers temps, j'utilise de plus en plus de programmes en CLI. D'une manière générale, voici la
 liste des programmes que j'utilise par catégories, et ceux que j'ai utilisés. Pour chacun, vous
-trouverez éventuellemnent des liens vers d'anciens articles en rapport ainsi que mes fichiers de
+trouverez éventuellement des liens vers d'anciens articles en rapport ainsi que mes fichiers de
 conf sur GitHub.
 
 |                               |                                                                              |                                                                                                           |
