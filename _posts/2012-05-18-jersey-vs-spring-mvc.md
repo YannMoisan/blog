@@ -198,13 +198,8 @@ Ma préférence va à Jersey car il est simple, standard et testable.
 
 ## Ressources externes
 
--   [Le code source du billet](https://github.com/YannMoisan/restcmp)
--   
-
-    1: [Learn REST: A Tutorial](http://rest.elkstein.org/)
--   
-
-    2: ~~Supporting XML and JSON web service endpoints in Spring 3.1 using @ResponseBody~~
--   3: [REST with Java (JAX-RS) using Jersey](http://www.vogella.com/articles/REST/article.html)
--   4: [A Comparison of Spring MVC and JAX-RS](http://www.infoq.com/articles/springmvc_jsx-rs)
-
+<p><a href="https://github.com/YannMoisan/restcmp">Le code source du billet</a></p>
+<p id="note1">[1] <a href="http://rest.elkstein.org/">Learn REST: A Tutorial</a></p>
+<p id="note2">[2] <del>Supporting XML and JSON web service endpoints in Spring 3.1 using @ResponseBody</del></p>
+<p><a href="http://www.vogella.com/articles/REST/article.html">REST with Java (JAX-RS) using Jersey</a></p>
+<p><a href="http://www.infoq.com/articles/springmvc_jsx-rs">A Comparison of Spring MVC and JAX-RS</a></p>
