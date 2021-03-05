@@ -110,7 +110,7 @@ ne fournit pas de pilotes pour Linux, et la montre n'est pas vue comme un simple
 la connecte en USB.
 
 Voici cependant la marche à suivre pour l'utiliser. Tout d'abord, il faut blacklister le module
-gps\_garmin. Ensuite, il faut installer [garmintools](https://code.google.com/p/garmintools/) et
+gps\_garmin. Ensuite, il faut installer [garmintools](https://code.google.com/archive/p/garmintools/) et
 [garminplugin](http://www.andreas-diesner.de/garminplugin). Le premier est un ensemble d'outils en
 ligne de commande, qui implémente le protocole de communication avec la montre. Le second est un
 plugin Firefox, qui utilise le premier, afin de permettre le dialogue avec la montre depuis le

@@ -282,7 +282,6 @@ If you don't know SauceLabs, it's a cloud solution to test a web app on a lot of
 Sauce Labs provides an integration with Travis CI, and Travis CI provide an integration with Sauce
 Labs.
 
--   [Sauce Labs doc](https://docs.saucelabs.com/ci-integrations/travis-ci/)
 -   [Travis doc](http://docs.travis-ci.com/user/sauce-connect/)
 
 The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI ans
@@ -415,9 +414,7 @@ Now it's configured, you want to display the information on your `README` page. 
 snippet as explained in the Sauce Labs documentation and … the status is unknown !
 
 PlayFramework doesn't provide built-in support for Sauce Labs, you have to update the status of each
-test manually by using the
-[REST API](https://docs.saucelabs.com/reference/test-configuration/#job-annotation-with-the-rest-api)
-provided by Sauce Labs.
+test manually by using the REST API provided by Sauce Labs.
 
 ## Conclusion
 

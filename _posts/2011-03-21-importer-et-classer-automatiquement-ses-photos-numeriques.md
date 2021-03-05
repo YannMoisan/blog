@@ -62,4 +62,4 @@ exiftool -ext JPG -ext AVI "-Directory<DateTimeOriginal" -d "%Y-%m-%d" .
 ```
 
 Le script est disponible sur mon
-[GitHub](https://github.com/YannMoisan/dotfiles/blob/master/scripts/photo-import).
+[GitHub](https://github.com/YannMoisan/dotfiles/blob/master/bin/photo-import).

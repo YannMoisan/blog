@@ -3,7 +3,7 @@ title: Hébergement sur un serveur dédié
 description: Les étapes à suivre pour passer d'un hébergement chez un prestataire web vers un hébergement sur son serveur dédié
 layout: blog
 ---
-Jusqu'ici, ce site était hebergé chez [hebergement-gratuit](http://www.hebergement-gratuit.com/),
+Jusqu'ici, ce site était hebergé chez `www.hebergement-gratuit.com`,
 qui offre un hébergement totalement gratuit, sans publicité. Le service est de bonne qualité, mais
 limité. Tout d'abord, ce prestataire impose l'utilisation de ses serveurs DNS. Il faut donc
 configurer une délégation DNS, ce qui se fait sans problème chez [Gandi](http://www.gandi.net), mon

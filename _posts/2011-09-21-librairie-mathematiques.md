@@ -17,9 +17,9 @@ Je choisis évidemment Java pour l'implémentation. Malheureusement, le JDK offr
 les mathématiques. En effet, il n'y a que la classe Math, les types primitifs et les wrappers :
 Integer, Long, BigInteger, … Cependant, il existe plusieurs librairies, en voici quelques unes :
 
--   [Google guava](http://code.google.com/p/guava-libraries/)
+-   [Google guava](https://github.com/google/guava)
 -   [Apache math](http://commons.apache.org/math/)
--   [Colt](http://acs.lbl.gov/software/colt/index.htm)
+-   [Colt](https://dst.lbl.gov/ACSSoftware/colt/)
 
 ## Ma librairie
 
