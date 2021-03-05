@@ -3,7 +3,7 @@ title: Créer une archive .tar.gz
 description: Création d'une archive .tar.gz en Java
 layout: blog
 ---
-Aujourd'hui, nous allons voir comment créer en Java une archive au format .tar.gz, à partir de
+Aujourd'hui, nous allons voir comment créer en Java une archive au format `.tar.gz`, à partir de
 plusieurs fichiers d'entrée. Ce format est en fait une archive au format tar qui est ensuite
 compressé avec l'utilitaire gzip.
 

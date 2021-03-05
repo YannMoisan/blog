@@ -115,7 +115,7 @@ Après le démarrage, le système consomme 400 Mo de RAM (4 fois moins que Win 7
 La configuration du touchpad : je désactive le clic avec le touchpad (pour éviter l'insupportable
 déplacement du curseur pendant la frappe) et j'utilise le scroll à deux doigts.
 
-Installation de numlockx afin de verrouiller automatiquement le pavé numérique avant la connection.
+Installation de `numlockx` afin de verrouiller automatiquement le pavé numérique avant la connection.
 
 ## Conclusion
 

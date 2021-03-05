@@ -291,7 +291,13 @@ dl h4, dl h5 {
     position:relative;
 }
 code {
-    padding: 0 4px;
+    background-color: #EEE8D5;
+    padding: 5px;
+    font-size: 85%;
+}
+
+p code {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1),0 1px 1px rgba(0,0,0,0.1),0 2px 1px -1px rgba(0,0,0,0.12);
 }
 ol, ul {
     padding-left: 40px;

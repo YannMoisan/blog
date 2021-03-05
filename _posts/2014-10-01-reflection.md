@@ -9,7 +9,7 @@ A common pitfall with JVM languages is type erasure. Let's see an example :
 List(1).isInstanceOf[List[String]]
 ```
 
-Hopefully, it's not a problem with Scala. Prior to version 2.10, Scala uses Manifest
+Hopefully, it's not a problem with Scala. Prior to version 2.10, Scala uses `Manifest`
 
 ```
 def foo[T](x: List[T])(implicit m: Manifest[T]) = {
@@ -33,5 +33,5 @@ def foo[T:TypeTag](x: List[T]) = {
 }
 ```
 
-On contrary to Manifest, TypeTag handles correctly path dependent type, existential types, … So if
-you are using Scala 2.10 and Manifest, consider to migrate.
+On contrary to `Manifest`, `TypeTag` handles correctly path dependent type, existential types, … So if
+you are using Scala 2.10 and `Manifest`, consider to migrate.

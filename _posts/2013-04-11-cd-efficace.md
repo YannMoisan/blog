@@ -7,7 +7,7 @@ Voici quelques astuces pour naviguer plus efficacement dans l'arborescence, depu
 
 ## CDPATH
 
-CDPATH permet d'aller facilement dans les sous répertoires d'un répertoire donné. Le cas
+`CDPATH` permet d'aller facilement dans les sous répertoires d'un répertoire donné. Le cas
 d'utilisation classique pour un développeur est le répertoire projects contenant tous ses projets.
 
 Il faut déclarer la variable shell `CDPATH` dans le `.bashrc`, sans oublier d'indiquer le répertoire
@@ -51,7 +51,7 @@ Ainsi, ces erreurs seront automatiquement corrigées.
 [yamo:~/.vim] $
 ```
 
-A noter, cela ne se cumule pas avec CDPATH.
+A noter, cela ne se cumule pas avec `CDPATH`.
 
 ## completion-ignore-case
 
@@ -68,7 +68,7 @@ Ainsi, on peut commencer à taper :
 cat ~/.xre<Tab>
 ```
 
-et ce sera corrigé en .Xresources
+et ce sera corrigé en `.Xresources`
 
 ## Conclusion
 

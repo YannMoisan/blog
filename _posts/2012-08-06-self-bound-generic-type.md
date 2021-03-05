@@ -118,9 +118,9 @@ public class Child1Builder extends ParentBuilder<Child1Builder> {
 }
 ```
 
-Bien que ce code fonctionne, il est possible de l'améliorer. Le paramètre générique T doit être une
-sous-classe de ParentBuilder. Cela donne donc l'expression class ParentBuilder<T extends
-ParentBuilder<T>> qui peut paraitre étrange et montre la complexité des génériques qui se
+Bien que ce code fonctionne, il est possible de l'améliorer. Le paramètre générique `T` doit être une
+sous-classe de `ParentBuilder`. Cela donne donc l'expression `class ParentBuilder<T extends
+ParentBuilder<T>>` qui peut paraitre étrange et montre la complexité des génériques qui se
 cache derrière leur apparente simplicité. C'est ce que l'on appelle un self-bound generic type.
 
 Source :
