@@ -34,7 +34,7 @@ aujourd'hui.
 
 ## Avec Guava
 
-[Guava](http://code.google.com/p/guava-libraries/) est une librairie développée par Google qui offre
+[Guava](https://github.com/google/guava) est une librairie développée par Google qui offre
 notamment une API Collection riche et un support partiel de la programmation fonctionnelle. Cette
 librairie remplace avantageusement la librairie commons collections d'Apache, tombé en désuétude.
 
@@ -92,8 +92,8 @@ départ dans ce but.
 ## Avec Java 8
 
 [Java 8](http://openjdk.java.net/projects/jdk8/) apportera le support très attendu des
-[lambda-expressions](http://openjdk.java.net/projects/lambda/) (JSR 335). Une version [binary
-snapshot](http://jdk8.java.net/lambda/) permet d'essayer ces nouveautés.
+[lambda-expressions](http://openjdk.java.net/projects/lambda/) (JSR 335). Une version binary
+snapshot permet d'essayer ces nouveautés.
 
 ```
 import java.util.ArrayList;
@@ -138,6 +138,3 @@ Iterable<T> filter(Predicate<? super T> predicate) default {
 Le code est beaucoup plus lisible qu'avec Guava, ce qui démontre la nécessité de mettre à jour le
 langage car les librairies tierces ne permettent pas d'obtenir le même résultat. De plus, la méthode
 `reduce` est supportée alors que Guava ne la supporte pas.
-
-Référence : Les slides de Brian Goetz à Devoxx :
-[devoxx-lang-lib-vm-co-evol.pdf](http://blogs.oracle.com/briangoetz/resource/devoxx-lang-lib-vm-co-evol.pdf)

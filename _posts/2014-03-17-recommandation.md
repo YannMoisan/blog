@@ -3,7 +3,7 @@ title: Système de recommandation avec Apache Mahout
 description: Retour d'expérience sur la conception d'un système de recommandation avec Apache Mahout
 layout: blog
 ---
-Sur mon dernier projet, [BlueKiwi](http://www.bluekiwi-software.com/fr/), j'ai eu la chance de
+Sur mon dernier projet, BlueKiwi, j'ai eu la chance de
 travailler sur un système de recommandation. C'est une plateforme de gestion de contenu, et donc un
 utilisateur peut lire ou noter des articles. Le but est donc de recommander des articles à un
 utilisateur, en se basant sur ses interactions passées avec la plateforme. Cela s'appelle du

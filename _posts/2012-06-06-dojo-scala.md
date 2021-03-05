@@ -27,8 +27,7 @@ tout un tas de méthodes utilitaires : `equals`, `hashCode`, `toString`.
 
 Après la pause pizza, des groupes plus informels se forment pour discuter. Une personne (désolé,
 étant nouveau, je ne connais pas les prénoms) fait suite à ma demande et me montre comment faire
-cohabiter Java et Scala dans Eclipse et me donne quelques infos sur le
-[maven-scala-plugin](http://scala-tools.org/mvnsites/maven-scala-plugin/). On echange alors sur les
+cohabiter Java et Scala dans Eclipse et me donne quelques infos sur le `maven-scala-plugin`. On echange alors sur les
 pratiques de test et il m'indique l'existence d'un plugin eclipse pour ScalaTest et du projet
 [specs2](http://etorreborre.github.com/specs2/) plus orienté BDD.
 

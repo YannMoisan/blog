@@ -146,10 +146,8 @@ deals with this header.
   )
 ```
 
-Finally, I still have two questions :
+Finally, I still have one question :
 
--   [How do you model an empty
-    body](http://stackoverflow.com/questions/36306341/how-do-you-model-an-empty-body-with-swagger-annotation)
 -   [Why swagger-ui doesn't display the response model for an alternate
     response](http://stackoverflow.com/questions/36304732/swagger-ui-doesnt-display-the-response-model-for-a-400)
 

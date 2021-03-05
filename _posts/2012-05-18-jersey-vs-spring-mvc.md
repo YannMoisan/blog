@@ -151,7 +151,7 @@ public class FibResourceTest extends JerseyTest {
 ```
 
 Pour Spring, il faut utiliser un autre projet :
-[spring-test-mvc](https://github.com/SpringSource/spring-test-mvc) qui a vocation à être intégré au
+`spring-test-mvc` qui a vocation à être intégré au
 module spring-test de Spring Framework. Ce projet se base sur l'utilisation de Mock et permet de
 tester sans conteneur de Servlet. Pour récupérer la dépendance avec Maven, il faut ajouter le
 repository maven snapshot de Spring.
@@ -204,8 +204,7 @@ Ma préférence va à Jersey car il est simple, standard et testable.
     1: [Learn REST: A Tutorial](http://rest.elkstein.org/)
 -   
 
-    2: [Supporting XML and JSON web service endpoints in Spring 3.1 using
-    @ResponseBody](http://springinpractice.com/2012/02/22/supporting-xml-and-json-web-service-endpoints-in-spring-3-1-using-responsebody/)
+    2: ~~Supporting XML and JSON web service endpoints in Spring 3.1 using @ResponseBody~~
 -   3: [REST with Java (JAX-RS) using Jersey](http://www.vogella.com/articles/REST/article.html)
 -   4: [A Comparison of Spring MVC and JAX-RS](http://www.infoq.com/articles/springmvc_jsx-rs)
 
