@@ -22,7 +22,7 @@ Voici donc les limites qui, à la longue, peuvent devenir dérangeant pour un us
 -   impossible de configurer son serveur web (pour activer la compression gzip, configurer le cache,
     par exemple)
 -   impossible de configurer les redirections mail
--   impossible d'avoir un compte SSH sur le serveur (pour synchroniser le contenu avec rsync, par
+-   impossible d'avoir un compte SSH sur le serveur (pour synchroniser le contenu avec rsync, par
     exemple)
 -   impossible de configurer un sous-domaine au niveau DNS
 

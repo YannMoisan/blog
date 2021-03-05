@@ -5,7 +5,7 @@ layout: blog
 ---
 In computer science, there are often many ways to obtain the same result. And this is true when it
 comes to writing a program. Depending on the programming language, different styles could be used.
-In this post, we will see how to write a simple program in Scala : decomposing a number using base
+In this post, we will see how to write a simple program in Scala : decomposing a number using base
 10.
 
 ## Iteration
@@ -33,7 +33,7 @@ inside the `while` instruction, the result becomes wrong.
 
 ## Recursion
 
-It exists an interesting property : we can rewrite any loop with a recursive call. This refactoring,
+It exists an interesting property : we can rewrite any loop with a recursive call. This refactoring,
 [Replace Iteration with
 Recursion](https://www.refactoring.com/catalog/replaceIterationWithRecursion.html), is described in
 the great catalog of refactorings written by Martin Fowler.
@@ -57,8 +57,8 @@ def decompose(n: Int, history: List[Int]): List[Int] = {
 In the recursive approach, two concerns are still mixed : the computation and the history.
 
 Scala 2.13 introduced a new method `Iterator.unfold` that we can take advantage of. Let's start with
-an intuition : `fold` allows converting multiple values into a single value (like a sum). `unfold`
-is the opposite : convert a single value into multiple values.
+an intuition : `fold` allows converting multiple values into a single value (like a sum). `unfold`
+is the opposite : convert a single value into multiple values.
 
 The documentation says :
 

@@ -84,7 +84,7 @@ la commande suivante :
     smbclient -L mafreebox.freebox.fr
 ```
 
-Dans mon cas, cela affiche :
+Dans mon cas, cela affiche :
 
 ```
         Sharename       Type      Comment
@@ -105,7 +105,7 @@ Dans mon cas, cela affiche :
 
 ## Garmin Forerunner 305
 
-Le Forerunner 305 est une montre GPS pour la pratique de la course à pied. Malheureusement, Garmin
+Le Forerunner 305 est une montre GPS pour la pratique de la course à pied. Malheureusement, Garmin
 ne fournit pas de pilotes pour Linux, et la montre n'est pas vue comme un simple disque dur quand on
 la connecte en USB.
 

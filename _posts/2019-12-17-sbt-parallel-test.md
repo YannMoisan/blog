@@ -104,7 +104,7 @@ possibilities :
 1. Forking. But each project will have its own JVM and its own SparkContext.
 
 2. Stay in the same JVM and execute all tests sequentially (with parallelExecution = true
-AND Tags.Test = 1). Warning: the configuration given
+AND Tags.Test = 1). Warning: the configuration given
 [here](https://github.com/holdenk/spark-testing-base#special-considerations) doesn't work in case of
 multi-project.
 
@@ -181,7 +181,7 @@ Bar1[5][76861]
 
 ## Links
 
--   [sbt official doc : Testing](https://www.scala-sbt.org/1.x/docs/Testing.html)
+-   [sbt official doc : Testing](https://www.scala-sbt.org/1.x/docs/Testing.html)
 -   [sbt official doc : Forking](https://www.scala-sbt.org/1.x/docs/Forking.html)
 -   [sbt official doc : Multi-Project](https://www.scala-sbt.org/1.x/docs/Multi-Project.html)
 -   [sbt official doc :
