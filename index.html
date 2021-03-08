@@ -7,7 +7,13 @@ lang: fr
     {% for post in site.posts %}
     <li>
         <span class="time">{{ post.date | date_to_string }}</span>
-        <a href="{{ post.url }}">{{ post.title }}</a>
+        <a href="{{ post.url }}">
+            {% if post.lang == "fr" %}
+            <img src="/assets/french-flag.png" alt="[french]"/>
+            {% endif %}
+            {% if post.lang == "en" %}
+            <img src="/assets/british-flag.png" alt="[english]"/>
+            {% endif %} {{ post.title }}</a>
     </li>
     {% endfor %}
 </ul>
