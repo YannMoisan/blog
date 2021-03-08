@@ -2,6 +2,7 @@
 title: TDD en Scala
 description: Comment pratiquer le TDD en Scala, le plus simplement possible (sans IDE)
 layout: blog
+lang: fr
 ---
 En ce moment, je pratique le [kata](http://en.wikipedia.org/wiki/Kata_%28programming%29) Roman
 Numerals pour me familiariser avec l'écosystème Scala. Mon but est la simplicité, je n'utilise donc

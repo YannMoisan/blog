@@ -2,6 +2,7 @@
 title: Critique du livre The Productive Programmer
 description: Critique du livre The Productive Programmer de Neal Ford
 layout: blog
+lang: fr
 ---
 The Productive Programmer, paru chez O'Reilly, est le dernier livre de Neal Ford. Pour ceux qui ne
 le connaitraient pas, Neal Ford est un architecte Système travaillant chez ThoughtWorks, et donc un

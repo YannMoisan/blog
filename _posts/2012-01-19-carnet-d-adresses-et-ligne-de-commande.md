@@ -2,6 +2,7 @@
 title: Carnet d'adresses et ligne de commande
 description: Manipulation de son carnet d'adresse avec la ligne de commande
 layout: blog
+lang: fr
 ---
 Un bon développeur, comme tout bon artisan, doit utiliser les bons outils et les maitriser. L'outil
 incontournable, en raison notamment de sa puissance, est la ligne de commande. Afin de m'exercer,

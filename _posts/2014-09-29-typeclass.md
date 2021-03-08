@@ -2,6 +2,7 @@
 title: Simplest typeclass example
 description: "Typeclass 101 : Simplest typeclass example in Scala"
 layout: blog
+lang: en
 ---
 The aim of this post is to present the simplest typeclass example. A typeclass is a kind of design
 pattern that allows to add behaviour to a class without extending it (i.e. non intrusively). Let's

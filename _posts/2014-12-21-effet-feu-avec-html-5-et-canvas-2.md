@@ -2,6 +2,7 @@
 title: Effet feu avec HTML 5 et Canvas
 description: Effet feu avec HTML 5 et Canvas
 layout: blog
+lang: fr
 ---
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function (event) {

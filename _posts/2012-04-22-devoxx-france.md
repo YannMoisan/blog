@@ -2,6 +2,7 @@
 title: Devoxx France 2012
 description: Retour d'expérience de la conférence Devoxx France 2012
 layout: blog
+lang: fr
 ---
 J'ai eu le plaisir d'assister pendant 3 jours à Devoxx France. L'organisation était impeccable; un
 grand bravo aux organisateurs pour cette première édition. En synthèse, c'est 199 speakers, 133

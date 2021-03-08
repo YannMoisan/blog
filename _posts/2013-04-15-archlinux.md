@@ -2,6 +2,7 @@
 title: Les pièges à éviter avec Archlinux
 description: Les pièges à éviter avec Archlinux
 layout: blog
+lang: fr
 ---
 update 2014-03-27 : Garmin Forerunner 305 et serveur d'impression Freebox
 

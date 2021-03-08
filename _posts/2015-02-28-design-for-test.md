@@ -2,6 +2,7 @@
 title: Design for test
 description: Design for test
 layout: blog
+lang: fr
 ---
 Nous allons voir un exemple de code legacy *Scala* qui n'est pas testable. C'est une problématique
 assez simple et indépendante pour un court article.

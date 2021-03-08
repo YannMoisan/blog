@@ -2,6 +2,7 @@
 title: Open World Forum
 description: Open World Forum
 layout: blog
+lang: fr
 ---
 J'ai assisté à l'[OWF](http://www.openworldforum.org/), le premier forum Open Source en Europe
 vendredi dernier. Cette conférence contenait une track dédiée à Java, et plusieurs présentations sur
