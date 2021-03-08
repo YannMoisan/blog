@@ -2,6 +2,7 @@
 title: Many ways to implement wordcount in Scala
 description: Many ways to implement wordcount in Scala
 layout: blog
+lang: en
 ---
 Wow. It's been a long time since the last post. Time flies.
 

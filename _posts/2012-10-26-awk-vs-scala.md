@@ -2,6 +2,7 @@
 title: awk vs Scala
 description: awk vs Scala
 layout: blog
+lang: fr
 ---
 Dans la série "the right tool for the right job", j'ai besoin d'un petit programme qui filtre
 certaines lignes d'un fichier, au format csv. Je veux filtrer les enregistrements pour lesquelles le

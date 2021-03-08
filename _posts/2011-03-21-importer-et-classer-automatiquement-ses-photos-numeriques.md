@@ -2,6 +2,7 @@
 title: Importer et classer automatiquement ses photos numériques
 description: Script shell pour importer et classer automatiquement les photos de son appareil numérique sous Linux
 layout: blog
+lang: fr
 ---
 Update 17/02/2013 : script sur GitHub, script amélioré
 

@@ -2,6 +2,7 @@
 title: Migration de Java 6 à Java 5.
 description: Migration d'une application de Java 6 à Java 5
 layout: blog
+lang: fr
 ---
 Sur mon projet actuel, nous avons dû rétrograder la version de Java utilisée. Seulement trois
 problèmes se sont posés :

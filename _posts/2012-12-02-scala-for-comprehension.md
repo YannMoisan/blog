@@ -2,6 +2,7 @@
 title: for-comprehension en Scala 
 description: Explication du for-comprehension en Scala par l'exemple
 layout: blog
+lang: fr
 ---
 Scala possède un mécanisme très puissant mais pas simple à appréhender : for-comprehension. Le but
 de ce billet est d'aborder ce sujet par l'exemple avec les `List`. J'illustre le propos avec des

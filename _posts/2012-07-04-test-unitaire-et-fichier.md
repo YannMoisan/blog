@@ -2,6 +2,7 @@
 title: Tester unitairement la lecture d'un fichier, sans fichier !
 description: Tester unitairement la lecture d'un fichier, sans utiliser de fichier.
 layout: blog
+lang: fr
 ---
 Nous allons voir comment tester unitairement un composant basé sur la lecture d'un fichier, sans
 utiliser de fichier. Cette approche peut sembler étrange mais elle offre plusieurs avantages : le

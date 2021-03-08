@@ -2,6 +2,7 @@
 title: Solve type erasure
 description: How to solve type erasure issue in Scala
 layout: blog
+lang: en
 ---
 A common pitfall with JVM languages is type erasure. Let's see an example :
 

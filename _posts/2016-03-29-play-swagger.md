@@ -2,6 +2,7 @@
 title: Add a swagger documentation on a Play application
 description: Add a swagger documentation on a Play application
 layout: blog
+lang: en
 ---
 The starting point of this post is the need to document an existing REST APIs. I want the
 documentation to live with my code because I think it's the only way to have an up-to-date doc.

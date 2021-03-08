@@ -2,6 +2,7 @@
 title: Naviguer efficacement depuis le terminal
 description: Naviguer efficacement dans l'arborescence, depuis le terminal (uniquement pour bash)
 layout: blog
+lang: fr
 ---
 Voici quelques astuces pour naviguer plus efficacement dans l'arborescence, depuis un terminal bash.
 

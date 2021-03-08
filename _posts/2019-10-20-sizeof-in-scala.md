@@ -2,6 +2,7 @@
 title: Sizeof in Scala
 description: Size of in Scala
 layout: blog
+lang: en
 ---
 This blog post will show the impact of different ways to store a couple of integers in Scala on the
 memory footprint of a program.

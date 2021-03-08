@@ -2,6 +2,7 @@
 title: Mes raccourcis clavier préférés
 description: Mes raccourcis clavier préférés
 layout: blog
+lang: fr
 ---
 Pour des raisons de productivité, je m'efforce de dialoguer avec mon ordinateur en utilisant au
 maximum le clavier. Voici la liste des raccourcis clavier que j'utilise le plus.

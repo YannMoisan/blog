@@ -2,6 +2,7 @@
 title: Self-bound generic type
 description: Self-bound generic type
 layout: blog
+lang: fr
 ---
 Ce billet porte sur les self-bound generic types. Mais que se cache derrière ce terme étrange.
 Rassurez-vous, aucun développeur n'a été blessé pour réaliser ce billet. Laissons le besoin émerger

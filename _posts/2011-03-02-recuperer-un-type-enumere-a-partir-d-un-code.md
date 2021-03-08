@@ -2,6 +2,7 @@
 title: Récupérer un type énuméré à partir d'un code
 description: Récupération d'un type énuméré à partir d'un code, de la bonne utilisation des Generics de Java 5
 layout: blog
+lang: fr
 ---
 ## La problématique
 

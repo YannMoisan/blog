@@ -2,6 +2,7 @@
 title: Ubuntu sur HP ProBook 4530s
 description: Notes d'installation d'Ubuntu sur un ordinateur portable HP ProBook 4530s
 layout: blog
+lang: fr
 ---
 ## Un nouveau portable
 
