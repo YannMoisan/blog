@@ -38,9 +38,9 @@
         </div>
         <nav class="menu">
             <div class="link">
-                <a href="index.html">Billets</a>
-                <a href="a-propos.html">A propos</a>
-                <a href="cv.html">CV</a>
+                <a href="index.html" {% if page.url == "/" %}class="active"{% endif %}>Billets</a>
+                <a href="a-propos.html" {% if page.url == "/a-propos.html" %}class="active"{% endif %}>A propos</a>
+                <a href="cv.html" {% if page.url == "/cv.html" %}class="active"{% endif %}>CV</a>
             </div>
             <div class="social">
                 <a href="https://twitter.com/yannmoisan"><span class="socicon">a</span></a>
@@ -53,10 +53,6 @@
         </nav>
     </header>
 
-    <script>
-var page = location.pathname.split("/")
-document.querySelector('nav a[href^="' + page[page.length-1] + '"]').classList.add('active')
-     </script>
     <div class="row">
         {{ content }}
     </div>
