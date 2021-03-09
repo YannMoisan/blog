@@ -1,15 +1,13 @@
 ---
-title: Many ways to implement wordcount in Scala
-description: Many ways to implement wordcount in Scala
+title: Understand the essence of the iterator pattern through the example of word count
+description: We will start with a naive implementation of word count (to compute the numbers of characters, words and lines in a text). We'll perform multiple refactorings to go towards a pure functional approach inspired by the paper The Essence of the Iterator Pattern.
 layout: blog
 lang: en
 ---
-Wow. It's been a long time since the last post. Time flies.
-
 The starting point is that I'm trying to understand the paper [The Essence of the Iterator
-Patttern](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf). To help my brain, I
+Pattern](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf). To help my brain, I
 need to see how these abstract concepts can be useful in a real world use case. So I've decided to
-implement myself a classic use case : wordcount. The aim is to count the number of chars, words and
+code a classic use case : word count. The aim is to count the number of chars, words and
 lines in a piece of text. The idea is to take the road from the start, hit the wall and appreciate
 how clever this paper is.
 
@@ -46,8 +44,8 @@ Let's implement a solution where the text is traversed only once
   }
 ```
 
-It's a very imperative style, with a big loop that mutate some variables. And as you know,
-mutability is a bad bad thing. Let's fix that
+It's a very imperative style, with a big loop that mutate some variables. As you know,
+mutability is a bad thing. Let's fix that
 
 ```
   def wordcount3(s: String) : (Int, Int, Int) = {
@@ -64,8 +62,8 @@ mutability is a bad bad thing. Let's fix that
   }
 ```
 
-It's better, `foldLeft` allow abstracting over the traversal logic. But all countings are mixed
-together and we must respect the single responsibility principle. Let's separate the concerns.
+It's better, `foldLeft` allow abstracting over the traversal logic. But all the counts are mixed
+together which does not respect the single responsibility principle. Let's separate the concerns.
 
 ```
   def wordcount4(s: String) : (Int, Int, Int) = {
@@ -85,7 +83,7 @@ together and we must respect the single responsibility principle. Let's separate
   }
 ```
 
-Damned, the problem of traversing 3 times is back ! But the power of functional programming is to
+Damned, the problem of traversing 3 times is back ! The power of functional programming is to
 compose functions. Let's combine the 3 fold.
 
 ```
@@ -151,7 +149,7 @@ We can even merge foldMap together, because if we have a `Monoid[A]`, we have fo
   }
 ```
 
-And now, we are stuck with 2 traversals.
+Now, we are stuck with 2 traversals.
 
 Hopefully, the paper propose a solution to go further. There is nice [write
 up](https://etorreborre.blogspot.fr/2011/06/essence-of-iterator-pattern.html) by Eric Torreborre.
