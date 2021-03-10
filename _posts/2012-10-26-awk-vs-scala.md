@@ -30,7 +30,7 @@ France,Marseille
 J'ai voulu tester 2 approches différentes : une première en ligne de commandes et une deuxième avec
 Scala.
 
-### awk
+## awk
 
 La boite à outils Unix permettant de rendre des services inestimables, j'ai implémenté une version
 avec awk :
@@ -39,7 +39,7 @@ avec awk :
 awk 'BEGIN { FS=","; OFS=","} {id[$0]=$1; lines[$0]=$0; count[$1]++;} END { for (line in lines) if(count[id[line]] > 2) print line}' pays.csv
 ```
 
-### Scala
+## Scala
 
 ```
 import scala.io.Source._
@@ -60,7 +60,7 @@ object awk extends App {
 }
 ```
 
-### Conclusion
+## Conclusion
 
 Étant débutant dans ces 2 langages, je pense que les solutions ne sont pas optimales. D'ailleurs,
 n'hésitez pas à me proposer vos améliorations. L'implémentation AWK est plus concise, et utilise un

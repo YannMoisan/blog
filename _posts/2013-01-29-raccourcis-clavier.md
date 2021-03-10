@@ -7,7 +7,7 @@ lang: fr
 Pour des raisons de productivité, je m'efforce de dialoguer avec mon ordinateur en utilisant au
 maximum le clavier. Voici la liste des raccourcis clavier que j'utilise le plus.
 
-### X11
+## X11
 
 Contrairement à Windows et Mac OS, Linux (plus précisément X Window) offre deux clipboards : PRIMARY
 (contient le dernier texte sélectionné) et CLIPBOARD (celui utilisé avec C-c et C-v).
@@ -15,13 +15,13 @@ Contrairement à Windows et Mac OS, Linux (plus précisément X Window) offre de
 Shift+Ins : Coller le contenu du PRIMARY clipboard. C'est équivalent à un clic avec le bouton du
 milieu. Très utile comme vous avez un touchpad mais pas de souris.
 
-### Readline
+## Readline
 
 `readline` est le programme utilisé dans bash pour lire la ligne courante
 
 Ctrl+R : Rechercher dans l'historique la dernière commande contenant les caractères saisis
 
-### Gnome Shell
+## Gnome Shell
 
 Alt+F2 : Lancer une commande
 
@@ -41,7 +41,7 @@ Ctrl+Super+haut : Maximiser la fenêtre
 
 Ctrl+Super+gauche/droite : Afficher la fenêtre à gauche ou à droite (méconnu mais très pratique)
 
-### xfce
+## xfce
 
 Alt+F2 : Lancer une commande
 
@@ -55,7 +55,7 @@ Ctrl+Alt+Del : Verrouiller l'écran
 
 Super+T : Lancer un terminal
 
-### Source
+## Source
 
 -   https://wiki.archlinux.org/index.php/Keyboard\_Shortcuts
 -   http://www.tux-planet.fr/toutes-les-astuces-pour-gnome-shell/

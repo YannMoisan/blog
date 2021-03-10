@@ -6,7 +6,7 @@ lang: fr
 ---
 Voici quelques astuces que j'ai apprises en jouant à VimGolf
 
-### Gagner une frappe de touche
+## Gagner une frappe de touche
 
 | long  | court | description                                                |
 |-------|-------|------------------------------------------------------------|
@@ -18,7 +18,7 @@ Voici quelques astuces que j'ai apprises en jouant à VimGolf
 | `2dd` | `dj`  | supprimer la ligne courant et celle du dessous             |
 | `f)`  | `%`   | aller à la prochaine parenthèse fermante                   |
 
-### Quelques commandes Ex
+## Quelques commandes Ex
 
 Commençons par un rappel historique : Vim est le successeur de Vi qui est lui-même le successeur de
 Ex.
@@ -29,7 +29,7 @@ Ex.
 | `yyjp`  | `:t+`    | Copier la ligne courante en dessous de la ligne du dessous |
 | `ddggP` | `:m0`    | Déplacer la ligne courante au début du fichier             |
 
-### Opérateurs commençant par g
+## Opérateurs commençant par g
 
 Avec Vim, il suffit de doubler les opérateurs pour qu'ils s'appliquent à la ligne courante. Par
 exemple : `dd`. Et pour certains opérateurs, il existe même une syntaxe raccourcie.
@@ -41,7 +41,7 @@ exemple : `dd`. Et pour certains opérateurs, il existe même une syntaxe raccou
 | `g?g?` | `g??` | mettre la ligne courante en ROT13     |
 | `g~g~` | `g~~` | inverser la casse de ligne courante   |
 
-### Recherche et substitution
+## Recherche et substitution
 
 | long       | court     | description                                          |
 |------------|-----------|------------------------------------------------------|
@@ -50,7 +50,7 @@ exemple : `dd`. Et pour certains opérateurs, il existe même une syntaxe raccou
 | `:%s//~/g` | `g&`      | répéter la dernière substitution sur tout le fichier |
 |            | `@:`      | répéter la dernière ex commande                      |
 
-### Quelques commandes avec la touche Ctrl
+## Quelques commandes avec la touche Ctrl
 
 | commande          | description                                                                    |
 |-------------------|--------------------------------------------------------------------------------|
@@ -59,7 +59,7 @@ exemple : `dd`. Et pour certains opérateurs, il existe même une syntaxe raccou
 | `<C-o>`           | revenir au dernier emplacement visité                                          |
 | `<C-a>` / `<C-x>` | en mode normal, incrémenter / décrémenter le prochain nombre sur la ligne      |
 
-### Entourer un mot
+## Entourer un mot
 
 Pour entourer un mot avec des parenthèses, nous faisons généralement en mode normal
 `i(<Esc>ea)<Esc>`, ce qui fait 7 touches. Mais il existe plus efficace : `cw()<Esc>P`, ce qui fait 6

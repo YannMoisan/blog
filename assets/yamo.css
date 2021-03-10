@@ -186,7 +186,7 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 /*    font-family: Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif */
-h1, h2, h3, h4, .entry-title {
+h1, h2, h3, h4, .h1-like, .entry-title {
     font-family: 'Bree Serif', serif;
 }
 

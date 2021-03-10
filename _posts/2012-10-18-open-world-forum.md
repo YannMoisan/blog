@@ -84,7 +84,7 @@ Open Studio.
 Et pour finir la journée, une série de présentations éclair, notamment une assez poilue sur les
 opérateurs secrets de Perl.
 
-### Conclusion
+## Conclusion
 
 Les sessions ne sont pas aussi techniques qu'à Devoxx mais ce fut néanmoins riche et intéressant.
 Cela m'a permis d'avoir des retours d'expérience autour d'Hadoop et d'approfondir ma connaissance de
