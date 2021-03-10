@@ -46,6 +46,7 @@ plugins:
 exclude:
   - Dockerfile
   - "*.sh"
+  - nginx
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/
