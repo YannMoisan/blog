@@ -1,7 +1,7 @@
 ---
 title: How-to run tests in parallel with sbt
 description: How-to run tests in parallel with sbt
-layout: blog
+layout: post
 lang: en
 ---
 The aim of this post is to clarify how to run tests in parallel with sbt.

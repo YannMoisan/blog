@@ -1,7 +1,7 @@
 ---
 title: Le partitionnement de ma machine
 description: Pourquoi et comment je partitionne ma machine
-layout: blog
+layout: post
 lang: fr
 ---
 Ce billet n'est pas une introduction sur la notion de partition mais explique les choix que j'ai

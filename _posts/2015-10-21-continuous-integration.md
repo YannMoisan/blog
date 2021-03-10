@@ -1,7 +1,7 @@
 ---
 title: Continuous Integration for Reactive Web Applications
 description: Continuous Integration for Reactive Web Applications, leverage the power of Travis CI, Sauce Labs and Heroku
-layout: blog
+layout: post
 lang: en
 ---
 I've started a new pet project. It's an online board game, for two players.

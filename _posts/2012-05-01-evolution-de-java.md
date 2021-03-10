@@ -1,7 +1,7 @@
 ---
 title: Évolution de Java
 description: "À travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala"
-layout: blog
+layout: post
 lang: fr
 ---
 J'ai déjà parlé du [projet euler](librairie-mathematiques.html). Dans ce billet, nous allons voir

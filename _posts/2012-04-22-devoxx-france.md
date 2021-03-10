@@ -1,7 +1,7 @@
 ---
 title: Devoxx France 2012
 description: Retour d'expérience de la conférence Devoxx France 2012
-layout: blog
+layout: post
 lang: fr
 ---
 J'ai eu le plaisir d'assister pendant 3 jours à Devoxx France. L'organisation était impeccable; un

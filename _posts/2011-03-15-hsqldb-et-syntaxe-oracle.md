@@ -1,7 +1,7 @@
 ---
 title: HSQLDB et syntaxe Oracle
 description: Utilisation de la base HSQLDB avec la syntaxe Oracle
-layout: blog
+layout: post
 lang: fr
 ---
 ## La problématique

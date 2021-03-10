@@ -1,7 +1,7 @@
 ---
 title: Jersey vs Spring MVC
 description: Comparatif entre Jersey et Spring MVC, deux frameworks Java pour l'implémentation de services REST
-layout: blog
+layout: post
 lang: fr
 ---
 En Java, il existe de nombreux frameworks pour implémenter un service REST : Spring MVC, Jersey,

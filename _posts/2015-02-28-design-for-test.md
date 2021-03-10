@@ -1,7 +1,7 @@
 ---
 title: Design for test
 description: Design for test
-layout: blog
+layout: post
 lang: fr
 ---
 Nous allons voir un exemple de code legacy *Scala* qui n'est pas testable. C'est une problématique

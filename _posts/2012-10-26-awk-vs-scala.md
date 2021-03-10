@@ -1,7 +1,7 @@
 ---
 title: awk vs Scala
 description: awk vs Scala
-layout: blog
+layout: post
 lang: fr
 ---
 Dans la série "the right tool for the right job", j'ai besoin d'un petit programme qui filtre

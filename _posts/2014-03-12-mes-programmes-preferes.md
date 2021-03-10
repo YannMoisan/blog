@@ -1,7 +1,7 @@
 ---
 title: Mes programmes préférés
 description: Mes programmes préférés
-layout: blog
+layout: post
 lang: fr
 ---
 Ces derniers temps, j'utilise de plus en plus de programmes en CLI. D'une manière générale, voici la

@@ -1,7 +1,7 @@
 ---
 title: Hébergement sur un serveur dédié
 description: Les étapes à suivre pour passer d'un hébergement chez un prestataire web vers un hébergement sur son serveur dédié
-layout: blog
+layout: post
 lang: fr
 ---
 Jusqu'ici, ce site était hébergé chez `www.hebergement-gratuit.com`,

@@ -1,7 +1,7 @@
 ---
 title: Understand the essence of the iterator pattern through the example of word count
 description: We will start with a naive implementation of word count (to compute the numbers of characters, words and lines in a text). We'll perform multiple refactorings to go towards a pure functional approach inspired by the paper The Essence of the Iterator Pattern.
-layout: blog
+layout: post
 lang: en
 ---
 The starting point is that I'm trying to understand the paper [The Essence of the Iterator

@@ -1,7 +1,7 @@
 ---
 title: Librairie Mathématiques
 description: Développement d'une petite librairie utilitaire pour les Mathématiques
-layout: blog
+layout: post
 lang: fr
 ---
 ## Le project euler
