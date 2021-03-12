@@ -47,7 +47,7 @@ HTTPS est un prérequis pour HTTP/2. J'ai donc pu l'activer simplement en modifi
 
 ## Sécurité
 Le site [webpagetest](https://webpagetest.org) permet de tester la performance de son site. Ma note en sécurité est F.
-Digital ocean offre [un outil pour configurer nginx](https://www.digitalocean.com/community/tools/nginx). J'ai recopié les valeurs
+DigitalOcean offre [un outil pour configurer nginx](https://www.digitalocean.com/community/tools/nginx). J'ai recopié les valeurs
 de `security.conf` qui permettent d'ajouter des _headers_ de sécurité.
 
 On peut utiliser `httpie` pour vérifier 
@@ -89,6 +89,11 @@ La métrique _First Contentful Paint_ est ainsi passé de 2.5 s à 1 s
 Mon blog était généré par un script shell maison. Même si cela était intéressant à faire, le code est devenu peu lisible
 et peu maintenable. Il existe aujourd'hui de nombreux générateurs de sites statiques et j'ai migré sur une solution éprouvée : [jekyll](https://jekyllrb.com/) 
 et ainsi soigner un peu mon syndrome [NIH](https://en.wikipedia.org/wiki/Not_invented_here).
+
+Jusqu'ici, j'écrivais mes articles en HTML. Ce qui est pénible à la longue. Jekyll supportant HTML et Markdown, j'ai migré
+tous mes posts en Markdown avec l'aide de `pandoc`.
+
+Et pour finir, j'ai opté pour le thème par défaut : minima. Le site s'affiche mieux sur mobile (à croire que le dev front est un vrai métier).
 
 ## URL canonique
 Mon site était disponible à travers ces 2 urls : [http://www.yannmoisan.com](http://www.yannmoisan.com) et 
