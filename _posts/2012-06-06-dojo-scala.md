@@ -1,7 +1,7 @@
 ---
 title: #1 Dojo Scala
 description: Retour d'expérience du premier dojo Scala du 05 juin 2012
-layout: blog
+layout: post
 lang: fr
 ---
 Ce billet est un retour d'expérience du premier dojo Scala qui s'est déroulé le 5/6/2012. Je précise

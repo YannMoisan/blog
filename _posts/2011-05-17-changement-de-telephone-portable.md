@@ -1,7 +1,7 @@
 ---
 title: Changement de téléphone portable
 description: "Que faire lors d'un changement de téléphone portable : récupération des contacts, …"
-layout: blog
+layout: post
 lang: fr
 ---
 Le billet d'aujourd'hui va vous conter l'histoire de mon changement de téléphone portable. Mon

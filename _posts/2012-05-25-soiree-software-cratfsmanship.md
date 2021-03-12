@@ -1,7 +1,7 @@
 ---
 title: Soirée TDD en pratique - rencontre mensuelle Software Craftsmanship
 description: Retour d'expérience de la rencontre mensuelle Software Craftsmanship consacrée à TDD en pratique
-layout: blog
+layout: post
 lang: fr
 ---
 J'ai participé hier à la [7ème

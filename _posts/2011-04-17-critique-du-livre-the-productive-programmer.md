@@ -1,7 +1,7 @@
 ---
 title: Critique du livre The Productive Programmer
 description: Critique du livre The Productive Programmer de Neal Ford
-layout: blog
+layout: post
 lang: fr
 ---
 The Productive Programmer, paru chez O'Reilly, est le dernier livre de Neal Ford. Pour ceux qui ne

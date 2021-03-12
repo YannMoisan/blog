@@ -1,7 +1,7 @@
 ---
 title: Système de recommandation avec Apache Mahout
 description: Retour d'expérience sur la conception d'un système de recommandation avec Apache Mahout
-layout: blog
+layout: post
 lang: fr
 ---
 Sur mon dernier projet, BlueKiwi, j'ai eu la chance de

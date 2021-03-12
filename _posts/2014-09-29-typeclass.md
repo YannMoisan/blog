@@ -1,7 +1,7 @@
 ---
 title: How to code a type class in Scala
 description: We explain through an example how to simply code a type class in Scala. It only takes three lines of code.
-layout: blog
+layout: post
 lang: en
 ---
 The aim of this post is to present the simplest type class example. A type class is a kind of design

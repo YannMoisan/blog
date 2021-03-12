@@ -1,7 +1,7 @@
 ---
 title: TDD en Scala
 description: Comment pratiquer le TDD en Scala, le plus simplement possible (sans IDE)
-layout: blog
+layout: post
 lang: fr
 ---
 En ce moment, je pratique le [kata](http://en.wikipedia.org/wiki/Kata_%28programming%29) Roman

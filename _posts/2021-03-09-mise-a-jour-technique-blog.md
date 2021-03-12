@@ -1,7 +1,7 @@
 ---
 title: Mise à jour technique de mon blog
 description: J'ai mis à jour le système d'exploitation Ubuntu, configurer HTTPS et HTTP/2, améliorer la sécurité et les performances et changer le générateur de contenu statique.
-layout: blog
+layout: post
 lang: fr
 ---
 ## Un nouvel hébergeur

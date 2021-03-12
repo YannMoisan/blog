@@ -1,7 +1,7 @@
 ---
 title: Effet feu avec HTML 5 et Canvas
 description: Effet feu avec HTML 5 et Canvas
-layout: blog
+layout: post
 lang: fr
 ---
 <script type="text/javascript">

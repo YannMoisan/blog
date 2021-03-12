@@ -1,7 +1,7 @@
 ---
 title: Copier-coller sous Linux
 description: Copier-coller sous Linux
-layout: blog
+layout: post
 lang: fr
 ---
 Le but de ce billet est d'expliquer comment copier-coller sous GNU/Linux pour les *hackers*, c.-à-d

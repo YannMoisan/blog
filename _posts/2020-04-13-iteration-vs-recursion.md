@@ -1,7 +1,7 @@
 ---
 title: "A rant on programming styles : iteration vs recursion"
 description: "A rant on programming styles : iteration vs recursion"
-layout: blog
+layout: post
 lang: en
 ---
 In computer science, there are often many ways to obtain the same result. And this is true when it

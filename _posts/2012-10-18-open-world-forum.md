@@ -1,7 +1,7 @@
 ---
 title: Open World Forum
 description: Open World Forum
-layout: blog
+layout: post
 lang: fr
 ---
 J'ai assisté à l'[OWF](http://www.openworldforum.org/), le premier forum Open Source en Europe

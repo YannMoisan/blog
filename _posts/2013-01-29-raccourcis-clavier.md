@@ -1,7 +1,7 @@
 ---
 title: Mes raccourcis clavier préférés
 description: Mes raccourcis clavier préférés
-layout: blog
+layout: post
 lang: fr
 ---
 Pour des raisons de productivité, je m'efforce de dialoguer avec mon ordinateur en utilisant au

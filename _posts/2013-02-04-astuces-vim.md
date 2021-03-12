@@ -1,7 +1,7 @@
 ---
 title: Mes astuces Vim
 description: Mes astuces Vim
-layout: blog
+layout: post
 lang: fr
 ---
 Voici quelques astuces que j'ai apprises en jouant à VimGolf
