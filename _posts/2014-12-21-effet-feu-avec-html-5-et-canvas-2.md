@@ -58,7 +58,7 @@ lang: fr
 
         FireEffect.updatePanel = function () {
             var i;
-            for (var j = this.height - 3; j > 0; j--) {
+            for (var j = 0; j <= this.height - 3; j++) {
                 for (i = 1; i < this.width - 1; i++) {
                     this.panel[i][j] = Math.floor((
                     this.panel[i - 1][j + 1] +
