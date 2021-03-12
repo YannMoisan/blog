@@ -3,6 +3,7 @@ title: Effet feu avec HTML 5 et Canvas
 description: Effet feu avec HTML 5 et Canvas
 layout: post
 lang: fr
+last_modified_at: 2021-03-12
 ---
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -127,3 +128,18 @@ Perf calculate: <input type="text" id="perfCalculate" />
 Perf draw: <input type="text" id="perfDraw" />
 
 <input type="button" value="Démarrer" onClick="init()" />  
+
+## Correction du bogue - mise à jour du 12 mars 2021
+
+Il y a de nombreuses années, j'étais candidat chez Criteo. Mon intervieweur avait pris le temps de regarder mon blog 
+et était tombé sur cette page. Il avait immédiatement remarqué un truc bizarre; des triangles asymétriques se formaient.
+J'avais rapidement regardé le code après l'entretien, sans trouver le bogue. Et cette discussion est restée dans un coin de ma tête.
+
+J'ai décidé d'y repasser un peu de temps et il y avait en fait 2 bogues.
+- [d73c479](https://github.com/YannMoisan/blog/pull/25/commits/d73c479915a6703869e9f7d53becad31a0f13288) :
+  le calcul balayait d'abord les colonnes puis les lignes (au lieu de l'inverse) 
+- [264eda5](https://github.com/YannMoisan/blog/pull/25/commits/264eda5c0d22656236d1600dba940fa6c50bfc0d) : le calcul se faisait du bas vers le haut (au lieu de l'inverse) 
+
+Ces deux bogues ont la même conséquence : le calcul des pixels précédents impactent le calcul des pixels suivants.
+
+C'est enfin corrigé !
