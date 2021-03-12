@@ -6,13 +6,13 @@ lang: en
 ---
 A common pitfall with JVM languages is type erasure. Let's see an example :
 
-```
+```scala
 List(1).isInstanceOf[List[String]]
 ```
 
 Hopefully, it's not a problem with Scala. Prior to version 2.10, Scala uses `Manifest`
 
-```
+```scala
 def foo[T](x: List[T])(implicit m: Manifest[T]) = {
   if (m <:< manifest[String])
     println("Hey, this list is full of strings")
@@ -23,7 +23,7 @@ def foo[T](x: List[T])(implicit m: Manifest[T]) = {
 
 But Scala 2.10 comes with a new reflection API
 
-```
+```scala
 import scala.reflect.runtime.universe._
 def foo[T:TypeTag](x: List[T]) = {
   val t = typeOf[T]

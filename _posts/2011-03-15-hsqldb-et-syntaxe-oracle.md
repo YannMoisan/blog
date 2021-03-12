@@ -11,13 +11,13 @@ n'utilisent pas toujours la même syntaxe SQL. À titre d'exemple, voici la synt
 prochaine valeur d'une séquence. 
 Avec HSQL :
 
-```
+```sql
 SELECT […] NEXT VALUE FOR <sequencename> […] FROM <tablename>;
 ```
 
 Avec Oracle :
 
-```
+```sql
 SELECT <sequencename>.NEXTVAL FROM dual;
 ```
 

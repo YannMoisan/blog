@@ -13,7 +13,7 @@ how clever this paper is.
 
 Let's start with the straightforward solution, that will be enriched step by step.
 
-```
+```scala
   def wordcount1(s: String) : (Int, Int, Int) = {
     val c = s.length
     val w = s.split("\\w+").size
@@ -26,7 +26,7 @@ The drawback is that the text is traversed 3 times.
 
 Let's implement a solution where the text is traversed only once
 
-```
+```scala
   def wordcount2(s: String) : (Int, Int, Int) = {
     var nonAlpha = true
     var c = 0
@@ -47,7 +47,7 @@ Let's implement a solution where the text is traversed only once
 It's a very imperative style, with a big loop that mutate some variables. As you know,
 mutability is a bad thing. Let's fix that
 
-```
+```scala
   def wordcount3(s: String) : (Int, Int, Int) = {
     val init = (true, 0, 0, 0)
     val (_, c, w, l) = s.foldLeft(init) { case ((prevSpace, c, w, l), ch) =>
@@ -65,7 +65,7 @@ mutability is a bad thing. Let's fix that
 It's better, `foldLeft` allow abstracting over the traversal logic. But all the counts are mixed
 together which does not respect the single responsibility principle. Let's separate the concerns.
 
-```
+```scala
   def wordcount4(s: String) : (Int, Int, Int) = {
     val c = s.foldLeft(0) { case (c, _) => c + 1 }
 
@@ -86,7 +86,7 @@ together which does not respect the single responsibility principle. Let's separ
 Damned, the problem of traversing 3 times is back ! The power of functional programming is to
 compose functions. Let's combine the 3 fold.
 
-```
+```scala
   def wordcount5(s: String) : (Int, Int, Int) = {
     def foldLeft3[A, B, C, D](as: Seq[A])(z1: B, z2: C, z3: D)(op1: (B, A) => B, op2: (C, A) => C, op3: (D, A) => D) : (B, C, D) = {
       val z = (z1, z2, z3)
@@ -117,7 +117,7 @@ As a functional programmer, I really enjoy the way that we can create new combin
 functions. But wait, some more powerful abstractions exists, like `Foldable` and `Traversable` (for
 counting words, because it's a stateful process) …
 
-```
+```scala
   def wordcount6(s: String) : (Int, Int, Int) = {
     val c = s.toList.foldMap(_ => 1)
     val l = s.toList.foldMap(c => if (c == '\n') 1 else 0)
@@ -135,7 +135,7 @@ counting words, because it's a stateful process) …
 We can even merge foldMap together, because if we have a `Monoid[A]`, we have for free a
 `Monoid[(A, A)]`
 
-```
+```scala
   def wordcount7(s: String) : (Int, Int, Int) = {
     val (c, l) = s.toList.foldMap(c => (1, if (c == '\n') 1 else 0))
     def f(c: Char): IndexedStateT[Eval, Boolean, Boolean, Int] =
@@ -156,7 +156,7 @@ up](https://etorreborre.blogspot.fr/2011/06/essence-of-iterator-pattern.html) by
 Here is below an implementation made by eedesign in its great [herding
 cats](http://eed3si9n.com/herding-cats/applicative-wordcount.html) series.
 
-```
+```scala
   def wordcount8(s: String) : (Int, Int, Int) = {
     // A type alias to treat Int as semigroupal applicative
     type Count[A] = Const[Int, A]

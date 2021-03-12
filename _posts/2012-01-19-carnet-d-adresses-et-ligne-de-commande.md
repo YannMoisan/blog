@@ -12,7 +12,7 @@ puis Tools > Export.
 
 Voici le code :
 
-```
+```sh
 cat ~/export.csv | 
   sed '1d' | 
   sed -e 's/"[^"]*"//g' | 

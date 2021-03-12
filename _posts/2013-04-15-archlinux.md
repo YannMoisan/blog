@@ -16,8 +16,8 @@ expérience pour tester i3, un tiling window manager.
 
 La première chose à faire est de désactiver le beep, en ajoutant dans le `.xinitrc`.
 
-```
-    xset -b
+```sh
+xset -b
 ```
 
 ## Vim

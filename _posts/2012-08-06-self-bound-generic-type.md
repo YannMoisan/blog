@@ -10,7 +10,7 @@ Rassurez-vous, aucun développeur n'a été blessé pour réaliser ce billet. La
 Child1 et Child2, ayant une propriété commune. Voici une première implémentation naive. Pour des
 raisons de clarté, nous n'affichons que le code nécessaire à la compréhension :
 
-```
+```java
 public class Child1Builder {
     private String parentProperty;
     private String child1Property;
@@ -56,7 +56,7 @@ public class Child2Builder {
 
 Nous allons maintenant refactorer pour supprimer le code dupliqué de la méthode setParentProperty.
 
-```
+```java
 public class ParentBuilder {
     public String parentProperty;
 
@@ -87,7 +87,7 @@ Malheureusement, ce code ne compile pas car la méthode `setParentProperty` renv
 setParentProperty a besoin de renvoyer le type de la classe dérivée. L'astuce consiste à utiliser
 une méthode getThis().
 
-```
+```java
 public abstract class ParentBuilder<T> {
     public String parentProperty;
 

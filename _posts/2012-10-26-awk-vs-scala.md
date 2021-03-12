@@ -35,13 +35,13 @@ Scala.
 La boite à outils Unix permettant de rendre des services inestimables, j'ai implémenté une version
 avec awk :
 
-```
+```awk
 awk 'BEGIN { FS=","; OFS=","} {id[$0]=$1; lines[$0]=$0; count[$1]++;} END { for (line in lines) if(count[id[line]] > 2) print line}' pays.csv
 ```
 
 ## Scala
 
-```
+```scala
 import scala.io.Source._
 import java.io.PrintWriter
 

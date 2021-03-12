@@ -14,7 +14,7 @@ une méthode d'une interface. Pour l'anecdote, ce changement n'est pas document�
 l'annotation n'a pas été modifiée. La solution consiste à supprimer ces lignes. Cela est automatisé
 avec la ligne de commande suivante :
 
-```
+```sh
 find . -name "*.java" -exec sed -i '/@Override/d' {} \
 ```
 

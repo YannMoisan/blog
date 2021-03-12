@@ -24,7 +24,7 @@ de tous les types (cf Item 29 : Consider heterogeneous containers).
 
 Reference
 
-```
+```java
 public interface Reference {
     public int getCode();
 }
@@ -32,7 +32,7 @@ public interface Reference {
 
 References
 
-```
+```java
 public class References {
     private static final Map<String, Map<Integer, Reference>> DICTIONARIES;
 
@@ -57,7 +57,7 @@ public class References {
 
 ExampleReference
 
-```
+```java
 public enum ExampleReference implements Reference {
     FOO(1),
 

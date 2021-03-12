@@ -14,7 +14,7 @@ In this post, we will see how to write a simple program in Scala : decomposing a
 The most obvious implementation seems to be a simple loop, because most of us learned to program in
 iterative style.
 
-```
+```scala
 def decompose(n: Int): List[Int] = {
   var history = List[Int]()
   var next = n
@@ -41,7 +41,7 @@ the great catalog of refactorings written by Martin Fowler.
 
 The main trick is to pass variables that are modified inside the loop as parameters of the function.
 
-```
+```scala
 def decompose(n: Int): List[Int] = decompose(n, Nil)
 
 @tailrec
@@ -63,7 +63,7 @@ is the opposite : convert a single value into multiple values.
 
 The documentation says :
 
-```
+```scala
 def unfold[A, S](init: S)(f: (S) => Option[(A, S)]): Iterator[A]
     Creates an Iterator that uses a function f to produce elements of type A 
     and update an internal state of type S.
@@ -73,7 +73,7 @@ So we have to determine what are elements of type `A` and what is the internal s
 may be solved by following the types. We are interested in remainders, so they are elements of type
 `A`. And the internal state is the next number to consider.
 
-```
+```scala
 def decompose(n: Int): List[Int] =
   Iterator
     .unfold(n) { n =>

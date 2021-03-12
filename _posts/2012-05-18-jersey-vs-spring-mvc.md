@@ -27,7 +27,7 @@ Regardons à présent ce qui intéresse tous les développeurs, le code du servi
 
 Jersey
 
-```
+```java
 package com.yannmoisan.restcmp;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class FibController {
 
 Spring
 
-```
+```java
 package com.yannmoisan.restcmp;
 
 import javax.ws.rs.GET;
@@ -95,7 +95,7 @@ Jersey a un module jersey-json pour la transformation en JSON, qui offre 3 appro
 POJO, JAXB et bas niveau. Dans notre exemple, on utilise l'approche POJO, la plus simple, basée sur
 jackson. Il suffit d'activer le paramètre `POJOMappingFeature` sur la servlet.
 
-```
+```xml
 <init-param>
     <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
     <param-value>true</param-value>
@@ -119,7 +119,7 @@ Avec Spring, bien évidemment, c'est natif.
 Jersey embarque nativement un framework de test : jersey-test-framework, qui permet de faire des
 tests avec différents conteneurs.
 
-```
+```java
 package com.yannmoisan.restcmp;
 
 import org.junit.Assert;
@@ -157,7 +157,7 @@ module spring-test de Spring Framework. Ce projet se base sur l'utilisation de M
 tester sans conteneur de Servlet. Pour récupérer la dépendance avec Maven, il faut ajouter le
 repository maven snapshot de Spring.
 
-```
+```java
 package com.yannmoisan.restcmp;
 
 import static org.springframework.test.web.server.request.MockMvcRequestBuilders.*;
@@ -186,7 +186,7 @@ public class FibControllerTest {
 Les tests de bout en bout permettent de vérifier que le résultat est identique, avec les 2 webapps
 déployées sur un serveur tomcat.
 
-```
+```sh
 $ curl http://localhost:8080/restcmp-jersey/fib/10
 {"fib":[1,1,2,3,5,8,13,21,34,55]}
 $ curl http://localhost:8080/restcmp-spring/fib/10

@@ -102,7 +102,7 @@ Le support de HTTPS a encore ajouté deux nouvelles variantes : [https://www.yan
 [https://yannmoisan.com](http://yannmoisan.com). Afin d'aider les moteurs de recherche à ne pas détecter ces contenus 
 comme dupliqués, j'ai déclaré une URL canonique sur chaque page.
 
-```
+```html
 <link rel="canonical" href="https://www.yannmoisan.com/foo.html"/>
 ```
 

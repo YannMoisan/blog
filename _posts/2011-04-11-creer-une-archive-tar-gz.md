@@ -22,7 +22,7 @@ de chainage de streams de java.
 Il faut aussi gérer finement les exceptions, à l'aide de blocs `finally`, afin de garantir la
 fermeture des streams en toute circonstance.
 
-```
+```java
 public final class FileUtils {
     private static final int BUFFER_SIZE = 1024;
 

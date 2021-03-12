@@ -10,13 +10,13 @@ que ces programmes : Vim, tmux et sbt. Voici, étape par étape, comment je prat
 
 Lancer tmux
 
-```
+```sh
 $ tmux
 ```
 
 Créer et aller dans le répertoire du projet
 
-```
+```sh
 $ mkdir roman
 $ cd $_
 ```
@@ -24,28 +24,28 @@ $ cd $_
 Créer le fichier de configuration de sbt, afin d'ajouter la dépendance avec ScalaTest (framework de
 test).
 
-```
+```sh
 $ vim build.sbt
 ```
 
-```
+```sbt
 libraryDependencies += "org.scalatest" %% "scalatest" % "1.8" % "test"
 ```
 
 Créer et aller dans le répertoire du code source
 
-```
+```sh
 $ mkdir -p src/test/scala
 $ cd $_
 ```
 
 Écrire le code, dans un seul fichier pour faciliter les déplacements entre le code et les tests.
 
-```
+```sh
 $ vim RomanTest.scala
 ```
 
-```
+```scala
 import org.scalatest.FunSuite
 
 object Roman {
@@ -62,7 +62,7 @@ class RomanTest extends FunSuite {
 Nous allons maintenant pouvoir tester. C'est maintenant que tmux va être utile pour séparer l'écran
 en 2 <Ctrl-b> " et aller en bas.
 
-```
+```sh
 $ sbt
 ```
 

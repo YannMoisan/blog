@@ -36,13 +36,13 @@ Avec une autre personne, on regarde les premiers codes Scala que j'ai écrit, et
 problème 8 du projet euler. Il me montre ainsi comment améliorer mon implémentation en tirant parti
 de la richesse de l'API Collection de Scala. Voici le code initial :
 
-```
+```scala
 println((for (i <- 0 to 1000 - 5) yield (0 to 4).map(j => s.charAt(i + j).getNumericValue).reduceLeft(_ * _)).max)
 ```
 
 Et le code refactoré :
 
-```
+```scala
 println(s.map(_.asDigit).sliding(5).map(_.product).max)
 ```
 

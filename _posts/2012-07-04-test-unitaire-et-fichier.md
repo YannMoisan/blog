@@ -14,7 +14,7 @@ dans le test.
 
 Voyons comment faire :
 
-```
+```java
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,7 +56,7 @@ public class Counter {
 }
 ```
 
-```
+```java
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileNotFoundException;

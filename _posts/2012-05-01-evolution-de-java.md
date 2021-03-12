@@ -14,7 +14,7 @@ permet d'apprécier l'évolution des langages basés sur la JVM. Tout d'abord, v
 
 ## Avec Java 6
 
-```
+```java
 public class Java6Euler1 {
     public static void main(String[] args) {
         int sum = 0;
@@ -39,7 +39,7 @@ aujourd'hui.
 notamment une API Collection riche et un support partiel de la programmation fonctionnelle. Cette
 librairie remplace avantageusement la librairie commons collections d'Apache, tombé en désuétude.
 
-```
+```java
 import java.util.Collection;
 
 import com.google.common.base.Predicate;
@@ -81,7 +81,7 @@ orientée objet et la programmation fonctionnelle. Scala supporte nativement les
 paramètre d'entrée une ou plusieurs fonctions et/ou renvoyant une fonction). Le code suivant montre
 la puissance du langage.
 
-```
+```scala
 object euler1 extends App {
   println((1 until 1000).filter(n => n % 3 == 0 || n % 5 == 0).sum)
 }
@@ -96,7 +96,7 @@ départ dans ce but.
 [lambda-expressions](http://openjdk.java.net/projects/lambda/) (JSR 335). Une version binary
 snapshot permet d'essayer ces nouveautés.
 
-```
+```java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +122,7 @@ de Scala. Voici quelques précisions techniques :
     défaut sur les interfaces. L'interface `Iterable` gagne ainsi une méthode `filter` qui prend en
     paramètre un `Predicate` et possède une implémentation par défaut.
 
-```
+```java
 Iterable<T> filter(Predicate<? super T> predicate) default {
     return Iterables.filter(this, predicate);
 }

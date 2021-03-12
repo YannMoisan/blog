@@ -32,7 +32,7 @@ de la pop-up, cliquer sur Démonter.
 Le script utilise les deux programmes suivants : `gphoto` et `exiftool`. Voici le code source du
 script :
 
-```
+```sh
 #! /bin/sh
 # Importe et classe les fichiers (images et videos) de l'appareil photo.
 # Ne supprime pas les photos originales de l'appareil.

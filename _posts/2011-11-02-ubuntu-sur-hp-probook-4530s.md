@@ -67,7 +67,7 @@ l'indique la commande `lspci|grep VGA`.
 La connexion Wifi souffre de lenteurs. C'est dû à l'utilisation du driver ath9k de la carte Atheros
 avec un noyau 2.6.38. La solution consiste simplement à exécuter cette commande :
 
-```
+```sh
 sudo -s
 echo "options ath9k nohwcrypt=1" > /etc/modprobe.d/ath9k.conf
 ```

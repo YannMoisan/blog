@@ -7,7 +7,7 @@ lang: fr
 Nous allons voir un exemple de code legacy *Scala* qui n'est pas testable. C'est une problématique
 assez simple et indépendante pour un court article.
 
-```
+```scala
 object SUT {
   def isEnabled = ResourceBundle.getBundle("design").getString("enabled").toBoolean
   def methodToTest(name: String) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
@@ -22,7 +22,7 @@ problème, sans modifier le code client de cet objet.
 
 Le plus simple est d'ajouter un paramètre à la fonction.
 
-```
+```scala
 object SUT {
   def isEnabled = ResourceBundle.getBundle("design").getString("enabled").toBoolean
   def methodToTest(name: String, isEnabled: Boolean = isEnabled) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
@@ -32,7 +32,7 @@ object SUT {
 La valeur par défaut permet ainsi au code client de continuer à fonctionner sans modification. Voici
 alors le code de test.
 
-```
+```scala
 test("should work when isEnabled is true") {
   assertResult("Hello Test")(SUT.methodToTest("Test", true))
 }
@@ -49,7 +49,7 @@ le scope et qu'il faut le faire pour chaque méthode qui a besoin de ce paramèt
 
 Il est aussi possible d'introduire une classe.
 
-```
+```scala
 class SUTC {
   def isEnabled = ResourceBundle.getBundle("design").getString("enabled").toBoolean
   def methodToTest(name: String) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
@@ -60,7 +60,7 @@ object SUT extends SUTC
 
 Ce qui permet de surcharger le comportement par défaut dans le test.
 
-```
+```scala
 test("should work when isEnabled is true") {
     val sut = new SUTC {
       override def isEnabled: Boolean = true
@@ -80,14 +80,14 @@ test("should work when isEnabled is false") {
 
 La dernière possibilité est d'utiliser un paramètre implicite
 
-```
+```scala
 object SUT {
   implicit val isEnabled: Boolean = ResourceBundle.getBundle("design").getString("enabled").toBoolean
   def methodToTest(name: String)(implicit isEnabled: Boolean) = if (isEnabled) s"Hello $name" else s"Goodbye $name"
 }
 ```
 
-```
+```scala
 test("should work when isEnabled is true") {
   assertResult("Hello Test")(SUT.methodToTest("Test")(true))
 }
