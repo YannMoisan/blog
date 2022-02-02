@@ -86,5 +86,5 @@ def decompose(n: Int): List[Int] =
 ## Conclusion
 
 There are really many ways to implement even such a trivial program. Scala offers a rich collection
-API and so we can replace custom code by a built-in function, which increases readability and
+API and so we can replace custom code with a built-in function, which increases readability and
 reduces the surface for bugs.

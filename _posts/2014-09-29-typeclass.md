@@ -5,7 +5,7 @@ layout: post
 lang: en
 ---
 The aim of this post is to present the simplest type class example. A type class is a kind of design
-pattern that allows to add behaviour to a class without extending it (i.e. non intrusively). Let's
+pattern that allows adding behaviour to a class without extending it (i.e. non intrusively). Let's
 use the REPL :
 
 A type class is just a regular scala `trait`

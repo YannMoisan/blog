@@ -6,12 +6,12 @@ lang: en
 ---
 The starting point is that I'm trying to understand the paper [The Essence of the Iterator
 Pattern](https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf). To help my brain, I
-need to see how these abstract concepts can be useful in a real world use case. So I've decided to
+need to see how these abstract concepts can be useful in a real-world use case. So I've decided to
 code a classic use case : word count. The aim is to count the number of chars, words and
 lines in a piece of text. The idea is to take the road from the start, hit the wall and appreciate
 how clever this paper is.
 
-Let's start with the straightforward solution, that will be enriched step by step.
+Let's start with a straightforward solution, that will be enriched step by step.
 
 ```scala
   def wordcount1(s: String) : (Int, Int, Int) = {
@@ -113,8 +113,8 @@ compose functions. Let's combine the 3 fold.
   }
 ```
 
-As a functional programmer, I really enjoy the way that we can create new combinator from existing
-functions. But wait, some more powerful abstractions exists, like `Foldable` and `Traversable` (for
+As a functional programmer, I really enjoy the way that we can create new combinators from existing
+functions. But wait, some more powerful abstractions exist, like `Foldable` and `Traversable` (for
 counting words, because it's a stateful process) …
 
 ```scala
@@ -151,8 +151,8 @@ We can even merge foldMap together, because if we have a `Monoid[A]`, we have fo
 
 Now, we are stuck with 2 traversals.
 
-Hopefully, the paper propose a solution to go further. There is nice [write
-up](https://etorreborre.blogspot.fr/2011/06/essence-of-iterator-pattern.html) by Eric Torreborre.
+Hopefully, the paper proposes a solution to go further. There is a nice [write-up]
+(https://etorreborre.blogspot.fr/2011/06/essence-of-iterator-pattern.html) by Eric Torreborre.
 Here is below an implementation made by eedesign in its great [herding
 cats](http://eed3si9n.com/herding-cats/applicative-wordcount.html) series.
 
@@ -203,6 +203,6 @@ The main points are :
 
 ## Conclusion
 
-We've seen many ways to solve the same problem. Functional programming offer powerful
-abstraction to decouple things and allow composing small parts together to build complex system. So
-it's worth to spend some times to understand those concepts in order to write better programs.
+We've seen many ways to solve the same problem. Functional programming offers powerful
+abstraction to decouple things and allow composing small parts together to build complex systems. So
+it's worth spending some time to understand those concepts in order to write better programs.

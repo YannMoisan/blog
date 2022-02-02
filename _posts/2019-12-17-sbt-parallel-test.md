@@ -8,7 +8,7 @@ The aim of this post is to clarify how to run tests in parallel with sbt.
 
 The initial motivation is to speed up testing on a Spark project.
 
-## 2 level of parallelism
+## 2 levels of parallelism
 
 A frequent source of confusion is that there are multiple levels of parallelism involved.
 
@@ -25,7 +25,7 @@ parallelExecution in Test := false
 ### cross-project
 
 There is a second level of parallelism. If your build is a cross-project build, sbt also runs tasks
-from different project in parallel.
+from the different projects in parallel.
 
 sbt can limit task concurrency based on tags. The task test is tagged by default and this tag is
 propagated to each child task created for each test class.
@@ -47,7 +47,7 @@ Here is a short recap
 
 ## Forking ?
 
-By default, tests are executed in the same JVM than sbt.
+By default, tests are executed in the same JVM as sbt.
 
 This can be changed with :
 
@@ -109,13 +109,13 @@ and `Tags.Test = 1`). Warning: the configuration given
 [here](https://github.com/holdenk/spark-testing-base#special-considerations) doesn't work in case of
 multi-project.
 
-## Why should I trust you
+## Why should I trust you?
 
 I have created a tiny project to test all these configurations :
 <https://github.com/YannMoisan/sbt-parallel>
 
 It's a project with 2 subprojects and 2 test classes in each project : Foo(1|2) in project foo and
-Bar(1|2) in project bar. Each test print 5 messages with a 1s delay between them. So we can see how
+Bar(1|2) in project bar. Each test prints 5 messages with a 1s delay between them. So we can see how
 it's interleaved. Each message contains the class name, the index of the iteration and the pid of
 the JVM
 

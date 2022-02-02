@@ -64,7 +64,7 @@ The size is
 -   2 `int` fields : 2 \* 4 = 8 bytes
 -   total = 20 bytes, so 24 bytes with alignment
 
-But it will be awkward to create classes for all combinaison of types, so let's create a generic
+But it will be awkward to create classes for all combinations of types, so let's create a generic
 pair object.
 
 ```scala
@@ -143,8 +143,8 @@ so the size is
 -   2 ints : 2 \* 4 = 8 bytes
 -   total = 28 bytes, so 32 bytes with alignment. (Q.E.D.)
 
-We can double check with jol, another interesting tool when it comes to understand memory
-consumption. Our `SpPair` class use exactly the same mechanism as the `Tuple2` class from the scala
+We can double-check with jol, another interesting tool when it comes to understanding memory
+consumption. Our `SpPair` class uses exactly the same mechanism as the `Tuple2` class from the scala
 standard library. So here is the result of jol on `scala.Tuple2$mcII$sp`, the specialized instance for
 pair of ints.
 

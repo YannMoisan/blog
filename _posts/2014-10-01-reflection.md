@@ -34,5 +34,5 @@ def foo[T:TypeTag](x: List[T]) = {
 }
 ```
 
-On contrary to `Manifest`, `TypeTag` handles correctly path dependent type, existential types, … So if
-you are using Scala 2.10 and `Manifest`, consider to migrate.
+On contrary to `Manifest`, `TypeTag` handles correctly path-dependent type, existential types, … So if
+you are using Scala 2.10 and `Manifest`, consider migrating.
