@@ -54,11 +54,11 @@ Exemples d'attaque
 Solutions:
 zero-trust shift left
 
-[sigstore.dev](sigstore.dev)
+[sigstore.dev](https://www.sigstore.dev)
 
 ![slsa-1.jpg](assets/devoxx/slsa-1.jpg)
 
-[slsa.dev](slsa.dev) (prononcer salsa) = framework, check list
+[slsa.dev](https://slsa.dev) (prononcer salsa) = framework, check list
 
 ex: utiliser git sign pour signer les commits
 

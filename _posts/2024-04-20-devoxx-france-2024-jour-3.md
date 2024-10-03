@@ -303,7 +303,7 @@ Talk du speaker à FlinkForward sur le Blue/Green pour faire des montées de ver
 ![flink-10.jpg](../assets/devoxx/jour3/flink-10.jpg)
 
 # 15:40 16:25 - J'ai terminé les 9 Advents of Code : Leçons Apprises
-[Teiva Harsanyi](teivah.dev/connect): SRE at Google, 100 Go mistakes author.
+[Teiva Harsanyi](https://teivah.dev/connect): SRE at Google, 100 Go mistakes author.
 
 J'attendais ce talk, n'ayant terminé que 3 Advent Of Code (et en y passant beaucoup de temps)
 

@@ -103,7 +103,7 @@ Le support de HTTPS a encore ajouté deux nouvelles variantes : [https://www.yan
 comme dupliqués, j'ai déclaré une URL canonique sur chaque page.
 
 ```html
-<link rel="canonical" href="https://www.yannmoisan.com/foo.html"/>
+<link rel="canonical" href="https://www.yannmoisan.com/mise-a-jour-technique-blog.html"/>
 ```
 
 L'impact devrait être visible dans la [google search console](https://search.google.com/search-console).
