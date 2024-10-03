@@ -6,12 +6,21 @@ lang: fr
 ---
 Here is the list of my favorite articles collected during my 10 years of language practice.
 
+## Best practices
+
+- [Why are Default Parameter Values Considered Bad in Scala?](https://blog.ssanj.net/posts/2019-05-01-why-are-default-parameter-values-considered-bad-in-scala.html)
+- [try-with-resources](https://dkomanov.medium.com/scala-try-with-resources-735baad0fd7d)
+- [scala-best-practices](https://nrinaudo.github.io/scala-best-practices)
+- [ADT](https://nrinaudo.github.io/scala-best-practices/definitions/adt.html)
+- [referential transparency](https://nrinaudo.github.io/scala-best-practices/definitions/referential_transparency.html)
+
 ## Type System
 
 ### Awesome overview
 
 - [Kinds of types in Scala](https://kubuszok.com/compiled/kinds-of-types-in-scala/), A master piece, highly recommended read
 - [Scala’s Types of Types](http://ktoso.github.io/scala-types-of-types/)
+- [Types in Scala](https://heather.miller.am/blog/types-in-scala.html)
 
 ### Specific topics
 
