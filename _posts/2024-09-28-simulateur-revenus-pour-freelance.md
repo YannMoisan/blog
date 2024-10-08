@@ -6,6 +6,10 @@ lang: fr
 ---
 <script>
     function updateDouble() {
+// 2024
+// PASS 43992e brut
+// 6762 brut pour valider 4T de retraite
+// 8230 par foyer fiscale tax PUMa
         // Récupère la valeur de l'input
 
         let imposition = document.querySelector('input[name="imposition"]:checked').value;
@@ -49,7 +53,7 @@ lang: fr
 
         let revenuImposableSasuIS = salaireNet + autresRevenus + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
         let revenuImposableSasuIR = ca - salaireNet * 0.54 + autresRevenus // les charges patronales sont deductibles
-        let revenuImposableEurlIS = salaireNet + autresRevenus + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
+        let revenuImposableEurlIS = salaireNet * 0.9 + autresRevenus + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
         let revenuImposableEurlIR = ca - chargesSocialesEurlIR + autresRevenus // les charges sont deductibles ?
 
         let irSasuIS = calculImpot2(revenuImposableSasuIS, nombreDeParts)
@@ -131,37 +135,37 @@ lang: fr
         let impot = 0;
 
         // Tranche 0% : de 0 à 10 777 €
-        if (salaireNet <= 10777) {
+        if (salaireNet <= 11294) {
             return impot;
         }
 
         // Tranche 11% : de 10 778 € à 27 478 €
-        if (salaireNet > 10777 && salaireNet <= 27478) {
-            impot += (salaireNet - 10777) * 0.11;
+        if (salaireNet > 11294 && salaireNet <= 28797) {
+            impot += (salaireNet - 11294) * 0.11;
             return impot;
         }
 
         // Tranche 30% : de 27 479 € à 78 570 €
-        if (salaireNet > 27478 && salaireNet <= 78570) {
-            impot += (27478 - 10777) * 0.11;  // 11% sur la première tranche
-            impot += (salaireNet - 27478) * 0.30;
+        if (salaireNet > 28797 && salaireNet <= 82341) {
+            impot += (28797 - 11294) * 0.11;  // 11% sur la première tranche
+            impot += (salaireNet - 28797) * 0.30;
             return impot;
         }
 
         // Tranche 41% : de 78 571 € à 168 994 €
-        if (salaireNet > 78570 && salaireNet <= 168994) {
-            impot += (27478 - 10777) * 0.11;  // 11% sur la première tranche
-            impot += (78570 - 27478) * 0.30;  // 30% sur la deuxième tranche
-            impot += (salaireNet - 78570) * 0.41;
+        if (salaireNet > 82341 && salaireNet <= 177106) {
+            impot += (28797 - 11294) * 0.11;  // 11% sur la première tranche
+            impot += (82341 - 28797) * 0.30;  // 30% sur la deuxième tranche
+            impot += (salaireNet - 82341) * 0.41;
             return impot;
         }
 
         // Tranche 45% : au-delà de 168 994 €
-        if (salaireNet > 168994) {
-            impot += (27478 - 10777) * 0.11;  // 11% sur la première tranche
-            impot += (78570 - 27478) * 0.30;  // 30% sur la deuxième tranche
-            impot += (168994 - 78570) * 0.41; // 41% sur la troisième tranche
-            impot += (salaireNet - 168994) * 0.45; // 45% sur le reste
+        if (salaireNet > 177106) {
+            impot += (28797 - 11294) * 0.11;  // 11% sur la première tranche
+            impot += (82341 - 28797) * 0.30;  // 30% sur la deuxième tranche
+            impot += (177106 - 82341) * 0.41; // 41% sur la troisième tranche
+            impot += (salaireNet - 177106) * 0.45; // 45% sur le reste
             return impot;
         }
     }
