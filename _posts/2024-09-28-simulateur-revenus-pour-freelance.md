@@ -51,15 +51,20 @@ lang: fr
         let cotisationsSocialesEurlIS = beneficeNetEurlIS * 0.45
         let cotisationsSocialesEurlIR = 0
 
-        let revenuImposableSasuIS = salaireNet + autresRevenus + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
-        let revenuImposableSasuIR = ca - salaireNet * 0.54 + autresRevenus // les charges patronales sont deductibles
-        let revenuImposableEurlIS = salaireNet * 0.9 + autresRevenus + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
-        let revenuImposableEurlIR = ca - chargesSocialesEurlIR + autresRevenus // les charges sont deductibles ?
+        let revenuImposableSasuIS = salaireNet + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
+        let revenuImposableSasuIR = ca - salaireNet * 0.54 // les charges patronales sont deductibles
+        let revenuImposableEurlIS = salaireNet * 0.9 + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
+        let revenuImposableEurlIR = ca - chargesSocialesEurlIR // les charges sont deductibles ?
 
-        let irSasuIS = calculImpot2(revenuImposableSasuIS, nombreDeParts)
-        let irSasuIR = calculImpot2(revenuImposableSasuIR, nombreDeParts) // les charges patronales sont deductibles
-        let irEurlIS = calculImpot2(revenuImposableEurlIS, nombreDeParts)
-        let irEurlIR = calculImpot2(revenuImposableEurlIR, nombreDeParts)
+        let ratioIrSasuIS = revenuImposableSasuIS / (revenuImposableSasuIS + autresRevenus)
+        let ratioIrSasuIR = revenuImposableSasuIR / (revenuImposableSasuIR + autresRevenus)
+        let ratioIrEurlIS = revenuImposableEurlIS / (revenuImposableEurlIS + autresRevenus)
+        let ratioIrEurlIR = revenuImposableEurlIR / (revenuImposableEurlIR + autresRevenus)
+
+        let irSasuIS = calculImpot2(revenuImposableSasuIS + autresRevenus, nombreDeParts)
+        let irSasuIR = calculImpot2(revenuImposableSasuIR + autresRevenus, nombreDeParts) // les charges patronales sont deductibles
+        let irEurlIS = calculImpot2(revenuImposableEurlIS + autresRevenus, nombreDeParts)
+        let irEurlIR = calculImpot2(revenuImposableEurlIR + autresRevenus, nombreDeParts)
 
         let flatTaxSasuIS = beneficeNetSasuIS * ((imposition == "flat_tax") ? 0.30 : 0.172)
         let flatTaxSasuIR = 0
@@ -71,10 +76,10 @@ lang: fr
         let dividendesNetEurlIS = beneficeNetEurlIS - flatTaxEurlIS - cotisationsSocialesEurlIS
         let dividendesNetEurlIR = 0
 
-        let revenuNetSasuIS = salaireNet - irSasuIS[0] + dividendesNetSasuIS
-        let revenuNetSasuIR = ca - chargesSocialesSasuIR - irSasuIR[0]
-        let revenuNetEurlIS = salaireNet - irEurlIS[0] + dividendesNetEurlIS
-        let revenuNetEurlIR = ca - chargesSocialesEurlIR - irEurlIR[0]
+        let revenuNetSasuIS = salaireNet - irSasuIS[0] * ratioIrSasuIS + dividendesNetSasuIS
+        let revenuNetSasuIR = ca - chargesSocialesSasuIR - irSasuIR[0] * ratioIrSasuIR
+        let revenuNetEurlIS = salaireNet - irEurlIS[0] * ratioIrEurlIS + dividendesNetEurlIS
+        let revenuNetEurlIR = ca - chargesSocialesEurlIR - irEurlIR[0] * ratioIrEurlIR
         // Affiche le résultat
         //document.getElementById("salaireSuperBrutSasuIS").innerText = salaireSuperBrutSasuIS;
         document.getElementById("chargesSocialesSasuIS").innerText = show(chargesSocialesSasuIS);
@@ -127,7 +132,12 @@ lang: fr
        } 
 
     function calculImpot2(salaireNet, nombreDeParts) {
+        // PLAFONNEMENT DES EFFETS DU QUOTIENT FAMILIAL
         let impot = nombreDeParts * calculImpot(salaireNet / nombreDeParts)
+        if (nombreDeParts > 2) {
+            let impot2parts = 2 * calculImpot(salaireNet / 2)
+            impot = Math.max(impot, impot2parts - 1759 * (2 * (nombreDeParts - 2)))
+        }
         return [impot, impot/salaireNet]
     }
 
