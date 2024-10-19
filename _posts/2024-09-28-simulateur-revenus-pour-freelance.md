@@ -328,3 +328,4 @@ car elles ne modifient pas la logique de comparaison. Il vous suffit de soustrai
 - [Simulateur pour freelance en SASU](http://sasu.mokatech.net/)
 - [Urssaf - simulateur SASU](https://mon-entreprise.urssaf.fr/simulateurs/sasu)
 - [Urssaf - simulateur EURL](https://mon-entreprise.urssaf.fr/simulateurs/eurl)
+- [Calcul de l'IR](https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2024/pdf_som/21-calcul_impot_361a374.pdf)
