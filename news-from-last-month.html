@@ -1,0 +1,20 @@
+---
+title: News from last month
+layout: page
+lang: fr
+---
+<ul class="unstyled">
+    {% assign sorted_news = site.news | sort: "date" | reverse %}
+    {% for news in sorted_news %}
+    <li>
+        <span class="time">{{ news.date | date_to_string }}</span>
+        <a href="{{ news.url }}">
+            {% if news.lang == "fr" %}
+            <img src="/assets/french-flag.png" alt="[french]"/>
+            {% endif %}
+            {% if news.lang == "en" %}
+            <img src="/assets/british-flag.png" alt="[english]"/>
+            {% endif %} {{ news.title }}</a>
+    </li>
+    {% endfor %}
+</ul>

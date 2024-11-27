@@ -1,0 +1,10 @@
+https://julien.danjou.info/p/how-to-be-a-great-software-engineer
+https://gist.github.com/adamw/ff91be0f7002c1ccea4ce2c5af058bf8
+https://xuanwo.io/2024/07-rewrite-bigdata-in-rust
+https://stackoverflow.blog/2024/09/04/best-practices-for-cost-efficient-kafka-clusters
+https://jvns.ca/blog/2024/09/12/reasons-i--still--love-fish/
+https://une-tasse-de.cafe/blog/nats/
+https://dev.to/lifen/as-rails-developers-why-we-are-excited-about-postgresql-17-27nj
+https://github.com/scala/scala/releases/tag/v2.13.15
+https://www.postgresql.org/about/news/postgresql-17-released-2936/
+https://www.thebigwhale.io/article/charles-guillemet-ledger-avec-ce-protocole-vos-donnees-vous-appartiennent-vraiment

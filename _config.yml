@@ -38,8 +38,13 @@ plugins:
 
 header_pages:
   - index.html
+  - news-from-last-month.html
   - a-propos.md
   - bookmarks.html
+
+collections:
+  news:
+    output: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -53,6 +58,7 @@ exclude:
   - Dockerfile
   - "*.sh"
   - nginx
+  - news-raw
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/

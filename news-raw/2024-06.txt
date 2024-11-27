@@ -1,0 +1,8 @@
+https://blog.nyrkio.com/2024/06/27/an-introduction-to-benchmarks/
+https://eed3si9n.com/10things/
+https://www.jeffrey-analyst.cafe/posts/001-literature?p=1
+http://www.lihaoyi.com/post/12yearsofthecomlihaoyiScalaPlatform.html
+https://www.ginnieandfifounet.com/jpb/slides/Generational%20Z%20GC.pdf
+https://bszwej.medium.com/domain-driven-design-with-fp-in-scala-21b557f94aa5
+https://jjfumero.github.io/posts/2024/06/21/book-review-jvm-performance-engineering
+http://nataliiadziubenko.com/2023/11/13/the-hidden-dynamic-life-of-Java.html
