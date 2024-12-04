@@ -1,3 +1,6 @@
 https://candost.blog/on-good-software-engineers/
 https://principledgraphql.com/
 https://alexn.org/blog/2024/11/20/join-the-open-web/
+https://www.youtube.com/watch?v=4yPMD6cykQM
+https://softwaremill.com/what-is-functional-programming/
+https://blog.pierre-ricadat.com/idiomatic-dependency-injection-for-zio-applications-in-scala
