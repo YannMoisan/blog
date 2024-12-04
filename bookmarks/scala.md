@@ -78,3 +78,11 @@ Here is the list of my favorite articles collected during my 10 years of languag
 - [Travis Brown](https://meta.plasm.us/), author of circe
 - [Typelevel](https://typelevel.org/blog/), the blog of the typelevel organization
 - [Erik Bruchez](https://blog.bruchez.name/categories/programming/)
+- [Jonas Boner](https://jonasboner.com/), CTO of Lightbend
+- [Debasish Ghosh](https://debasishg.blogspot.com/), author of Functional and Reactive Domain Modeling
+- [Adam Warski](https://warski.org/), R&D at SoftwareMill
+- [Eugene Yokota](https://eed3si9n.com/), sbt core dev
+- [Mateusz Kubuszok](https://kubuszok.com/), author of chimney
+- [Gabriel Volpe](https://gvolpe.com/), author of Practical FP in Scala
+- [Alexandru Nedelcu](https://alexn.org/), author of monix
+- [Nicolas Rinaudo](https://nrinaudo.github.io/), awesome speaker
