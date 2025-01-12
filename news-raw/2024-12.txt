@@ -1,0 +1,16 @@
+https://www.data.gouv.fr/fr/posts/telecharger-des-donnees-massives-au-format-parquet/
+https://aws.amazon.com/blogs/aws/new-amazon-s3-tables-storage-optimized-for-analytics-workloads/
+https://blog.rhetoricalmusings.com/posts/how-i-sbt1/
+https://nicokosi.github.io/nix-terminal-tricks-en.html
+https://softwaremill.com/scala-space-in-2025/
+https://kubuszok.com/2024/modeling-in-scala-part-1/
+https://vbergeron.github.io/posts/0002-refinements/
+https://www.thecoder.cafe/p/streetlight-effect
+https://opentelemetry.io/blog/2024/collecting-otel-compliant-java-logs-from-files/
+https://usbeketrica.com/fr/article/jay-graber-la-patronne-du-reseau-social-bluesky-qui-fait-trembler-elon-musk
+https://blog.dataengineer.io/p/how-i-prepared-for-a-staff-data-engineer
+https://mcorbin.fr/posts/2024-12-19-scale-team-dev/
+https://softwaremill.com/what-scala-has-to-offer-for-java-devs/
+https://emmanuelbernard.com/blog/2024/12/19/diataxis/
+https://blog.malt.engineering/advocating-for-more-infrastructure-components-tests-b47a1917a9d6
+https://www.youtube.com/watch?v=8sccqfvvXho&t=1s
