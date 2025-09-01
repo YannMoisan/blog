@@ -6,7 +6,7 @@ lang: fr
 <ul class="unstyled">
     {% for post in site.posts %}
     <li>
-        <span class="time">{{ post.date | date_to_string }}</span>
+        <span class="time" style="display: inline-block; width: 120px;">{{ post.date | date_to_string }}</span>
         <a href="{{ post.url }}">
             {% if post.lang == "fr" %}
             <img src="/assets/french-flag.png" alt="[french]"/>
