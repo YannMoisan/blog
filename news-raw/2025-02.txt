@@ -1,0 +1,13 @@
+https://softwaremill.com/10-years-of-rust-code-community-industry-standards/
+https://medium.com/teads-engineering/the-caching-strategy-of-our-teads-ssp-b0e152e951d0
+https://readtfb.com/posts/2025-02-25-mcp/
+https://scala-lang.org/highlights/2025/02/06/highlights-2024.html
+https://blog.pierre-ricadat.com/scala-3-migration-report-from-the-field
+https://www.loicmathieu.fr/wordpress/informatique/java-vers-une-integrite-par-defaut-de-la-jvm/
+https://andysblog.uk/why-blog-if-nobody-reads-it/
+https://www.anthropic.com/news/claude-3-7-sonnet
+https://www.shayon.dev/post/2025/40/scaling-with-postgresql-without-boiling-the-ocean/
+https://www.massdriver.cloud/blogs/devops-is-bullshit
+https://www.sqlnoir.com/
+https://european-alternatives.eu/
+https://github.com/johnousterhout/aposd-vs-clean-code/blob/main/README.md

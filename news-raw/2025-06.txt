@@ -1,0 +1,7 @@
+https://cekrem.github.io/posts/programming-as-theory-building-naur/
+https://www.morling.dev/ai/
+https://netflixtechblog.com/uda-unified-data-architecture-6a6aee261d8d
+https://pierrezemb.fr/posts/thank-you-datafusion/
+https://tech.devsisters.com/posts/scala-for-game-server-development/
+https://slides.com/ereold/modeliser-domaine-metiers-types
+https://kevinmahoney.co.uk/articles/my-principles-for-building-software/

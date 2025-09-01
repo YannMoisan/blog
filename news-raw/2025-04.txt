@@ -1,0 +1,11 @@
+https://alexn.org/blog/2025/04/02/tagged-vs-untagged-unions-in-scala/
+https://endler.dev/2025/best-programmers/
+https://ittavern.com/ssh-server-hardening/
+https://lucianonooijen.com/blog/why-i-stopped-using-ai-code-editors/
+https://www.morling.dev/blog/building-native-binary-for-apache-kafka-macos/
+https://ziobrando.substack.com/p/remote-work-is-fooling-you
+https://www.morling.dev/blog/ingesting-debezium-events-from-kafka-with-flink-sql/
+https://rustyrazorblade.com/post/2025/04-compaction-throughput/
+https://www.youtube.com/watch?v=nyMwp7--rY4
+https://www.youtube.com/watch?v=Vy-0LL0REnI
+https://www.sdlhasldgasldfj.org/

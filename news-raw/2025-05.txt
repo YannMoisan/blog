@@ -1,0 +1,9 @@
+https://blog.mozilla.org/en/mozilla/building-whats-next/
+https://lifen.substack.com/p/5-notion-databases-to-rule-them-all
+https://github.com/dacr/the-rules-for-good-code-examples
+https://www.buoyantdata.com/blog/2025-04-22-rust-is-good-for-the-climate.html
+https://codingismycraft.blog/index.php/2025/05/27/the-hidden-cost-of-skipping-the-fundamentals-in-the-age-of-ai
+https://spark.apache.org/releases/spark-release-4-0-0.html
+https://duckdb.org/2025/05/27/ducklake.html
+https://medium.com/@tachem_88813/how-to-size-and-scale-apache-cassandra-clusters-for-optimal-performance-with-real-benchmarks-e830e16183ad
+https://scala-lang.org/blog/2025/05/28/scala-days-2025-announcement.html

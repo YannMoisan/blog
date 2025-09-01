@@ -1,0 +1,9 @@
+https://blog.daniel-beskin.com/2025-01-07-random-scala-tip-697-avoid-anon-func-deps
+https://www.loicmathieu.fr/wordpress/informatique/java-24-quoi-de-neuf/
+https://www.howtocodeit.com/articles/master-hexagonal-architecture-rust
+https://rachelbythebay.com/w/2025/01/04/cruft/
+https://jvns.ca/blog/2025/01/11/getting-a-modern-terminal-setup/
+https://github.com/bloodyowl/review-guidelines
+https://motherduck.com/blog/data-engineering-toolkit-essential-tools/#simple-orchestration
+https://diaspora-fr.org/alternatives.pdf
+https://www.infoq.com/articles/rethinking-medallion-architecture/
