@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Soirée TDD en pratique - rencontre mensuelle Software Craftsmanship | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Soirée TDD en pratique - rencontre mensuelle Software Craftsmanship" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Retour d’expérience de la rencontre mensuelle Software Craftsmanship consacrée à TDD en pratique" />
+<meta property="og:description" content="Retour d’expérience de la rencontre mensuelle Software Craftsmanship consacrée à TDD en pratique" />
+<link rel="canonical" href="https://www.yannmoisan.com/soiree-software-cratfsmanship.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/soiree-software-cratfsmanship.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-05-25T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Soirée TDD en pratique - rencontre mensuelle Software Craftsmanship" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2012-05-25T00:00:00+02:00","datePublished":"2012-05-25T00:00:00+02:00","description":"Retour d’expérience de la rencontre mensuelle Software Craftsmanship consacrée à TDD en pratique","headline":"Soirée TDD en pratique - rencontre mensuelle Software Craftsmanship","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/soiree-software-cratfsmanship.html"},"url":"https://www.yannmoisan.com/soiree-software-cratfsmanship.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Soirée TDD en pratique - rencontre mensuelle Software Craftsmanship</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2012-05-25T00:00:00+02:00" itemprop="datePublished">May 25, 2012
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>J’ai participé hier à la <a href="http://www.meetup.com/paris-software-craftsmanship/events/63398382/?a=ed1_l6">7ème
+soirée</a> de la
+communauté Software Craftsmanship dont le sujet était TDD en pratique. La soirée était sponsorisée
+par Arolla et un sympathique buffet permettait de prendre des forces avant la session. Ça commence
+par une brève présentation de Joel Costigliola sur le framework d’assertion
+<a href="https://github.com/alexruiz/fest-assert-2.x/wiki">fest-assert</a>. Cyrille nous présente alors les
+<a href="http://www.jbrains.ca/permalink/the-four-elements-of-simple-design">four element of simple design</a>.</p>
+
+<h2 id="kata">Kata</h2>
+
+<p>Nous votons ensuite entre 2 katas pour retenir celui sur l’écriture en chiffres romains. Le but est
+de faire 3 sessions de 30 min en <em>pair programming</em> en changeant de binôme à chaque fois
+(finalement, le temps ne permettre de ne faire que 2 sessions). Je code avec Yakhya une première
+session et nous arrivons à 13, Cyrille rappelle pendant ce temps les bases de TDD : le fameux cycle
+Red, Green, Refactor ainsi que l’obligation de ne pas anticiper prématurément la suite. On repart de
+zéro avec Loic, ce qui permettra d’aller jusqu’à 39 en utilisant la récursivité. La soirée se
+termine par Cyrille et son binôme (je ne connais pas son prénom) qui refont l’exercice en projetant
+leur écran. Ils gagnent du temps en mettant le test et l’implémentation dans la même classe et nous
+rappellent l’existence des <a href="http://junit.sourceforge.net/javadoc/org/junit/runners/Parameterized.html">tests paramétrés de
+JUnit</a>.</p>
+
+<h2 id="bilan">Bilan</h2>
+
+<p>Pour ma première participation à cette communauté, c’était très positif. Cela permet de pratiquer
+une méthode que l’on n’utilise pas toujours sur les projets. J’ai appris des astuces (merci à Loic
+pour le plugin Eclipse mousefeed). J’ai vraiment apprécié le temps économisé grâce au plugin
+infinitest. Et j’ai rencontré des gens motivés voire passionnés. Je referais ce kata, en suivant les
+pistes lancées par Cyrille : limiter la taille des méthodes à 3 lignes et utiliser exclusivement le
+refactoring Eclipse.</p>
+
+  </div><a class="u-url" href="/soiree-software-cratfsmanship.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

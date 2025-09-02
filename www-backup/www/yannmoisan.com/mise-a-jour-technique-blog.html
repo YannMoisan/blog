@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Mise à jour technique de mon blog | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Mise à jour technique de mon blog" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="J’ai mis à jour le système d’exploitation Ubuntu, configurer HTTPS et HTTP/2, améliorer la sécurité et les performances et changer le générateur de contenu statique." />
+<meta property="og:description" content="J’ai mis à jour le système d’exploitation Ubuntu, configurer HTTPS et HTTP/2, améliorer la sécurité et les performances et changer le générateur de contenu statique." />
+<link rel="canonical" href="https://www.yannmoisan.com/mise-a-jour-technique-blog.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/mise-a-jour-technique-blog.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-09T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Mise à jour technique de mon blog" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-03-09T00:00:00+01:00","datePublished":"2021-03-09T00:00:00+01:00","description":"J’ai mis à jour le système d’exploitation Ubuntu, configurer HTTPS et HTTP/2, améliorer la sécurité et les performances et changer le générateur de contenu statique.","headline":"Mise à jour technique de mon blog","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/mise-a-jour-technique-blog.html"},"url":"https://www.yannmoisan.com/mise-a-jour-technique-blog.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Mise à jour technique de mon blog</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2021-03-09T00:00:00+01:00" itemprop="datePublished">Mar 9, 2021
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="un-nouvel-hébergeur">Un nouvel hébergeur</h2>
+
+<p>Souvenez-vous, <a href="/hebergement.html">mon blog est hébergé sur un VPS</a>. C’est donc à moi de maintenir le système à jour. Et vu que l’OS est encore un Ubuntu 16.04, 
+je ne l’avais pas fait depuis longtemps. La mise à jour ne fonctionne pas, je décide donc de réinstaller via l’interface web
+de mon fournisseur. Et c’est là que les ennuis commencent. Ubuntu 20.04 refuse de s’installer et le support technique est catastrophique.</p>
+
+<p>Je suis donc contraint de changer de fournisseur. Je continue de soutenir la <em>french tech</em> et choisis <a href="https://www.ovh.com/fr/">OVH</a>.
+J’ai choisi l’offre la moins chère : VPS Starter (1 vCPU 2 GB RAM 20 GB disk) pour 3,6 € par mois. Après quelques minutes, j’ai un nouveau
+serveur fraichement installé avec Ubuntu 20.04.</p>
+
+<h2 id="la-configuration-ssh">La configuration SSH</h2>
+<p>Juste après l’installation, je fais la configuration minimale pour SSH :</p>
+<ul>
+  <li>je change le port par défaut du serveur SSH pour réduire radicalement les attaques de <em>bots</em>. 
+<code class="language-plaintext highlighter-rouge">journalctl</code> montre que ces erreurs disparaissent.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sshd[2823]: Invalid user admin from 186.89.246.141 port 24850
+sshd[2823]: pam_unix(sshd:auth): check pass; user unknown
+sshd[2823]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=186.89.246.141
+sshd[2823]: Failed password for invalid user admin from 186.89.246.141 port 24850 ssh2
+sshd[2823]: Connection closed by invalid user admin 186.89.246.141 port 24850 [preauth]
+</code></pre></div>    </div>
+  </li>
+  <li>je mets à jour l’entrée pour mon VPS dans <code class="language-plaintext highlighter-rouge">~/.ssh/config</code> (avec le nouveau port)</li>
+  <li>je copie ma clé SSH sur le serveur avec <code class="language-plaintext highlighter-rouge">ssh-copy-id</code> pour me connecter sans mot de passe</li>
+</ul>
+
+<h2 id="la-configuration-nginx">La configuration NGINX</h2>
+<p>J’utilise la configuration par défaut pour <code class="language-plaintext highlighter-rouge">/etc/nginx/nginx.conf</code>. Je dois juste :</p>
+<ul>
+  <li>copier <a href="https://github.com/YannMoisan/blog/blob/master/nginx/blog">la config du blog</a> dans <code class="language-plaintext highlighter-rouge">/etc/nginx/sites-available/blog</code></li>
+  <li>ajouter le lien symbolique vers <code class="language-plaintext highlighter-rouge">/etc/nginx/sites-enabled</code></li>
+  <li>copier le contenu statique dans <code class="language-plaintext highlighter-rouge">/var/www/yannmoisan.com</code>
+    <ul>
+      <li>créer le répertoire : <code class="language-plaintext highlighter-rouge">sudo mkdir -p /var/www/yannmoisan.com</code></li>
+      <li>changer le propriétaire : <code class="language-plaintext highlighter-rouge">sudo chown ubuntu:ubuntu /var/www/yannmoisan.com</code></li>
+      <li>synchroniser le contenu : <code class="language-plaintext highlighter-rouge">rsync -a _site/ blog:/var/www/yannmoisan.com</code></li>
+    </ul>
+  </li>
+  <li>recharger nginx : <code class="language-plaintext highlighter-rouge">systemctl reload nginx</code></li>
+</ul>
+
+<h2 id="https">HTTPS</h2>
+<p>Mon site n’était pas disponible en HTTPS. J’ai suivi la documentation pour utiliser <a href="https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/">Let’s encrypt avec NGINX</a>.
+L’outil modifie la configuration NGINX; le traffic HTTP est ainsi redirigé en HTTPS. Le cadenas dans le navigateur montre bien que tout fonctionne.</p>
+
+<h2 id="http2">HTTP/2</h2>
+<p>HTTPS est un prérequis pour HTTP/2. J’ai donc pu l’activer simplement en modifiant la ligne <code class="language-plaintext highlighter-rouge">listen 443 ssl;</code> par <code class="language-plaintext highlighter-rouge">listen 443 ssl http2;</code></p>
+
+<h2 id="sécurité">Sécurité</h2>
+<p>Le site <a href="https://webpagetest.org">webpagetest</a> permet de tester la performance de son site. Ma note en sécurité est F.
+DigitalOcean offre <a href="https://www.digitalocean.com/community/tools/nginx">un outil pour configurer nginx</a>. J’ai recopié les valeurs
+de <code class="language-plaintext highlighter-rouge">security.conf</code> qui permettent d’ajouter des <em>headers</em> de sécurité.</p>
+
+<p>On peut utiliser <code class="language-plaintext highlighter-rouge">httpie</code> pour vérifier</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ http https://www.yannmoisan.com
+HTTP/1.1 200 OK
+...
+Content-Security-Policy: default-src 'self' http: https: data: blob: 'unsafe-inline'
+Referrer-Policy: no-referrer-when-downgrade
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+</code></pre></div></div>
+
+<p>Ma note est maintenant A+.</p>
+
+<h2 id="performance">Performance</h2>
+<p>webpagetest a aussi détecté un problème sur le cache des fonts et un problème sur la compression de certains fichiers.</p>
+
+<p>Après les correctifs, voici l’évolution des différents scores :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Security score</th>
+      <th>First Byte Time</th>
+      <th>Keep-alive Enabled</th>
+      <th>Compress Transfer</th>
+      <th>Compress Images</th>
+      <th>Cache static content</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>avant</td>
+      <td>F</td>
+      <td>B</td>
+      <td>A</td>
+      <td>C</td>
+      <td>A</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>après</td>
+      <td>A+</td>
+      <td>A</td>
+      <td>A</td>
+      <td>A</td>
+      <td>A</td>
+      <td>A</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Vous pouvez consulter <a href="https://webpagetest.org/result/210309_AiB3_d67682d3e764a6cff8a772ad588e4583/">le résultat</a>.</p>
+
+<p>lighthouse est un autre outil populaire. Vous pouvez tester votre site sur <a href="https://web.dev/measure/">web.dev</a>.
+Un problème remonté est <a href="https://web.dev/render-blocking-resources/">render-blocking resources</a>. Pour résoudre cela, j’ai hébergé les fonts google sur mon serveur comme recommandé 
+<a href="https://sia.codes/posts/making-google-fonts-faster/">ici</a> ou 
+<a href="https://wpspeedmatters.com/self-host-google-fonts/">là</a>.
+La métrique <em>First Contentful Paint</em> est ainsi passé de 2.5 s à 1 s</p>
+
+<h2 id="migration-à-jekyll">Migration à jekyll</h2>
+<p>Mon blog était généré par un script shell maison. Même si cela était intéressant à faire, le code est devenu peu lisible
+et peu maintenable. Il existe aujourd’hui de nombreux générateurs de sites statiques et j’ai migré sur une solution éprouvée : <a href="https://jekyllrb.com/">jekyll</a> 
+et ainsi soigner un peu mon syndrome <a href="https://en.wikipedia.org/wiki/Not_invented_here">NIH</a>.</p>
+
+<p>Jusqu’ici, j’écrivais mes articles en HTML. Ce qui est pénible à la longue. Jekyll supportant HTML et Markdown, j’ai migré
+tous mes posts en Markdown avec l’aide de <code class="language-plaintext highlighter-rouge">pandoc</code>.</p>
+
+<p>Et pour finir, j’ai opté pour le thème par défaut : minima. Le site s’affiche mieux sur mobile (à croire que le dev front est un vrai métier).</p>
+
+<h2 id="url-canonique">URL canonique</h2>
+<p>Mon site était disponible à travers ces 2 urls : <a href="http://www.yannmoisan.com">http://www.yannmoisan.com</a> et 
+<a href="http://yannmoisan.com">http://yannmoisan.com</a>. 
+Le support de HTTPS a encore ajouté deux nouvelles variantes : <a href="http://www.yannmoisan.com">https://www.yannmoisan.com</a> et
+<a href="http://yannmoisan.com">https://yannmoisan.com</a>. Afin d’aider les moteurs de recherche à ne pas détecter ces contenus 
+comme dupliqués, j’ai déclaré une URL canonique sur chaque page.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"canonical"</span> <span class="na">href=</span><span class="s">"https://www.yannmoisan.com/mise-a-jour-technique-blog.html"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>L’impact devrait être visible dans la <a href="https://search.google.com/search-console">google search console</a>.</p>
+
+<h2 id="problèmes-restants">Problèmes restants</h2>
+<ul>
+  <li>l’administration du système m’incombe (mise à jour des paquets, …)</li>
+  <li>la configuration du serveur est manuelle (elle pourrait être automatisée avec ansible par ex.)</li>
+  <li>il n’y a pas de haute disponibilité. Mon site est inaccessible lors d’un incident comme l’<a href="https://www.lemonde.fr/societe/article/2021/03/10/a-strasbourg-un-important-incendie-sur-le-site-de-l-entreprise-ovh-classe-seveso_6072548_3224.html">incendie du 10/03/2021.</a>.</li>
+</ul>
+
+<blockquote>
+  <p>Nous faisons actuellement face à un incident majeur au sein de notre datacentre de Strasbourg, avec un feu déclaré dans le bâtiment SBG2.</p>
+</blockquote>
+
+<ul>
+  <li>il y a peu de monitoring</li>
+</ul>
+
+<h2 id="liens">Liens</h2>
+
+<ul>
+  <li><a href="https://jgefroh.medium.com/a-guide-to-using-nginx-for-static-websites-d96a9d034940">un guide complet pour utiliser nginx pour un site statique [en]</a></li>
+  <li><a href="https://docs.ovh.com/fr/vps/conseils-securisation-vps/">sécuriser un VPS - OVH [fr]</a></li>
+</ul>
+
+  </div><a class="u-url" href="/mise-a-jour-technique-blog.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

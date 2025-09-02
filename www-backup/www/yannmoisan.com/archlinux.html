@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Les pièges à éviter avec Archlinux | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Les pièges à éviter avec Archlinux" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Les pièges à éviter avec Archlinux" />
+<meta property="og:description" content="Les pièges à éviter avec Archlinux" />
+<link rel="canonical" href="https://www.yannmoisan.com/archlinux.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/archlinux.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-04-15T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Les pièges à éviter avec Archlinux" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2013-04-15T00:00:00+02:00","datePublished":"2013-04-15T00:00:00+02:00","description":"Les pièges à éviter avec Archlinux","headline":"Les pièges à éviter avec Archlinux","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/archlinux.html"},"url":"https://www.yannmoisan.com/archlinux.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Les pièges à éviter avec Archlinux</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2013-04-15T00:00:00+02:00" itemprop="datePublished">Apr 15, 2013
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>update 2014-03-27 : Garmin Forerunner 305 et serveur d’impression Freebox</p>
+
+<p>Je suis passé sur Archlinux, car j’ai été déçu par Ubuntu (<a href="ubuntu-12-10.html">comme je l’ai déjà
+expliqué</a>). Je cherchais une distribution plus configurable et on
+(<a href="https://twitter.com/OlivierCroisier">Olivier</a>, <a href="https://twitter.com/FreakyNadley">Nahir</a>, Alkino)
+m’a conseillé Archlinux. Cela permet de revenir à plus de simplicité. Je profite d’ailleurs de cette
+expérience pour tester i3, un tiling window manager.</p>
+
+<h2 id="beep">beep</h2>
+
+<p>La première chose à faire est de désactiver le beep, en ajoutant dans le <code class="language-plaintext highlighter-rouge">.xinitrc</code>.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xset <span class="nt">-b</span>
+</code></pre></div></div>
+
+<h2 id="vim">Vim</h2>
+
+<p>Un des premiers programmes que j’installe est Vim. Malheureusement, le presse-papiers <code class="language-plaintext highlighter-rouge">"*p</code> ne
+fonctionne pas. En fait, le paquet est minimal et il faut installer gvim pour avoir le support du
+presse-papiers.</p>
+
+<h2 id="zathura">Zathura</h2>
+
+<p>Zathura est un lecteur de PDF léger et clavier centric, avec les raccourcis de Vim. Après
+l’installation, Zathura affiche un écran noir. À l’instar de Vim, les packageurs de Arch ont le
+souci de gérer les dépendances de manière minimale. Les moteurs de rendu pdf sont en dépendances
+optionnelles. Il faut donc en installer un à la main.</p>
+
+<h2 id="intellij-idea">IntelliJ Idea</h2>
+
+<p>IntelliJ Idea est le meilleur IDE pour Java. Mais il plante au démarrage en affichant l’erreur
+suivante :
+<code class="language-plaintext highlighter-rouge">Caused by: java.lang.UnsatisfiedLinkError: /usr/lib/jvm/java-7-openjdk/jre/lib/amd64/libsplashscreen.so: libgif.so.4</code>.
+Il faut installer giflib.</p>
+
+<h2 id="imprimante">Imprimante</h2>
+
+<p>Il faut installer les paquets <code class="language-plaintext highlighter-rouge">cups</code> (le serveur d’impression) et <code class="language-plaintext highlighter-rouge">gutenprint</code> (un ensemble de
+drivers). Il reste alors à démarrer le service : <code class="language-plaintext highlighter-rouge">systemctl start cups</code>. J’ai opté pour un démarrage
+à la main, uniquement en cas de besoin. On peut alors configurer alors l’imprimante, une Canon PIXMA
+360 dans mon cas, dans un navigateur <a href="http://localhost:631">localhost:631</a> grâce à l’interface web
+de cups.</p>
+
+<h2 id="touches-multimédia">Touches multimédia</h2>
+
+<p>Pour pouvoir régler le volume à l’aide des touches multimédia, il faut installer le paquet
+<code class="language-plaintext highlighter-rouge">alsa-utils</code> qui contient le programme amixer. Puis installer le paquet <code class="language-plaintext highlighter-rouge">xorg-xev</code> qui contient le
+programme xev, qui nous permettra de trouver les codes des touches multimédia. Il reste alors à
+configurer i3, voici l’extrait de ma config :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bind 123 exec amixer -q set Master 2dB+ unmute
+bind 122 exec amixer -q set Master 2dB- unmute
+bind 121 exec amixer -q set Master toggle
+</code></pre></div></div>
+
+<h2 id="réseau">Réseau</h2>
+
+<p>Je gère aussi le réseau à la main. J’utilise le programme wifi-menu pour le wifi et j’utilise la
+commande suivante pour me connecter en ethernet <code class="language-plaintext highlighter-rouge">netcfg -u ethernet-dhcp</code>, ce qui correspond au
+profil dans mon répertoire <code class="language-plaintext highlighter-rouge">etc/network.d/</code>.</p>
+
+<h2 id="le-serveur-dimpression-de-la-freebox">Le serveur d’impression de la Freebox</h2>
+
+<p>En tant que possesseur d’une Freebox Révolution et d’une imprimante USB, je peux bénéficier du
+serveur d’impression de la Freebox en branchant mon imprimante en USB dessus.</p>
+
+<p>Première étape, activez le <strong>Partage Windows</strong> et le <strong>Partage d’imprimante</strong> dans l’interface de
+configuration de la Freebox.</p>
+
+<p>Deuxième étape, qui m’a fait pas mal galérer : configurer cups. Dans l’interface Web de cups, faire
+<strong>Administration &gt; Add printer</strong>. Cocher la case <strong>Window Printer via SAMBA</strong>. Et l’URI est
+<code class="language-plaintext highlighter-rouge">smb://WORKGROUP/FREEBOX/Canon%20MX360%20series</code>. La partie Workgroup est obligatoire pour moi,
+contrairement à ce que l’on trouve sur le web. Pour vous aider à trouver l’URI, vous pouvez utiliser
+la commande suivante :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    smbclient -L mafreebox.freebox.fr
+</code></pre></div></div>
+
+<p>Dans mon cas, cela affiche :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        Sharename       Type      Comment
+        ---------       ----      -------
+        Disque dur      Disk      AutoShare of fbxhdiskd partition 2
+        Canon MX360 series Printer   
+        Canon MX360 series FAX Printer   
+        IPC$            IPC       IPC Service (Freebox Server)
+
+        Server               Comment
+        ---------            -------
+        FREEBOX              Freebox Server
+
+        Workgroup            Master
+        ---------            -------
+        WORKGROUP            FREEBOX
+</code></pre></div></div>
+
+<h2 id="garmin-forerunner-305">Garmin Forerunner 305</h2>
+
+<p>Le Forerunner 305 est une montre GPS pour la pratique de la course à pied. Malheureusement, Garmin
+ne fournit pas de pilotes pour Linux, et la montre n’est pas vue comme un simple disque dur quand on
+la connecte en USB.</p>
+
+<p>Voici cependant la marche à suivre pour l’utiliser. Tout d’abord, il faut blacklister le module
+gps_garmin. Ensuite, il faut installer <a href="https://code.google.com/archive/p/garmintools/">garmintools</a> et
+<a href="http://www.andreas-diesner.de/garminplugin">garminplugin</a>. Le premier est un ensemble d’outils en
+ligne de commande, qui implémente le protocole de communication avec la montre. Le second est un
+plugin Firefox, qui utilise le premier, afin de permettre le dialogue avec la montre depuis le
+navigateur. On peut alors récupérer automatiquement ses courses sur
+<a href="http://runkeeper.com">runkeeper</a>. À noter, le plugin ne fonctionne pas sur le site
+<a href="http://connect.garmin.com">connect.garmin.com</a>.</p>
+
+<p>Il subsiste un énorme problème : nous ne possédons pas nos données. Or, on peut y remédier
+facilement avec l’option <code class="language-plaintext highlighter-rouge">BackupWorkout</code>, désactivée par défaut dans le fichier
+<code class="language-plaintext highlighter-rouge">$HOME/.config/garminplugin/garminplugin.xml</code>. Le plugin fera ainsi lors de chaque transfert une
+copie en local des données. On a alors un fichier par session, au format
+<a href="http://en.wikipedia.org/wiki/Training_Center_XML">TCX</a>, qui est au format XML.</p>
+
+  </div><a class="u-url" href="/archlinux.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

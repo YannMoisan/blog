@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Sizeof in Scala | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Sizeof in Scala" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Size of in Scala" />
+<meta property="og:description" content="Size of in Scala" />
+<link rel="canonical" href="https://www.yannmoisan.com/sizeof-in-scala.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/sizeof-in-scala.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-10-20T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Sizeof in Scala" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-10-20T00:00:00+02:00","datePublished":"2019-10-20T00:00:00+02:00","description":"Size of in Scala","headline":"Sizeof in Scala","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/sizeof-in-scala.html"},"url":"https://www.yannmoisan.com/sizeof-in-scala.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Sizeof in Scala</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-10-20T00:00:00+02:00" itemprop="datePublished">Oct 20, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This blog post will show the impact of different ways to store a couple of integers in Scala on the
+memory footprint of a program.</p>
+
+<h2 id="reminder-on-the-jvm">Reminder on the JVM</h2>
+
+<p>Every object on the JVM has a header. It consists of a mark word and a klass pointer. On 64-bit
+architectures with a heap &lt; 32G (i.e. with compressed oops), the header has a size of 12 bytes.</p>
+
+<p>Java objects are 8-byte aligned by default. This can be changed with a JVM flag.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java <span class="nt">-XX</span>:+PrintFlagsFinal <span class="nt">-version</span> | <span class="nb">grep </span>ObjectAlignmentInBytes
+     intx ObjectAlignmentInBytes                    <span class="o">=</span> 8                                   <span class="o">{</span>lp64_product<span class="o">}</span>
+</code></pre></div></div>
+
+<p>So, the minimum object size is 16 bytes for modern 64-bit JDK since the object has 12-byte header,
+padded to a multiple of 8 bytes.</p>
+
+<p>The size of an object is the object header + the size of its fields + the overhead of alignment</p>
+
+<p>A primitive int takes 4 bytes</p>
+
+<p>A java.lang.Integer takes 16 bytes : 12 bytes for the header and 4 bytes for the field (yes, this is
+a huge overhead)</p>
+
+<h2 id="tools">Tools</h2>
+
+<p>Apache Spark, a tool for large-scale data processing, has a class to measure the size of an object : <code class="language-plaintext highlighter-rouge">SizeEstimator.estimate</code></p>
+
+<p>I use ammonite, a better Scala REPL that allow to dynamically load dependencies</p>
+
+<p>Let’s check the size of an <code class="language-plaintext highlighter-rouge">Integer</code></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="k">import</span> <span class="nn">$ivy.</span><span class="n">`org.apache.spark::spark-sql:2.4.0`</span>
+<span class="k">import</span> <span class="nn">$ivy.$</span>
+
+<span class="k">@</span> <span class="k">import</span> <span class="nn">org.apache.spark.util.SizeEstimator._</span>
+<span class="k">import</span> <span class="nn">org.apache.spark.util.SizeEstimator._</span>
+
+<span class="k">@</span> <span class="nf">estimate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Integer</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+<span class="n">res2</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">16L</span>
+</code></pre></div></div>
+
+<p>So far, so good !</p>
+
+<h2 id="comparing-different-ways-to-store-2-ints">Comparing different ways to store 2 ints</h2>
+
+<p>Let’s create a simple wrapper to store 2 <code class="language-plaintext highlighter-rouge">int</code></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">IntInt</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">j</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>The size is</p>
+
+<ul>
+  <li>object header : 12 bytes</li>
+  <li>2 <code class="language-plaintext highlighter-rouge">int</code> fields : 2 * 4 = 8 bytes</li>
+  <li>total = 20 bytes, so 24 bytes with alignment</li>
+</ul>
+
+<p>But it will be awkward to create classes for all combinations of types, so let’s create a generic
+pair object.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="k">class</span> <span class="nc">Pair</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span><span class="o">](</span><span class="k">val</span> <span class="nv">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="k">val</span> <span class="nv">b</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span>
+<span class="n">defined</span> <span class="k">class</span> <span class="nc">Pair</span>
+
+<span class="k">@</span> <span class="nf">estimate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Pair</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">))</span>
+<span class="n">res4</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">56L</span>
+</code></pre></div></div>
+
+<p>On the JVM, generics and primitive types don’t play well together. Here primitive types passed to
+the constructor need to be boxed to <code class="language-plaintext highlighter-rouge">java.lang.Integer</code> objects.</p>
+
+<p>Let’s check the number by hand. The size is</p>
+
+<ul>
+  <li>object header : 12 bytes</li>
+  <li>2 reference fields : 2 * 4 = 8 bytes</li>
+  <li>2 Integers : 2 * 16 = 32 bytes</li>
+  <li>total = 52 bytes, so 56 bytes with alignment</li>
+</ul>
+
+<p>In order to reduce the overhead due to boxing, Scala has a feature called specialized.</p>
+
+<p>In this case, the compiler will generate specialized classes for each combination of specialized
+argument types.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="k">case</span> <span class="k">class</span> <span class="nc">SpPair</span><span class="o">[</span><span class="kt">@specialized</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="kt">A</span>, <span class="kt">@specialized</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="kt">B</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">B</span><span class="o">)</span>
+<span class="n">defined</span> <span class="k">class</span> <span class="nc">SpPair</span>
+
+<span class="k">@</span> <span class="nf">estimate</span><span class="o">(</span><span class="nc">SpPair</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">))</span>
+<span class="n">res7</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">32L</span>
+</code></pre></div></div>
+
+<p>Surprisingly, because the specialization is supposed to solve the overhead issue, there is still a
+difference with the simple wrapper.</p>
+
+<p>Let’s dig into that</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="nc">SpPair</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="py">getClass</span>
+<span class="n">res8</span><span class="k">:</span> <span class="kt">Class</span><span class="o">[</span><span class="kt">?</span><span class="err">0</span><span class="o">]</span> <span class="k">=</span> <span class="k">class</span> <span class="nc">ammonite</span><span class="o">.</span><span class="py">$sess</span><span class="o">.</span><span class="py">cmd6$SpPair$mcII$sp</span>
+</code></pre></div></div>
+
+<p>The class name is <code class="language-plaintext highlighter-rouge">SpPair$mcII$sp</code> and not <code class="language-plaintext highlighter-rouge">SpPair</code>. it’s the class generated by the compiler.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="nc">SpPair</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="py">getClass</span><span class="o">.</span><span class="py">getDeclaredFields</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getType</span><span class="o">)</span>
+<span class="n">res9</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">?</span><span class="err">0</span><span class="o">]</span> <span class="k">forSome</span> <span class="o">{</span> <span class="k">type</span> <span class="kt">?</span><span class="err">0</span> <span class="o">}]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="n">int</span><span class="o">,</span> <span class="n">int</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>And this class has 2 fields of type <code class="language-plaintext highlighter-rouge">int</code>. So the size should be the same as that of the simple
+wrapper.</p>
+
+<p>Let’s see if there is a superclass …</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="nc">SpPair</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="py">getClass</span><span class="o">.</span><span class="py">getSuperclass</span>
+<span class="n">res10</span><span class="k">:</span> <span class="kt">Class</span><span class="o">[</span><span class="kt">?</span><span class="err">0</span><span class="o">]</span> <span class="k">=</span> <span class="k">class</span> <span class="nc">ammonite</span><span class="o">.</span><span class="py">$sess</span><span class="o">.</span><span class="py">cmd6$SpPair</span>
+</code></pre></div></div>
+
+<p>There is a superclass, it’s <code class="language-plaintext highlighter-rouge">SpPair</code>. Let’s have a look to the fields of the superclass</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@</span> <span class="nc">SpPair</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="py">getClass</span><span class="o">.</span><span class="py">getSuperclass</span><span class="o">.</span><span class="py">getDeclaredFields</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getType</span><span class="o">)</span>
+<span class="n">res11</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">Class</span><span class="o">[</span><span class="kt">?</span><span class="err">0</span><span class="o">]</span> <span class="k">forSome</span> <span class="o">{</span> <span class="k">type</span> <span class="kt">?</span><span class="err">0</span> <span class="o">}]</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="k">class</span> <span class="nc">java</span><span class="o">.</span><span class="py">lang</span><span class="o">.</span><span class="py">Object</span><span class="o">,</span> <span class="k">class</span> <span class="nc">java</span><span class="o">.</span><span class="py">lang</span><span class="o">.</span><span class="py">Object</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Unfortunately, the superclass has 2 fields of type <code class="language-plaintext highlighter-rouge">Object</code>, that will always be null for a
+specialized instance. Nevertheless, a reference field with a null value on the JVM take the same
+space as a non-null reference.</p>
+
+<p>so the size is</p>
+
+<ul>
+  <li>object header : 12 bytes</li>
+  <li>2 reference fields : 2 * 4 = 8 bytes</li>
+  <li>2 ints : 2 * 4 = 8 bytes</li>
+  <li>total = 28 bytes, so 32 bytes with alignment. (Q.E.D.)</li>
+</ul>
+
+<p>We can double-check with jol, another interesting tool when it comes to understanding memory
+consumption. Our <code class="language-plaintext highlighter-rouge">SpPair</code> class uses exactly the same mechanism as the <code class="language-plaintext highlighter-rouge">Tuple2</code> class from the scala
+standard library. So here is the result of jol on <code class="language-plaintext highlighter-rouge">scala.Tuple2$mcII$sp</code>, the specialized instance for
+pair of ints.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java -jar jol-cli-0.9-full.jar internals -cp /usr/local/Cellar/scala/2.13.1/libexec/lib/scala-library.jar 'scala.Tuple2$mcII$sp'                                                   
+
+Instantiated the sample instance via public scala.Tuple2$mcII$sp(int,int)
+
+scala.Tuple2$mcII$sp object internals:
+ OFFSET  SIZE               TYPE DESCRIPTION                               VALUE
+      0     4                    (object header)                           05 00 00 00 (00000101 00000000 00000000 00000000) (5)
+      4     4                    (object header)                           00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+      8     4                    (object header)                           85 0a 02 f8 (10000101 00001010 00000010 11111000) (-134083963)
+     12     4   java.lang.Object Tuple2._1                                 null
+     16     4   java.lang.Object Tuple2._2                                 null
+     20     4                int Tuple2$mcII$sp._1$mcI$sp                  0
+     24     4                int Tuple2$mcII$sp._2$mcI$sp                  0
+     28     4                    (loss due to the next object alignment)
+Instance size: 32 bytes
+Space losses: 0 bytes internal + 4 bytes external = 4 bytes total
+</code></pre></div></div>
+
+<p>Hopefully, the instance size computed by jol is also 32 bytes. It shows <code class="language-plaintext highlighter-rouge">java.lang.Object</code> fields <code class="language-plaintext highlighter-rouge">_1</code>
+and <code class="language-plaintext highlighter-rouge">_2</code> from the superclass and <code class="language-plaintext highlighter-rouge">int</code> fields from the subclass <code class="language-plaintext highlighter-rouge">_1$mcI$sp</code>, <code class="language-plaintext highlighter-rouge">_2$mcI$sp</code>.</p>
+
+<p>Let’s see a last solution with an array.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@ SizeEstimator.estimate(Array(1,2))
+res15: Long = 24L
+</code></pre></div></div>
+
+<p>The size is</p>
+
+<ul>
+  <li>object header : 12 bytes</li>
+  <li>length fields : 4 byte</li>
+  <li>2 ints : 2 * 4 = 8 bytes</li>
+  <li>total = 24 bytes</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Structure</th>
+      <th>Size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Simple Wrapper</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <td>Generic Pair</td>
+      <td>56</td>
+    </tr>
+    <tr>
+      <td>Specialized Pair</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td>Array</td>
+      <td>24</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>If you instantiate a lot of objects, it’s worth knowing the tradeoffs of each solution.</p>
+
+<h2 id="links-to-go-further">Links to go further</h2>
+
+<ul>
+  <li><a href="https://scalac.io/specialized-generics-object-instantiation/">specialized generics on scalac
+blog</a></li>
+  <li><a href="https://shipilev.net/jvm/anatomy-quarks/23-compressed-references/">compressed references</a></li>
+  <li><a href="https://shipilev.net/jvm/anatomy-quarks/24-object-alignment/">object alignment</a></li>
+  <li><a href="https://openjdk.java.net/projects/code-tools/jol/">jol</a></li>
+  <li><a href="https://www.javaworld.com/article/2077408/sizeof-for-java.html">sizeof for Java</a></li>
+</ul>
+
+
+  </div><a class="u-url" href="/sizeof-in-scala.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

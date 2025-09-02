@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Effet feu avec HTML 5 et Canvas | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Effet feu avec HTML 5 et Canvas" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Effet feu avec HTML 5 et Canvas" />
+<meta property="og:description" content="Effet feu avec HTML 5 et Canvas" />
+<link rel="canonical" href="https://www.yannmoisan.com/effet-feu-avec-html-5-et-canvas-2.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/effet-feu-avec-html-5-et-canvas-2.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-12-21T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Effet feu avec HTML 5 et Canvas" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-03-12T00:00:00+01:00","datePublished":"2014-12-21T00:00:00+01:00","description":"Effet feu avec HTML 5 et Canvas","headline":"Effet feu avec HTML 5 et Canvas","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/effet-feu-avec-html-5-et-canvas-2.html"},"url":"https://www.yannmoisan.com/effet-feu-avec-html-5-et-canvas-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Effet feu avec HTML 5 et Canvas</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2014-12-21T00:00:00+01:00" itemprop="datePublished">Dec 21, 2014
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        window.FireEffect = {};
+        FireEffect.canvas = document.getElementById('tutorial');
+        FireEffect.ctx = FireEffect.canvas.getContext('2d');
+        FireEffect.width = FireEffect.canvas.width;
+        FireEffect.height = FireEffect.canvas.height;
+
+        FireEffect.panel = function () {
+            var panel = [];
+            for (var i = 0; i < FireEffect.width; i++) {
+                panel[i] = [];
+                for (var j = 0; j < FireEffect.height; j++) {
+                    panel[i][j] = 0;
+                }
+            }
+            return panel;
+        }();
+
+        // Hide some implem details with module
+        FireEffect.palette = function () {
+            var palette = [];
+            addColorGradient(0, [0, 0, 0], 128, [255, 0, 0]);
+            addColorGradient(129, [255, 0, 0], 170, [255, 255, 0]);
+            addColorGradient(171, [255, 255, 0], 255, [255, 255, 255]);
+
+            function addColorGradient(idxStart, colorStart, idxEnd, colorEnd) {
+                var gradients = [];
+                for (var i = 0; i < 3; i++) {
+                    gradients.push(gradient(idxStart, colorStart[i], idxEnd, colorEnd[i]))
+                }
+
+                for (var i = idxStart; i <= idxEnd; i++) {
+                    palette[i] = new Array(3);
+                    palette[i][0] = gradients[0][i - idxStart];
+                    palette[i][1] = gradients[1][i - idxStart];
+                    palette[i][2] = gradients[2][i - idxStart]
+                }
+            }
+
+            function gradient(x1, y1, x2, y2) {
+                var res = [];
+                var step = (y2 - y1) / (x2 - x1);
+                for (var i = x1; i <= x2; i++) {
+                    res.push(y1 + step * (i - x1))
+                }
+                return res;
+            }
+
+            return palette;
+        }();
+
+        FireEffect.updatePanel = function () {
+            var i;
+            for (var j = 0; j <= this.height - 3; j++) {
+                for (i = 1; i < this.width - 1; i++) {
+                    this.panel[i][j] = Math.floor((
+                    this.panel[i - 1][j + 1] +
+                    this.panel[i + 1][j + 1] +
+                    this.panel[i][j + 1] +
+                    this.panel[i][j + 2]) / 4);
+                }
+            }
+            for (i = 0; i < this.width; i++) {
+                this.panel[i][this.height - 1] = Math.floor(Math.random() * 256);
+                this.panel[i][this.height - 2] = Math.floor(Math.random() * 256);
+            }
+        };
+
+        FireEffect.render = function (ctx) {
+            var canvasData = ctx.createImageData(this.width, this.height);
+            for (var i = 0; i < this.width; i++) {
+                for (var j = 0; j < this.height; j++) {
+                    // Index of the pixel in the array
+                    var idx = (i + j * this.width) * 4;
+
+                    var idxPanel = this.panel[i][j];
+                    canvasData.data[idx + 0] = this.palette[idxPanel][0]; // Red channel
+                    canvasData.data[idx + 1] = this.palette[idxPanel][1]; // Green channel
+                    canvasData.data[idx + 2] = this.palette[idxPanel][2]; // Blue channel
+                    canvasData.data[idx + 3] = 255; // Alpha channel
+                }
+            }
+            ctx.putImageData(canvasData, 0, 0);
+        };
+
+        FireEffect.mainLoop = function () {
+            var s = performance.now();
+            FireEffect.render(FireEffect.ctx);
+            var e = performance.now();
+            FireEffect.updatePanel();
+            var e2 = performance.now();
+            document.getElementById('perfDraw').value = e - s;
+            document.getElementById('perfCalculate').value = e2 - e;
+        };
+
+        function main() {
+            FireEffect.stopMain = window.requestAnimationFrame(main);
+            FireEffect.mainLoop()
+        }
+
+        main(); // Start the cycle
+    });
+</script>
+
+<style type="text/css">
+    canvas { border: 2px solid black; }
+</style>
+
+<p>Après une <a href="effet-feu-avec-html-5-et-canvas.html">première démo</a> avec la balise canvas, j’étais un
+peu frustré par les performances. Voici donc une version plus aboutie.</p>
+
+<p>Les performances sont bien meilleures grâce à l’utilisation de <code class="language-plaintext highlighter-rouge">requestAnimationFrame</code> à la place de
+<code class="language-plaintext highlighter-rouge">setTimeout</code> pour la boucle principale et <code class="language-plaintext highlighter-rouge">putImageData</code> à la place de <code class="language-plaintext highlighter-rouge">fillRect</code> pour remplir un
+canvas pixel par pixel.</p>
+
+<canvas id="tutorial" width="858" height="300"></canvas>
+
+<p>Perf calculate: <input type="text" id="perfCalculate" /></p>
+
+<p>Perf draw: <input type="text" id="perfDraw" /></p>
+
+<p><input type="button" value="Démarrer" onclick="init()" /></p>
+
+<h2 id="correction-du-bogue---mise-à-jour-du-12-mars-2021">Correction du bogue - mise à jour du 12 mars 2021</h2>
+
+<p>Il y a de nombreuses années, j’étais candidat chez Criteo. Mon intervieweur avait pris le temps de regarder mon blog 
+et était tombé sur cette page. Il avait immédiatement remarqué un truc bizarre; des triangles asymétriques se formaient.
+J’avais rapidement regardé le code après l’entretien, sans trouver le bogue. Et cette discussion est restée dans un coin de ma tête.</p>
+
+<p>J’ai décidé d’y repasser un peu de temps et il y avait en fait 2 bogues.</p>
+<ul>
+  <li><a href="https://github.com/YannMoisan/blog/pull/25/commits/d73c479915a6703869e9f7d53becad31a0f13288">d73c479</a> :
+le calcul balayait d’abord les colonnes puis les lignes (au lieu de l’inverse)</li>
+  <li><a href="https://github.com/YannMoisan/blog/pull/25/commits/264eda5c0d22656236d1600dba940fa6c50bfc0d">264eda5</a> : le calcul se faisait du bas vers le haut (au lieu de l’inverse)</li>
+</ul>
+
+<p>Ces deux bogues ont la même conséquence : le calcul des pixels précédents impactent le calcul des pixels suivants.</p>
+
+<p>C’est enfin corrigé !</p>
+
+  </div><a class="u-url" href="/effet-feu-avec-html-5-et-canvas-2.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

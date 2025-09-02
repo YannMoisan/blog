@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Évolution de Java | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Évolution de Java" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="À travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala" />
+<meta property="og:description" content="À travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala" />
+<link rel="canonical" href="https://www.yannmoisan.com/evolution-de-java.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/evolution-de-java.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-05-01T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Évolution de Java" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2012-05-01T00:00:00+02:00","datePublished":"2012-05-01T00:00:00+02:00","description":"À travers un exemple concret, réflexion autour de la nécessaire évolution de Java vers la programmation fonctionnelle. Au menu : Guava, Java 8 et Scala","headline":"Évolution de Java","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/evolution-de-java.html"},"url":"https://www.yannmoisan.com/evolution-de-java.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Évolution de Java</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2012-05-01T00:00:00+02:00" itemprop="datePublished">May 1, 2012
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>J’ai déjà parlé du <a href="librairie-mathematiques.html">projet euler</a>. Dans ce billet, nous allons voir
+comment résoudre le premier problème en utilisant des technologies de plus en plus récentes, ce qui
+permet d’apprécier l’évolution des langages basés sur la JVM. Tout d’abord, voici l’énoncé :</p>
+
+<blockquote>
+  <p>Si on liste tous les entiers naturels inférieurs à 10 qui sont multiples de 3 ou de 5, on obtient
+3, 5, 6 et 9. La somme de ces nombres est 23. Trouvez la somme de tous les multiples de 3 ou de 5
+inférieurs à 1000</p>
+</blockquote>
+
+<h2 id="avec-java-6">Avec Java 6</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Java6Euler1</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Ce code semble familier, clair et relativement lisible. Alors pourquoi chercher à l’améliorer ? Le
+premier problème est que l’itération est côté client et deuxièmement, cet algorithme n’est pas
+parallélisable, et donc n’est pas optimisé les processeurs multi-coeur qui sont devenus la norme
+aujourd’hui.</p>
+
+<h2 id="avec-guava">Avec Guava</h2>
+
+<p><a href="https://github.com/google/guava">Guava</a> est une librairie développée par Google qui offre
+notamment une API Collection riche et un support partiel de la programmation fonctionnelle. Cette
+librairie remplace avantageusement la librairie commons collections d’Apache, tombé en désuétude.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.google.common.base.Predicate</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.Collections2</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.ContiguousSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.DiscreteDomains</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.Ranges</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaEuler1</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ContiguousSet</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">range</span> <span class="o">=</span> <span class="nc">Ranges</span><span class="o">.</span><span class="na">closedOpen</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1000</span><span class="o">).</span><span class="na">asSet</span><span class="o">(</span>
+                <span class="nc">DiscreteDomains</span><span class="o">.</span><span class="na">integers</span><span class="o">());</span>
+
+        <span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">filtered</span> <span class="o">=</span> <span class="nc">Collections2</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">range</span><span class="o">,</span>
+                <span class="k">new</span> <span class="nc">Predicate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">apply</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">});</span>
+
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Integer</span> <span class="n">i</span> <span class="o">:</span> <span class="n">filtered</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>On progresse : l’itération et le filtrage sont pris en charge par la librairie et l’exécution n’est
+pas intrinsèquement en série. Malheureusement, la syntaxe n’est pas pratique car très verbeuse…</p>
+
+<h2 id="avec-scala">Avec Scala</h2>
+
+<p><a href="http://www.scala-lang.org/">Scala</a> est un nouveau langage sur la JVM qui combine la programmation
+orientée objet et la programmation fonctionnelle. Scala supporte nativement les lambda expressions
+(c.-à-d. les fonctions anonymes) et les fonctions d’ordre supérieur (c.-à-d. une fonction prenant en
+paramètre d’entrée une ou plusieurs fonctions et/ou renvoyant une fonction). Le code suivant montre
+la puissance du langage.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">euler1</span> <span class="k">extends</span> <span class="nc">App</span> <span class="o">{</span>
+  <span class="nf">println</span><span class="o">((</span><span class="mi">1</span> <span class="n">until</span> <span class="mi">1000</span><span class="o">).</span><span class="py">filter</span><span class="o">(</span><span class="n">n</span> <span class="k">=&gt;</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">).</span><span class="py">sum</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>C’est clairement l’objectif à atteindre au niveau de la syntaxe. Le langage a été conçu dés le
+départ dans ce but.</p>
+
+<h2 id="avec-java-8">Avec Java 8</h2>
+
+<p><a href="http://openjdk.java.net/projects/jdk8/">Java 8</a> apportera le support très attendu des
+<a href="http://openjdk.java.net/projects/lambda/">lambda-expressions</a> (JSR 335). Une version binary
+snapshot permet d’essayer ces nouveautés.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Java8Euler1</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">range</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">1000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">range</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">range</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">s</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="o">).</span>
+                <span class="n">reduce</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Ce code utilise deux nouveautés de Java 8 : les lambda expressions et les méthodes d’extension
+virtuelles. La syntaxe retenue pour les lambda est celle du C#. Le code est lisible et assez proche
+de Scala. Voici quelques précisions techniques :</p>
+
+<ul>
+  <li>Les méthodes d’extension virtuelles permettent de traiter un problème de l’évolution des API
+existantes, et notamment l’API Collection. Elles permettent d’ajouter une implémentation par
+défaut sur les interfaces. L’interface <code class="language-plaintext highlighter-rouge">Iterable</code> gagne ainsi une méthode <code class="language-plaintext highlighter-rouge">filter</code> qui prend en
+paramètre un <code class="language-plaintext highlighter-rouge">Predicate</code> et possède une implémentation par défaut.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Iterable</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Predicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="no">T</span><span class="o">&gt;</span> <span class="n">predicate</span><span class="o">)</span> <span class="k">default</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nc">Iterables</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">predicate</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Le type de la lambda expression est déduit en fonction du contexte par le compilateur. On parle
+alors de <em>target typing</em>. Dans le code ci-dessus, l’expression <code class="language-plaintext highlighter-rouge">s -&gt; s % 3 == 0 || s % 5 == 0</code>
+est de type <code class="language-plaintext highlighter-rouge">Predicate</code>. Le type est toujours une interface à une seule méthode.</li>
+  <li>Le type des paramètres est déduit à partir de la signature de la méthode de l’interface cible.
+Dans notre cas, le compilateur déduit que les paramètres <code class="language-plaintext highlighter-rouge">s</code>, <code class="language-plaintext highlighter-rouge">x</code> et <code class="language-plaintext highlighter-rouge">y</code> sont des <code class="language-plaintext highlighter-rouge">Integer</code>.
+C’est une extension de l’inférence de type apparue avec les génériques de Java 5 et étendue avec
+l’opérateur diamant de Java 7.</li>
+</ul>
+
+<p>Le code est beaucoup plus lisible qu’avec Guava, ce qui démontre la nécessité de mettre à jour le
+langage car les librairies tierces ne permettent pas d’obtenir le même résultat. De plus, la méthode
+<code class="language-plaintext highlighter-rouge">reduce</code> est supportée alors que Guava ne la supporte pas.</p>
+
+  </div><a class="u-url" href="/evolution-de-java.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

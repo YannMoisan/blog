@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Tester unitairement la lecture d’un fichier, sans fichier ! | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Tester unitairement la lecture d’un fichier, sans fichier !" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Tester unitairement la lecture d’un fichier, sans utiliser de fichier." />
+<meta property="og:description" content="Tester unitairement la lecture d’un fichier, sans utiliser de fichier." />
+<link rel="canonical" href="https://www.yannmoisan.com/test-unitaire-et-fichier.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/test-unitaire-et-fichier.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-07-04T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Tester unitairement la lecture d’un fichier, sans fichier !" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2012-07-04T00:00:00+02:00","datePublished":"2012-07-04T00:00:00+02:00","description":"Tester unitairement la lecture d’un fichier, sans utiliser de fichier.","headline":"Tester unitairement la lecture d’un fichier, sans fichier !","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/test-unitaire-et-fichier.html"},"url":"https://www.yannmoisan.com/test-unitaire-et-fichier.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Tester unitairement la lecture d&#39;un fichier, sans fichier !</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2012-07-04T00:00:00+02:00" itemprop="datePublished">Jul 4, 2012
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Nous allons voir comment tester unitairement un composant basé sur la lecture d’un fichier, sans
+utiliser de fichier. Cette approche peut sembler étrange mais elle offre plusieurs avantages : le
+test sera ainsi plus rapide, plus lisible (car le contenu à tester est dans le même fichier que le
+test) et indépendant du système de fichier. Pour l’exemple, nous allons implémenter en java un
+programme qui compte le nombre de lignes d’un fichier. L’astuce consiste à utiliser dans le code la
+classe <code class="language-plaintext highlighter-rouge">java.io.Reader</code> et d’injecter un <code class="language-plaintext highlighter-rouge">java.io.StringReader</code> à la place du <code class="language-plaintext highlighter-rouge">java.io.FileReader</code>
+dans le test.</p>
+
+<p>Voyons comment faire :</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileReader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Counter</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">File</span> <span class="n">source</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Counter</span><span class="o">(</span><span class="nc">File</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">countLines</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">Reader</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">newReader</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nf">countLines</span><span class="o">(</span><span class="n">reader</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// for test purpose </span>
+    <span class="kd">protected</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">Reader</span> <span class="nf">newReader</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">FileNotFoundException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">FileReader</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">countLines</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">Reader</span> <span class="n">reader</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">(</span><span class="nc">BufferedReader</span> <span class="n">bufReader</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BufferedReader</span><span class="o">(</span><span class="n">reader</span><span class="o">))</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">bufReader</span><span class="o">.</span><span class="na">readLine</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">count</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.FileNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.Reader</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.StringReader</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CounterTest</span> <span class="o">{</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="nc">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">"a\nb\nc"</span><span class="o">;</span>
+        <span class="nc">Counter</span> <span class="n">counter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Counter</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">protected</span> <span class="nc">Reader</span> <span class="nf">newReader</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">FileNotFoundException</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="nf">StringReader</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">};</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">counter</span><span class="o">.</span><span class="na">countLines</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Voici l’explication de l’astuce : la méthode countLines() appelle une méthode protected pour
+récupérer un reader et délègue le traitement ‘fonctionnel’ à la méthode countLines(Reader reader).
+Il est ainsi possible d’étendre la classe afin de surcharger la méthode newReader.</p>
+
+  </div><a class="u-url" href="/test-unitaire-et-fichier.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

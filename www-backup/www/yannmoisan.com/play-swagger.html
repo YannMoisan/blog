@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Add a swagger documentation on a Play application | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Add a swagger documentation on a Play application" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Add a swagger documentation on a Play application" />
+<meta property="og:description" content="Add a swagger documentation on a Play application" />
+<link rel="canonical" href="https://www.yannmoisan.com/play-swagger.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/play-swagger.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-03-29T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Add a swagger documentation on a Play application" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2016-03-29T00:00:00+02:00","datePublished":"2016-03-29T00:00:00+02:00","description":"Add a swagger documentation on a Play application","headline":"Add a swagger documentation on a Play application","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/play-swagger.html"},"url":"https://www.yannmoisan.com/play-swagger.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Add a swagger documentation on a Play application</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2016-03-29T00:00:00+02:00" itemprop="datePublished">Mar 29, 2016
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The starting point of this post is the need to document an existing REST APIs. I want the
+documentation to live with my code because I think it’s the only way to have an up-to-date doc.
+Swagger seems to be a de facto standard. This post is not a tutorial, it’s just to share some issues
+I faced. So let’s get the party started.</p>
+
+<p>I use PlayFramework and Scala. Thankfully, an integration already exists :
+<a href="https://github.com/swagger-api/swagger-play">play-swagger</a>. Play-swagger relies mainly on
+annotations. I’m not a big fan of annotations, maybe because they remind me of my long years of Java
+EE development. Last point, my APIs uses snake case and because swagger-core introspect fields, the
+default behaviour won’t work as expected.</p>
+
+<h2 id="tuple-serialization">Tuple serialization</h2>
+
+<p>Some of my services returns <code class="language-plaintext highlighter-rouge">Tuple</code>, so I have a custom <code class="language-plaintext highlighter-rouge">Writes</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  implicit val tupleWrites :  Writes[(Int, String)] = Writes[(Int, String)] {
+    case (id, action) =&gt;
+        Json.obj(
+          "tip_id" -&gt; id,
+          "action" -&gt; action
+        )
+  }
+</code></pre></div></div>
+
+<p>Swagger uses the return type of your operation method. It detects <code class="language-plaintext highlighter-rouge">ActionAnyContent</code> or
+<code class="language-plaintext highlighter-rouge">ActionJsValue</code>, depending on the BodyParser you use, that is never what you want. (I don’t
+understand how the erroneous concatenation happens between the type <code class="language-plaintext highlighter-rouge">Action</code> and the type parameter
+<code class="language-plaintext highlighter-rouge">JsValue</code>).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"responses": {
+  "200": {
+    "description": "successful operation",
+    "schema": {
+      "$ref": "#/definitions/ActionAnyContent"
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>So we have to explicitly set the response class with the following annotation :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@ApiOperation(response = classOf[Tuple2[Int, String]])
+</code></pre></div></div>
+
+<p>Due to Java type erasure, swagger will only generate :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"definitions": {
+    "Tuple2": {
+      "type": "object",
+      "properties": {
+        "_1": {
+          "type": "object"
+        },
+        "_2": {
+          "type": "object"
+        }
+      }
+    },
+</code></pre></div></div>
+
+<p>In fact, play-swagger has no idea how the Tuple is serialized and I came up with a trick to generate
+the documentation by creating a fake case class.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@ApiModel(value="Tip id and action")
+case class TipIdAndAction(
+  @ApiModelProperty(name="tip_id", required=true) tipId: Id,
+  @ApiModelProperty(required=true) action: String)
+</code></pre></div></div>
+
+<p>The annotation <code class="language-plaintext highlighter-rouge">@ApiModelProperty</code> is used to specify the name because I use snake case in JSON and
+camel case in Scala.</p>
+
+<p>Lastly, this annotation should be added on the action :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@ApiOperation(response = classOf[TipIdAndAction])
+</code></pre></div></div>
+
+<p>In fact, there are some cases where you can have different representation of a model, at least for
+read and write. For example, a timestamp is forbidden at creation but mandatory during retrieval. It
+seems impossible to do that with swagger annotations.</p>
+
+<p>And now, I have to maintain the mapping and the case class. It seems boring and error prone. So
+let’s get rid of the Tuple and use case class instead.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>implicit val actionWrites :  Writes[TipIdAndAction] = Writes[TipIdAndAction] { ta =&gt;
+Json.obj(
+  "tip_id" -&gt; ta.tipId,
+  "action" -&gt; ta.action
+)
+}
+</code></pre></div></div>
+
+<p>Either I can modify my service to return a <code class="language-plaintext highlighter-rouge">TipIdAndAction</code> or I have to transform a Tuple into a
+<code class="language-plaintext highlighter-rouge">TipIdAndAction</code>. At first sight, the last idea seems like the return of the DTO antipattern, a
+really bad idea. Nevertheless, I’d prefer that over polluting my domain model with swagger
+annotations.</p>
+
+<p>I can also use <a href="https://playframework.com/documentation/2.4.x/ScalaJsonInception">JSON Macro
+inception</a> and
+<a href="https://github.com/tototoshi/play-json-naming">play-json-naming</a> to avoid writing the <code class="language-plaintext highlighter-rouge">Writes</code>
+class. Unfortunately, I still need annotations on the case class. So now, all the boilerplate is
+just for swagger purpose. Even if Macro Inception is great, beware that a simple renaming of a
+property will change the JSON output, so the contract of your API.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  implicit val actionWrites : Writes[TipIdAndAction] = JsonNaming.snakecase(Json.writes[TipIdAndAction])
+</code></pre></div></div>
+
+<h2 id="nested-annotation">Nested annotation</h2>
+
+<p>for @ApiResponses, the syntax mentioned in the swagger doc triggers a compilation issue for an
+unknown reason (let me know if you know) :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@ApiResponses(value = { 
+      @ApiResponse(code = 400, message = "Invalid ID supplied", 
+                   responseHeaders = @ResponseHeader(name = "X-Rack-Cache", description = "Explains whether or not a cache was used", response = Boolean.class)),
+      @ApiResponse(code = 404, message = "Pet not found") })
+</code></pre></div></div>
+
+<h2 id="manage-http-header">Manage HTTP Header</h2>
+
+<p>For HTTP Header, like <code class="language-plaintext highlighter-rouge">Accept-Language</code>, you have to copy/paste the following on each operation that
+deals with this header.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  new ApiImplicitParam(
+    name = "Accept-Language", 
+    value = "language for the tip in the response", 
+    defaultValue = "en", 
+    required = false, 
+    paramType = "header", 
+    dataType="string"
+  )
+</code></pre></div></div>
+
+<p>Finally, I still have one question :</p>
+
+<ul>
+  <li><a href="http://stackoverflow.com/questions/36304732/swagger-ui-doesnt-display-the-response-model-for-a-400">Why swagger-ui doesn’t display the response model for an alternate
+response</a></li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Using swagger with Play is a pain. It forces you to break the DRY rule. But it remains better than
+writing swagger with a tool like Swagger Editor, due to the colocation of the spec with the code.
+Here are some points of attention :</p>
+
+<ul>
+  <li>Beware of always mentioning an explicit response class</li>
+  <li>Don’t use snake case to benefit from swagger automatic generation</li>
+  <li>Don’t use Tuples</li>
+  <li>Don’t pollute your domain model with annotations</li>
+</ul>
+
+
+  </div><a class="u-url" href="/play-swagger.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>My post mortem for the codingame Winter Challenge 2024 | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="My post mortem for the codingame Winter Challenge 2024" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="My post mortem for the codingame Winter Challenge 2024" />
+<meta property="og:description" content="My post mortem for the codingame Winter Challenge 2024" />
+<link rel="canonical" href="https://www.yannmoisan.com/winter-challenge-2024.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/winter-challenge-2024.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-01-06T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="My post mortem for the codingame Winter Challenge 2024" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-06T00:00:00+01:00","datePublished":"2025-01-06T00:00:00+01:00","description":"My post mortem for the codingame Winter Challenge 2024","headline":"My post mortem for the codingame Winter Challenge 2024","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/winter-challenge-2024.html"},"url":"https://www.yannmoisan.com/winter-challenge-2024.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">My post mortem for the codingame Winter Challenge 2024</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-01-06T00:00:00+01:00" itemprop="datePublished">Jan 6, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <style>
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin: 20px auto;
+    }
+    th, td {
+        border: 1px solid black;
+        text-align: center;
+        padding: 0px;
+        font-size: 48px;
+        width: 60px; /* Fixed width */
+        height: 60px; /* Fixed height */
+    }
+</style>
+
+<ul>
+  <li>Rank: #99/3900</li>
+  <li>Language: Scala</li>
+  <li>LOC: 1000</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>December is always a challenging month, especially with the Advent of Code daily puzzles. 
+By mid-December, as my motivation for Advent of Code began to decrease, 
+I received an invitation for the CodinGame Winter Challenge, 
+scheduled from December 19 to January 6. Despite trying to resist, I ultimately registered.</p>
+
+<p>I’m also proud of my older son, who created a CodinGame account and decided to participate 
+for the first time. With just a little help correcting Python coding mistakes in the IDE, 
+he successfully progressed through the wood league and ultimately reached the silver league. 
+Congrats to him!</p>
+
+<h2 id="strategy">Strategy</h2>
+
+<p>This contest was particularly friendly to heuristic approaches, 
+allowing participants to achieve good ranks with a heuristic-only bot. 
+Therefore, I decided not to implement a simulation this time.</p>
+
+<p>For each turn, I generated all possible actions: a cartesian product of 
+available locations within a distance of 1, different organ types, 
+and the four directions, plus all spore possibilities.</p>
+
+<p>For each action, I computed a score.</p>
+
+<h2 id="the-scoring-function">The scoring function</h2>
+
+<p>Score values by organ type : Tentacle &gt; Harvester &gt; Sporer &gt; Basic</p>
+
+<p>Each type had a specific scoring function:</p>
+
+<ul>
+  <li>Tentacle
+    <ul>
+      <li>The closer to the opponent, the highest score</li>
+      <li>If at a distance of 1 from the opponent (figure 1),
+        <ul>
+          <li>I used also the number of destroyed opponent organs</li>
+          <li>and also a boost if the location isn’t controlled by another of my tentacles (not as in fig 2)</li>
+        </ul>
+      </li>
+      <li>If at a distance of 2/3, the idea is to prevent the opponent from growing toward us. (figure 3’
+        <ul>
+          <li>and also a boost if the target of the tentacle is controlled by an opponent tentacle (figure 4)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Figure 1 (score 3.1)</p>
+
+<table>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: red;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Figure 2 (score 3.0)</p>
+
+<table>
+    <tr>
+        <td>&nbsp;</td>
+        <td style="color: blue;">&#x25BC;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: red;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Figure 3 (score 2.8)</p>
+
+<table>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: blue; ">&nbsp;</td>
+        <td style="color: red;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Figure 4 (score 2.9)</p>
+
+<table>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: blue; ">&nbsp;</td>
+        <td style="color: red;">&#x25C0;</td>
+    </tr>
+</table>
+
+<ul>
+  <li>Harvester
+    <ul>
+      <li>The fewer harvesters of this type, the higher the score.</li>
+    </ul>
+  </li>
+  <li>Sporer
+    <ul>
+      <li>I computed an expected number of roots (based on the number of proteins harvested) 
+  and scored positively if under this number.</li>
+      <li>I aimed to encourage sporers with a longer line of sight.</li>
+    </ul>
+  </li>
+  <li>Basic
+    <ul>
+      <li>Either move towards the enemy or target a needed protein (for all protein types without a harvester on them, we targeted the closest).</li>
+    </ul>
+  </li>
+  <li>Spore
+    <ul>
+      <li>We targeted the location with the most protein within a distance of 2.</li>
+      <li>and favor the farthest from the sporer</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Additionally,</p>
+<ul>
+  <li>penalties were applied for growing on protein
+    <ul>
+      <li>almost no penalty if it’s on the shortest path to the target (to avoid being stuck when there are no alternatives).</li>
+      <li>bigger penalties for growing on an harvested protein.</li>
+      <li>smaller penalties for growing on regular protein.
+        <ul>
+          <li>if no more resources for this type, the penalty becomes &gt; 1 (reward)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>A distance bonus was also applied to encourage movement towards the target.</p>
+
+<p>Here is the score calculation formula</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>finalScore = penalty * (score + distbonus)
+</code></pre></div></div>
+
+<h2 id="multi-agent">Multi agent</h2>
+
+<p>We selected organisms in decreasing order of scores, updating resources each time to avoid invalid actions. 
+The goal is to prevent scenarios where the optimal action is unavailable because the resource was already used for a less beneficial action on another organism.</p>
+
+<p>However, I still faced the limitation where two organisms could decide to harvest the same protein simultaneously.</p>
+
+<h2 id="code-reuse">Code reuse</h2>
+
+<p>I reused grid code from a previous contest. It represents the grid as a one-dimension array which is more efficient in term of memory and cpu (cache locality). 
+It was largely a copy-paste job as I didn’t use a bundler this time.</p>
+
+<h2 id="timeout-issues">Timeout issues</h2>
+
+<p>I encountered performance issues that caused some battles to be lost due to timeouts. 
+After some random guesses, I concluded that I needed better optimization. 
+Using a real profiler, I achieved a 3x performance gain by replacing a <code class="language-plaintext highlighter-rouge">Set</code> with a <code class="language-plaintext highlighter-rouge">List</code>.</p>
+
+<p>Initially, I used a <code class="language-plaintext highlighter-rouge">Set</code> to return all growable locations at depth 1, 
+not realizing that the cartesian product operation happened on <code class="language-plaintext highlighter-rouge">Set</code>, which is costly due to the computation of numerous hash codes.</p>
+
+<h2 id="fine-tuning">Fine tuning</h2>
+<p>On the last day, I set up BrutalTester to test some ideas with a better feedback loop 
+than waiting for a submit.</p>
+
+<h2 id="things-to-improve">Things to improve</h2>
+
+<h3 id="scoring-as-double">Scoring as double</h3>
+
+<p>My score is currently a double, but I believe using an integer would be a better approach because:</p>
+
+<ul>
+  <li>It’s faster to compute.</li>
+  <li>It avoids annoying floating-point issues, like <code class="language-plaintext highlighter-rouge">0.19999999999999998</code></li>
+</ul>
+
+<h3 id="local-minimum">local minimum</h3>
+
+<p>The drawback of using depth 0 is that the bot will go for a local minimun.
+In the example below, it will harvest A, which prevents the harvesting of B later on.</p>
+
+<table>
+    <tr>
+        <td>W</td>
+        <td>A</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B2;</td>
+        <td style="color: blue;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>A better situation after two turns would have been</p>
+
+<table>
+    <tr>
+        <td>W</td>
+        <td>A</td>
+        <td style="color: blue;">&#x25C0;</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td style="color: blue;">&#x25C0;</td>
+        <td style="color: blue;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Unfortunately, I couldn’t find a simple way to implement this !</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I thoroughly enjoyed the long-duration format during the winter holidays, which allowed participation whenever I had time.</p>
+
+<p>I personally enjoy grid-based challenges; in the past, I really liked games like Pac-Man and Wondev Woman, for example.</p>
+
+<p>The map generator added plenty of diversity, offering different scenarios such as open worlds versus labyrinths and varying numbers of proteins.</p>
+
+<p>I found the challenge both interesting and fun. The rules were simple, but implementing effective strategies was far from easy.</p>
+
+<p>The battles were also entertaining to watch.</p>
+
+  </div><a class="u-url" href="/winter-challenge-2024.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

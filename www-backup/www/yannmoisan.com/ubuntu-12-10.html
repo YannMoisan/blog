@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Que faire après l’installation d’Ubuntu 12.10 | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Que faire après l’installation d’Ubuntu 12.10" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Que faire après l’installation d’Ubuntu 12.10" />
+<meta property="og:description" content="Que faire après l’installation d’Ubuntu 12.10" />
+<link rel="canonical" href="https://www.yannmoisan.com/ubuntu-12-10.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/ubuntu-12-10.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-12-18T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Que faire après l’installation d’Ubuntu 12.10" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2012-12-18T00:00:00+01:00","datePublished":"2012-12-18T00:00:00+01:00","description":"Que faire après l’installation d’Ubuntu 12.10","headline":"Que faire après l’installation d’Ubuntu 12.10","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/ubuntu-12-10.html"},"url":"https://www.yannmoisan.com/ubuntu-12-10.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Que faire après l&#39;installation d&#39;Ubuntu 12.10</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2012-12-18T00:00:00+01:00" itemprop="datePublished">Dec 18, 2012
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>update 05/01/2013 : Désinstaller Zeitgeist, désactiver Update Notifier</p>
+
+<p>update 25/01/2013 : Installer Gnome Shell, désinstaller ubuntu one, la géolocalisation, unity</p>
+
+<h2 id="installer-les-programmes-que-jutilise-pour-développer">Installer les programmes que j’utilise pour développer</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get <span class="nb">install </span>git tmux vim-gnome htop virtualbox openjdk-7-jdk
+</code></pre></div></div>
+
+<h2 id="installer-skype">Installer Skype</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget http://www.skype.com/go/getskype-linux-ubuntu-64/skype-ubuntu-precise_4.1.0.20-1_amd64.deb
+<span class="nb">sudo </span>dpkg <span class="nt">-i</span> skype-ubuntu<span class="k">*</span>.deb
+<span class="nb">sudo </span>apt-get <span class="nt">-f</span> <span class="nb">install</span> 
+</code></pre></div></div>
+
+<h2 id="réactiver-la-zone-de-notification-notamment-pour-skype">Réactiver la zone de notification, notamment pour Skype</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gsettings <span class="nb">set </span>com.canonical.Unity.Panel systray-whitelist <span class="s2">"['all']"</span>
+</code></pre></div></div>
+
+<h2 id="désinstaller-la-lentille-shopping">Désinstaller la lentille <em>Shopping</em></h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get remove unity-lens-shopping
+</code></pre></div></div>
+
+<h2 id="installer-gnome-shell">Installer Gnome Shell</h2>
+
+<p>Unity est l’interface de Gnome 3 par défaut sur Ubuntu. Je préfère cependant son concurrent, Gnome
+Shell. Les deux paragraphes suivants expliquent comment installer Gnome Shell et désinstaller Unity.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>add-apt-repository ppa:gnome3-team/gnome3
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>gnome-shell gnome-tweak-tool
+<span class="nb">sudo </span>reboot
+</code></pre></div></div>
+
+<h2 id="désinstaller-unity">Désinstaller Unity</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get purge unity unity-common unity-services unity-webapps-service<span class="o">(</span>remove bamfdaemon<span class="o">)</span>
+<span class="nb">sudo </span>apt-get purge unity-lens-files unity-lens-gwibber unity-lens-music unity-lens-photos unity-lens-video
+<span class="nb">sudo </span>apt-get purge unity-asset-pool unity-greeter unity-scope-gdocs
+<span class="nb">sudo </span>apt-get purge gir1.2-unity-5.0:amd64 <span class="o">(</span>remove usb-creator-gtk<span class="o">)</span>
+<span class="nb">sudo </span>apt-get purge indicator-applet-complete indicator-application indicator-datetime indicator-messages indicator-power indicator-printers indicator-session indicator-sound
+<span class="nb">sudo </span>apt-get purge indicator-datetime indicator-printers libindicator7
+</code></pre></div></div>
+
+<h2 id="evolution">Evolution</h2>
+
+<p>Bien qu’utilisant Thunderbird, j’ai des processus evolution qui tournent.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ps <span class="nt">-ef</span>|grep evolution
+yamo      2193     1  0 Jan24 ?        00:00:00 /usr/lib/evolution/evolution-source-registry
+yamo      2202     1  0 Jan24 ?        00:00:00 /usr/lib/evolution/evolution-calendar-factory
+</code></pre></div></div>
+
+<p>Je déconseille cependant de désinstaller evolution-data-server car j’ai essayé et gnome shell refuse
+alors de démarrer.</p>
+
+<h2 id="désinstaller-zeitgeist">Désinstaller Zeitgeist</h2>
+
+<p>Zeitgeist est le service de Gnome 3 qui enregistre les actions de l’utilisateur. Unity utilise ces
+informations pour connaitre les dernières applications utilisées, les applications les plus
+utilisées, la musique que vous écoutez, … Si comme moi vous n’avez pas besoin de cela, cela
+permettra d’améliorer les performances du système.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zeitgeist-daemon <span class="nt">--quit</span>
+<span class="nb">sudo </span>apt-get <span class="nt">--purge</span> autoremove activity-log-manager-common activity-log-manager-control-center zeitgeist zeitgeist-core zeitgeist-datahub python-zeitgeist
+<span class="nb">sudo rm</span> <span class="nt">-fr</span> <span class="o">{</span>/root,/home/<span class="k">*</span><span class="o">}</span>/.local/share/zeitgeist
+</code></pre></div></div>
+
+<p>Remarque : il n’est pas possible d’enlever libzeitgeist-1.0-1 car c’est entremêler avec nautilus, …</p>
+
+<h2 id="désinstaller-ubuntu-one">Désinstaller Ubuntu One</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get purge ubuntuone-client ubuntuone-client-gnome ubuntuone-control-panel python-ubuntuone-client python-ubuntuone-storageprotocol
+</code></pre></div></div>
+
+<h2 id="désinstaller-la-géolocalisation">Désinstaller la géolocalisation</h2>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get purge geoclue-ubuntu-geoip geoclue libtimezonemap1 indicator-datetime
+</code></pre></div></div>
+
+<h2 id="désactiver-les-programmes-inutiles-au-démarrage">Désactiver les programmes inutiles au démarrage</h2>
+
+<p>Pour ce faire, il faut commencer par faire apparaitre ceux qui sont cachés :</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo sed</span> <span class="nt">-i</span> <span class="s1">'s/NoDisplay=true/NoDisplay=false/g'</span> /etc/xdg/autostart/<span class="k">*</span>.desktop
+</code></pre></div></div>
+
+<p>Il suffit maintenant de lancer Startup Application, pour faire apparaitre les 25 applications
+lancées au démarrage. Je désactive celles qui sont rayées.</p>
+
+<ul>
+  <li>T-SPI D-Bus Bus : Accessibilité</li>
+  <li><span style="text-decoration: line-through;">Backup Monitor : pour faire ses sauvegardes
+(j’utilise un script maison)</span></li>
+  <li><span style="text-decoration: line-through;">Bluetooth Manager : je n’utilise pas le
+bluetooth</span></li>
+  <li>Certificate and Key Storage :</li>
+  <li><span style="text-decoration: line-through;">Chat : fonctionne avec telepathy, j’utilise
+pidgin</span></li>
+  <li><span style="text-decoration: line-through;">Desktop sharing : pour partager son bureau</span></li>
+  <li>Files</li>
+  <li>GNOME Settings Daemon</li>
+  <li><span style="text-decoration: line-through;">GPG Password Agent : pour crypter ses messages avec
+GPG</span></li>
+  <li>GSettings Data Conversion</li>
+  <li>Gwibber</li>
+  <li>Mount Helper</li>
+  <li>Network</li>
+  <li><span style="text-decoration: line-through;">Onboard : pour l’accessibilité</span></li>
+  <li><span style="text-decoration: line-through;">Orca Screen reader : pour l’accessibilité</span></li>
+  <li>Personal File Sharing</li>
+  <li>PolicyKit Authentication Agent</li>
+  <li>PulseAudio Sound System</li>
+  <li>Screensaver</li>
+  <li>Secret Storage Service</li>
+  <li>SSH Key Agent</li>
+  <li><span style="text-decoration: line-through;">Ubuntu One : pour utiliser le service d’hébergement
+de fichiers en ligne intégré à Ubuntu</span></li>
+  <li><span style="text-decoration: line-through;">Update Notifier</span></li>
+  <li><span style="text-decoration: line-through;">User folders update</span></li>
+  <li><span style="text-decoration: line-through;">Zeitgeist Datahub : pour logguer automatiquement sa
+vie personnelle (je préfère éviter pour des raisons éthiques).</span></li>
+</ul>
+
+<p>Pour Update Notifier, je préfère lancer régulièrement (tous les 2-3 jours) la commande suivante :</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get update <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>apt-get upgrade <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>apt-get dist-upgrade
+</code></pre></div></div>
+
+<h2 id="en-vrac">En vrac</h2>
+
+<p>Réduire la taille des icônes dans le lanceur Unity (de 48 à 32 pixels). Aller dans System Settings -
+Appearance puis Launcher icon size</p>
+
+<p>N’hésitez pas à partager vos astuces et à revenir sur cette page, je mettrais à jour au fur et à
+mesure de la personnalisation.</p>
+
+<p>Sources:</p>
+
+<ul>
+  <li><a href="http://www.webupd8.org/2011/04/how-to-re-enable-notification-area.html">how-to-re-enable-notification-area</a></li>
+  <li><a href="https://help.ubuntu.com/community/ShowHiddenStartupApplications#Displaying_Hidden_Startup_Applications">Displaying_Hidden_Startup_Applications</a></li>
+  <li><a href="http://askubuntu.com/questions/192269/how-can-i-remove-amazon-search-results-from-the-dash">how-can-i-remove-amazon-search-results-from-the-dash”</a></li>
+  <li><a href="http://linuxaria.com/howto/how-to-remove-zeitgeist-in-ubuntu-and-why">how-to-remove-zeitgeist-in-ubuntu-and-why</a></li>
+  <li><a href="http://www.webupd8.org/2012/10/how-to-get-complete-gnome-3-desktop-in.html">how-to-get-complete-gnome-3-desktop-in</a></li>
+</ul>
+
+
+  </div><a class="u-url" href="/ubuntu-12-10.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

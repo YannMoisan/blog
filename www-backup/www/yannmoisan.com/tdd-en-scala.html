@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>TDD en Scala | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="TDD en Scala" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Comment pratiquer le TDD en Scala, le plus simplement possible (sans IDE)" />
+<meta property="og:description" content="Comment pratiquer le TDD en Scala, le plus simplement possible (sans IDE)" />
+<link rel="canonical" href="https://www.yannmoisan.com/tdd-en-scala.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/tdd-en-scala.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-12-31T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="TDD en Scala" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2012-12-31T00:00:00+01:00","datePublished":"2012-12-31T00:00:00+01:00","description":"Comment pratiquer le TDD en Scala, le plus simplement possible (sans IDE)","headline":"TDD en Scala","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/tdd-en-scala.html"},"url":"https://www.yannmoisan.com/tdd-en-scala.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">TDD en Scala</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2012-12-31T00:00:00+01:00" itemprop="datePublished">Dec 31, 2012
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>En ce moment, je pratique le <a href="http://en.wikipedia.org/wiki/Kata_%28programming%29">kata</a> Roman
+Numerals pour me familiariser avec l’écosystème Scala. Mon but est la simplicité, je n’utilise donc
+que ces programmes : Vim, tmux et sbt. Voici, étape par étape, comment je pratique le TDD en Scala.</p>
+
+<p>Lancer tmux</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>tmux
+</code></pre></div></div>
+
+<p>Créer et aller dans le répertoire du projet</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir </span>roman
+<span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$_</span>
+</code></pre></div></div>
+
+<p>Créer le fichier de configuration de sbt, afin d’ajouter la dépendance avec ScalaTest (framework de
+test).</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>vim build.sbt
+</code></pre></div></div>
+
+<pre><code class="language-sbt">libraryDependencies += "org.scalatest" %% "scalatest" % "1.8" % "test"
+</code></pre>
+
+<p>Créer et aller dans le répertoire du code source</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir</span> <span class="nt">-p</span> src/test/scala
+<span class="nv">$ </span><span class="nb">cd</span> <span class="nv">$_</span>
+</code></pre></div></div>
+
+<p>Écrire le code, dans un seul fichier pour faciliter les déplacements entre le code et les tests.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>vim RomanTest.scala
+</code></pre></div></div>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">org.scalatest.FunSuite</span>
+
+<span class="k">object</span> <span class="nc">Roman</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">decode</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">RomanTest</span> <span class="k">extends</span> <span class="nc">FunSuite</span> <span class="o">{</span>
+  <span class="nf">test</span><span class="o">(</span><span class="s">"I"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nf">assert</span><span class="o">(</span><span class="nv">Roman</span><span class="o">.</span><span class="py">decode</span><span class="o">(</span><span class="s">"I"</span><span class="o">)</span> <span class="o">===</span> <span class="mi">1</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Nous allons maintenant pouvoir tester. C’est maintenant que tmux va être utile pour séparer l’écran
+en 2 <Ctrl-b> " et aller en bas.</Ctrl-b></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sbt
+</code></pre></div></div>
+
+<p>Lancer les tests en continu</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; ~ test
+</code></pre></div></div>
+
+<p>Le test ne passe pas :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[info] RomanTest:
+[info] - I *** FAILED ***
+[info]   0 did not equal 1 (RomanTest.scala:9)
+</code></pre></div></div>
+
+<p>On revient dans Vim, on corrige l’implémentation, on sauvegarde et le test est relancé
+automatiquement. L’enchainement des cycles Red Green Refactor se fait ainsi de manière très fluide.</p>
+
+<p>Pour aller plus loin : configurer Vim pour Scala, essayer specs 2.</p>
+
+<p>Et vous, des idées, des remarques…</p>
+
+  </div><a class="u-url" href="/tdd-en-scala.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

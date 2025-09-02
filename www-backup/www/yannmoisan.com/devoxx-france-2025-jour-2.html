@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Devoxx France 2025 - Jour 2 | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Devoxx France 2025 - Jour 2" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Devoxx France 2025 - Jour 2" />
+<meta property="og:description" content="Devoxx France 2025 - Jour 2" />
+<link rel="canonical" href="https://www.yannmoisan.com/devoxx-france-2025-jour-2.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/devoxx-france-2025-jour-2.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-04-22T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Devoxx France 2025 - Jour 2" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-04-22T00:00:00+02:00","datePublished":"2025-04-22T00:00:00+02:00","description":"Devoxx France 2025 - Jour 2","headline":"Devoxx France 2025 - Jour 2","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/devoxx-france-2025-jour-2.html"},"url":"https://www.yannmoisan.com/devoxx-france-2025-jour-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Devoxx France 2025 - Jour 2</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-04-22T00:00:00+02:00" itemprop="datePublished">Apr 22, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="les-clés-de-larchitecture-pour-les-devs">Les clés de l’architecture pour les devs</h1>
+
+<p>Tout d’abord, chapeau à Eric Le Merdy qui a appris le matin du talk qu’il remplacerait Christian Sperandio.</p>
+
+<p>Le fil rouge de ce talk est un besoin client : un fichier est reçu chaque
+minute, et ces fichiers doivent être aggregés toutes les 15 min</p>
+
+<ul>
+  <li>Ne pas parler solution avant d’avoir compris le problème</li>
+  <li>Faire simple pour valider les hypothèses : 2 briques logique, 1 seul brique physique (avantage: 1 déploiement) = modular monolith</li>
+  <li>Garder des options pour changer (par ex. une interface pour les connecteurs entre module) - Reversible decisions</li>
+  <li>Archi = compromis</li>
+  <li>On teste en prod avec impl. in-memory, on fera la durabilité après</li>
+  <li>Faire du json c’est établir un contrat (les contrats sont partout, ex:<code class="language-plaintext highlighter-rouge">.h</code>/<code class="language-plaintext highlighter-rouge">.c</code>, API, MCP)</li>
+  <li>Les contrats sont pour toujours.</li>
+  <li>Règles de robustesse :
+    <ul>
+      <li>Ignore les évements et les champs inconnus.</li>
+      <li>Ne jamais supprimer un champs ou un événement.</li>
+      <li>Toujours ajouter un nouveau champs pour faire des changements</li>
+    </ul>
+  </li>
+  <li>Faire des ADR</li>
+  <li>ArchUnit est un outil pour tester son archi</li>
+</ul>
+
+<h1 id="booster-le-démarrage-des-applications-java--optimisations-jvm-et-frameworks---olivier-bourgain">Booster le démarrage des applications Java : optimisations JVM et frameworks - Olivier Bourgain</h1>
+
+<p>Le cycle de vie : Build (artefact) -&gt; Docker image -&gt; Deploy</p>
+
+<p>Les frameworks font plein de choses au démarrage : scanner le classpath, parser le bytecode, reflection, génération de code.</p>
+
+<p>La JVM</p>
+<ul>
+  <li>chargement et linking des classes. nature dynamique de la JVM (permet de changer de JDK)</li>
+  <li>génère du code optimisé. Le JIT (optim spéculative) tourne en // de l’application. C1 (rapide), C2 (lent)</li>
+</ul>
+
+<p>Voici une liste des options pour amélirer le temps de démarrage</p>
+
+<ul>
+  <li>Spring Boot - jar extract : 25s -&gt; 19s</li>
+  <li>Spring AOT (un goal maven en +) : 19s -&gt; 18s</li>
+  <li>CDS = Class Data Sharing : permet de précharger et de partager les métadonnées de classes</li>
+  <li>Leyden (à partir de Java 24) : 12s</li>
+  <li>Leyden + Spring AOT : 10s</li>
+  <li>CraC : capture l’image mémoire d’un processus. seulement pour Linux. Dev par Azul. démarrage ~ 100ms</li>
+  <li>Native Image : tps compilation long, pas de reflection, license commercial pour meilleur perf</li>
+</ul>
+
+<p>Attention sur k8s avec limit.cpu &lt; 2</p>
+
+<p>Pour conclure, un petit tableau de recap avec le gain et la simplicité de chaque solution</p>
+
+<h1 id="chapter-lead--retour-dxp-après-3-ans-de-mise-en-place-chez-bforbank---arnaud-mary">Chapter Lead : retour d’XP après 3 ans de mise en place chez BforBank - Arnaud MARY</h1>
+
+<p>Passage de 30 devs à 120 devs.</p>
+
+<p>Les missions:</p>
+<ul>
+  <li>instaurer et partager les bonnes pratiques</li>
+  <li>fluidifier les relations</li>
+  <li>support aux squads</li>
+  <li>vision tech - gestion du backlog tech</li>
+  <li>rayonner autour de nos expertises</li>
+  <li>recruter et accompagner nos talents</li>
+  <li>veille</li>
+</ul>
+
+<h1 id="dans-les-coulisses-des-géants-de-la-tech----rachel-dubois">Dans les coulisses des géants de la Tech ! - Rachel Dubois</h1>
+
+<p>Je l’avoue, j’ai failli loupé ce talk car il ne m’attirait pas plus que cela. Et
+j’ai adoré, un super rythme et des punchlines (j’en cite quelques unes plus
+bas). Pour la street cred, Rachel a notamment travaillé chez Spotify et Vinted.</p>
+
+<p>Elle commence par décrire l’illusion de l’agilité. L’équipe fait tout bien (mais des choses inutiles …). On confond vitesse et impact.</p>
+
+<blockquote>
+  <p>a Product <strong>is not</strong> a list of Jira tickets, it <strong>is not</strong> a roadmap to execute</p>
+</blockquote>
+
+<p>Elle donne ensuite un ex. chez Spotify où une équipe découvre un drop de 8% sur
+une feature. On peut alors transformer un problème en opportunité.</p>
+
+<p>DIBB (data, insight, believe, bet)</p>
+
+<p>L’excellence technique est un pré-requis.</p>
+
+<p>Faire une anti roadmap = la liste des trucs à enlever.</p>
+
+<blockquote>
+  <p>One refacto a day, keeps doctor at bay.</p>
+</blockquote>
+
+<p>Faire attention aux retours des utilisateurs :</p>
+
+<blockquote>
+  <p>Real behaviours trumps declarations every single time.</p>
+</blockquote>
+
+<p>Elle parle de système circulatoire, toutes les données doivent être accessibles.</p>
+
+<p>Le point commun des big techs : elles ont compris que ce qu’elles font, c’est de la tech !</p>
+
+<h1 id="quand-le-terminal-dévore-la-ui--tui-pour-tout-le-monde----thierry-chantier">Quand le Terminal dévore la UI : TUI pour tout le monde ! - Thierry Chantier</h1>
+
+<p><a href="https://noti.st/titimoby/zKCPXc/quand-le-terminal-devore-la-ui-tui-pour-tout-le-monde">slides</a></p>
+
+<p>Commence par données une définition et des exemples : k9s, posting (équivalent de postman)</p>
+
+<p>Thierry va montrer comment développer un TUI dans plusieurs langages</p>
+<ul>
+  <li>Java : n’a pas trouvé de librairie ?</li>
+  <li>Go : cobra</li>
+  <li>Python : typer, meme dev que FastAPI</li>
+  <li>Rust : pleins de petits éléments à assembler. clap / ratatui</li>
+</ul>
+
+<h1 id="vos-requêtes-sql-jusquà-10000-fois-plus-rapides-durablement---alain-lesage">Vos requêtes SQL jusqu’à 10000 fois plus rapides, durablement. - Alain Lesage</h1>
+
+<p>Alain travaille chez Dalibo, une société de référence dans l’ecosystème PostgreSQL.
+Pour l’anecdote, j’ai déjà eu l’occassion de les croiser lors d’une mission à la DGFiP en 2011.</p>
+
+<p>PostgreSQL n’a pas plus de 50% de la même entreprise.</p>
+
+<p>Voici un résumé des takeaways</p>
+
+<ul>
+  <li>autovacuum s’occupe de la maintenance et des stats. aussi possible de vacuum manuel si besoin.</li>
+  <li>Indexation couteuse en stockage/écriture mais indispensable en lecture.</li>
+  <li>Les différents types d’index
+    <ul>
+      <li>monocolonne</li>
+      <li>multicolonne</li>
+      <li>partiel</li>
+      <li>couvrant pour index only scan</li>
+      <li>fonctionnel</li>
+    </ul>
+  </li>
+  <li>et encore
+    <ul>
+      <li>B-Tree, arbre binaire, classique, efficace (probablement 100% de vos index)</li>
+      <li>GIN/GiST : extension PG pour faire du full text search <code class="language-plaintext highlighter-rouge">pg_trgm</code></li>
+      <li>BRIN : pour données ordonnées, par ex. un timestamp</li>
+    </ul>
+  </li>
+  <li>43 vues de supervision : <code class="language-plaintext highlighter-rouge">pg_stats</code></li>
+  <li>EXPLAIN ANALYZE</li>
+  <li><a href="explain.dalibo.com">explain.dalibo.com</a> pour représentation visuelle des plans</li>
+  <li>attention aux micro services. Pas d’acidité multi DB (Ne pas faire une DB par service mais faire un schema par service)</li>
+  <li>attention aux ORMs qui génèrent des requetes avec beaucoup de jointures. PG calcule tous les plans jusqu’à 8 tables.</li>
+  <li>Liens utiles :
+    <ul>
+      <li><a href="https://kb.dalibo.com/">Base de connaissance PostgreSQL</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bof-paris-scala-user-group-modélisation-de-domaines-parlons-en">BoF Paris Scala User Group: Modélisation de domaines, parlons en.</h1>
+
+<p>J’ai assisté au BoF avec Madame, qui m’avait rejoint pour découvrir cet événement dont je parle tant.
+C’est un plaisir d’assister à une présentation du PSUG, ça manquait !</p>
+
+<p>Jon et Stéphane nous ont montré comment modéliser son domaine grace au feature
+de scala 2 et scala 3 ainsi qu’un panorama des librairies pour améliorer encore
+les choses.</p>
+
+<p>En conclusion, ils montrent un recap des features disponible par langage et
+montre que Scala a encore 10 ans d’avance.</p>
+
+  </div><a class="u-url" href="/devoxx-france-2025-jour-2.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

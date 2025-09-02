@@ -1,0 +1,1825 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://www.yannmoisan.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.yannmoisan.com/" rel="alternate" type="text/html" /><updated>2025-09-01T17:11:04+02:00</updated><id>https://www.yannmoisan.com/feed.xml</id><title type="html">Yann Moisan</title><subtitle>Blog de Yann Moisan Scala, Java, Linux</subtitle><entry xml:lang="en"><title type="html">One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli</title><link href="https://www.yannmoisan.com/scala-cli.html" rel="alternate" type="text/html" title="One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli" /><published>2025-05-08T00:00:00+02:00</published><updated>2025-05-08T00:00:00+02:00</updated><id>https://www.yannmoisan.com/scala-cli</id><content type="html" xml:base="https://www.yannmoisan.com/scala-cli.html"><![CDATA[<p>Scala is a rich and expressive language, and one of its strengths is the flexibility it offers 
+in how you write your code. Whether you lean towards functional purity, pragmatic scripting, 
+or modern direct-style syntax, there’s likely a Scala flavor that suits your workflow.</p>
+
+<p>In this post, I’ll walk through a simple script I use to help publish my “news of the month” blog series. 
+What starts as a basic task — reading a list of URLs and printing each page’s title — 
+becomes an opportunity to explore different Scala styles, 
+from idiomatic scripting and parallelism with Future, to effect systems like cats-effect, ZIO, 
+and even the direct-style Ox library.</p>
+
+<p>The goal? To showcase how Scala’s ecosystem lets you solve the same problem in multiple elegant ways.</p>
+
+<h1 id="context">Context</h1>
+<p>Each month, I publish a “news of the month” post, a curated list of interesting articles.
+To do so, throughout the month, I collect interesting URLs in a text file.
+In order to automate a bit the creation of the markdown for the post, I wrote a
+script that reads this file, fetches the title for each URL, and prints it to
+the standard output.</p>
+
+<p>Requirements:</p>
+<ul>
+  <li>Do not crash in case of errors (e.g. invalid URLs).</li>
+  <li>Do not leave the file open in case of errors. In this simple case, it is more
+for educational purposes (<code class="language-plaintext highlighter-rouge">Source.fromFile</code> creates an open
+file handle. If we don’t call explicitly <code class="language-plaintext highlighter-rouge">.close()</code>, it causes a file
+descriptor leak. The OS has a limit on the number of concurrently open files, 
+you can check it with <code class="language-plaintext highlighter-rouge">ulimit -n</code> (default is often 256 on macOS).</li>
+</ul>
+
+<h1 id="getting-started-with-scala-cli">Getting Started with <code class="language-plaintext highlighter-rouge">scala-cli</code></h1>
+<p>A simple yet powerful tool has emerged: <a href="https://scala-cli.virtuslab.org">scala-cli</a> 
+that allows to compile and run scala scripts with an automatic setup (no build files).
+The dependencies are declared using a directive in the script file itself.
+So, it’s incredibly easy to experiment with different libraries.</p>
+
+<p>I personally installed it with sdkman <code class="language-plaintext highlighter-rouge">sdk install scala-cli</code>, and I update it with <code class="language-plaintext highlighter-rouge">sdk upgrade scala-cli</code></p>
+
+<p>Here is how <a href="https://scala-cli.virtuslab.org/docs/cookbooks/ide/intellij/">to setup IntelliJ</a>.
+When a new script is added, a pictogram suggests syncing BSP changes (otherwise,
+the script won’t be recognized and you won’t have completions).</p>
+
+<h1 id="style-1-idiomatic-scala">Style 1: Idiomatic scala</h1>
+
+<p>scala-cli supports scripts that end with <code class="language-plaintext highlighter-rouge">.sc</code>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+<span class="k">import</span> <span class="nn">org.jsoup.nodes.Document</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.util._</span>
+
+<span class="nc">Using</span><span class="o">(</span>
+  <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span> <span class="n">source</span> <span class="k">=&gt;</span> <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">foreach</span><span class="o">(</span><span class="n">fetchTitle</span><span class="o">)</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="nc">Try</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+    <span class="n">s</span><span class="s">"[$title]($url)"</span>
+  <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Since Scala 2.13, we can use the <code class="language-plaintext highlighter-rouge">Using</code> class, which provides support for automatic resource management in Scala.</p>
+
+<p>It’s very lightweight (around 20 lines of code) to write this kind of tasks in Scala (I personnaly prefer
+it over writing a bash script)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-idiomatic.sc
+</code></pre></div></div>
+
+<h1 id="style-2-parallelism-with-future">Style 2: Parallelism with <code class="language-plaintext highlighter-rouge">Future</code></h1>
+
+<p>It is the standard library concurrency.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+<span class="k">import</span> <span class="nn">org.jsoup.nodes.Document</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.</span><span class="o">{</span><span class="nc">Await</span><span class="o">,</span> <span class="nc">Future</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.duration.</span><span class="o">*</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Failure</span><span class="o">,</span> <span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">,</span> <span class="nc">Using</span><span class="o">}</span>
+
+<span class="nc">Using</span><span class="o">(</span>
+  <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span> <span class="n">source</span> <span class="k">=&gt;</span>
+  <span class="k">val</span> <span class="nv">futures</span> <span class="k">=</span> <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">url</span> <span class="k">=&gt;</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="o">))</span>
+  <span class="nv">Await</span><span class="o">.</span><span class="py">result</span><span class="o">(</span><span class="nv">Future</span><span class="o">.</span><span class="py">sequence</span><span class="o">(</span><span class="n">futures</span><span class="o">),</span> <span class="mf">5.</span><span class="n">minutes</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nc">Future</span> <span class="o">{</span>
+    <span class="nc">Try</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+      <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+      <span class="n">s</span><span class="s">"[$title]($url)"</span>
+    <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+      <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The method <code class="language-plaintext highlighter-rouge">fetchTitle</code> now returns a <code class="language-plaintext highlighter-rouge">Future</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-future.sc
+</code></pre></div></div>
+
+<p>Comparison of execution time (measured with <code class="language-plaintext highlighter-rouge">time</code>)</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>user</td>
+      <td>system</td>
+      <td>cpu</td>
+      <td>total</td>
+    </tr>
+    <tr>
+      <td>Style 1</td>
+      <td>3.64s</td>
+      <td>0.38s</td>
+      <td>38%</td>
+      <td>10.78</td>
+    </tr>
+    <tr>
+      <td>Style 2</td>
+      <td>4.88s</td>
+      <td>0.58s</td>
+      <td>73%</td>
+      <td>7.44</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>As expected, the wall-clock time is lower with Style 2.</p>
+
+<h1 id="style-3-effect-library---cats-effect">Style 3: Effect library - cats effect</h1>
+<p>For cats-effect, a scala file must be used (see <a href="https://typelevel.org/cats-effect/docs/faq#scala-cli">cats-effect - faq#scala-cli</a>)</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep org.typelevel::cats-effect:3.6.1</span>
+<span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">IO</span><span class="o">,</span> <span class="nc">IOApp</span><span class="o">,</span> <span class="nc">Resource</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">cats.syntax.all.</span><span class="o">*</span>
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.language.postfixOps</span>
+
+<span class="c1">// https://typelevel.org/cats-effect/docs/faq#scala-cli</span>
+<span class="k">object</span> <span class="nc">Main</span> <span class="k">extends</span> <span class="nv">IOApp</span><span class="o">.</span><span class="py">Simple</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">IO</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IO</span>
+    <span class="o">.</span><span class="py">blocking</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+      <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+      <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"[$title]($url)"</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="o">.</span><span class="py">handleErrorWith</span><span class="o">(</span><span class="n">e</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url (${e.getMessage})"</span><span class="o">))</span>
+
+  <span class="k">def</span> <span class="nf">run</span><span class="k">:</span> <span class="kt">IO</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">Resource</span>
+      <span class="o">.</span><span class="py">fromAutoCloseable</span><span class="o">(</span>
+        <span class="nv">IO</span><span class="o">.</span><span class="py">blocking</span><span class="o">(</span>
+          <span class="nc">Source</span>
+            <span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+            <span class="o">.</span><span class="py">getLines</span><span class="o">()</span>
+            <span class="o">.</span><span class="py">toList</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+      <span class="o">.</span><span class="py">use</span><span class="o">(</span><span class="n">lines</span> <span class="k">=&gt;</span> <span class="nv">lines</span><span class="o">.</span><span class="py">parTraverse</span><span class="o">(</span><span class="n">fetchTitle</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The .get() method performs a synchronous HTTP request. This blocks the current thread until the request completes or fails.
+So, this call should be wrapped in a blocking-safe context : IO.blocking(…).
+This ensures the blocking operation is run on a dedicated thread pool meant for blocking operations, avoiding starvation of compute threads.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Using</code> is replaced by <code class="language-plaintext highlighter-rouge">Resource.fromAutoCloseable</code></p>
+
+<p>The method <code class="language-plaintext highlighter-rouge">fetchTitle</code> now returns an <code class="language-plaintext highlighter-rouge">IO</code>.</p>
+
+<p>We no longer need to use <code class="language-plaintext highlighter-rouge">Try</code>, errors are captured on the
+error channel of <code class="language-plaintext highlighter-rouge">IO</code>.</p>
+
+<p>Note : As opposed to previous implementation, the file is read fully into memory.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-cats-effect.scala
+</code></pre></div></div>
+
+<h1 id="style-4-effect-library---zio">Style 4: Effect library - ZIO</h1>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep "dev.zio::zio:2.1.17"</span>
+<span class="c1">//&gt; using dep "org.jsoup:jsoup:1.20.1"</span>
+
+<span class="k">import</span> <span class="nn">zio._</span>
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+
+<span class="k">object</span> <span class="nc">Main</span> <span class="k">extends</span> <span class="nc">ZIOAppDefault</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Task</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">ZIO</span>
+      <span class="o">.</span><span class="py">attemptBlocking</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="nv">doc</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+        <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"[${doc.title()}]($url)"</span><span class="o">)</span>
+      <span class="o">}</span>
+      <span class="o">.</span><span class="py">catchAll</span><span class="o">(</span><span class="n">e</span> <span class="k">=&gt;</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">succeed</span><span class="o">(</span><span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url - ${e.getMessage}"</span><span class="o">)))</span>
+
+  <span class="k">def</span> <span class="nf">run</span><span class="k">:</span> <span class="kt">ZIO</span><span class="o">[</span><span class="kt">Scope</span>, <span class="kt">Throwable</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+
+    <span class="k">for</span> <span class="o">{</span>
+      <span class="n">source</span> <span class="k">&lt;-</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">fromAutoCloseable</span><span class="o">(</span>
+        <span class="nv">ZIO</span><span class="o">.</span><span class="py">attemptBlocking</span><span class="o">(</span>
+          <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span>
+            <span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span>
+          <span class="o">)</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+      <span class="n">lines</span> <span class="k">&lt;-</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">attemptBlocking</span><span class="o">(</span><span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">().</span><span class="py">toList</span><span class="o">)</span>
+      <span class="k">_</span> <span class="k">&lt;-</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">foreachParDiscard</span><span class="o">(</span><span class="n">lines</span><span class="o">)(</span><span class="n">fetchTitle</span><span class="o">)</span>
+    <span class="o">}</span> <span class="nf">yield</span> <span class="o">()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>On this case, ZIO is quite similar to cats-effect. The same concepts exist in
+both library.</p>
+
+<p>Here is a summary of the syntax differences</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>cats-effect</td>
+      <td>ZIO</td>
+    </tr>
+    <tr>
+      <td>IO.blocking</td>
+      <td>ZIO.attemptBlocking</td>
+    </tr>
+    <tr>
+      <td>Resource.fromAutocloseable</td>
+      <td>ZIO.fromAutoCloseable</td>
+    </tr>
+    <tr>
+      <td>lines.parTraverse</td>
+      <td>ZIO.foreachParDiscard(lines)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="style-5-direct-style-with-ox-and-high-level-concurrency">Style 5: Direct-style with <a href="https://ox.softwaremill.com">Ox</a> and high-level concurrency</h1>
+
+<p>In a nutshell, direct-style means you don’t have to deal with nested <code class="language-plaintext highlighter-rouge">flatMap</code>/<code class="language-plaintext highlighter-rouge">map</code>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep com.softwaremill.ox::core:0.5.13</span>
+<span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Failure</span><span class="o">,</span> <span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">,</span> <span class="nc">Using</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">ox.</span><span class="o">*</span>
+
+<span class="nc">Using</span><span class="o">(</span>
+  <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span> <span class="n">source</span> <span class="k">=&gt;</span>
+  <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">toList</span>
+    <span class="o">.</span><span class="py">foreachPar</span><span class="o">(</span><span class="mi">4</span><span class="o">)(</span><span class="n">fetchTitle</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="nc">Try</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+    <span class="n">s</span><span class="s">"[$title]($url)"</span>
+  <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The method <code class="language-plaintext highlighter-rouge">fetchTitle</code> remains exactly the same as in the first version. The only change
+is the call to <a href="https://ox.softwaremill.com/latest/high-level-concurrency/collections.html#foreachpar">foreachPar</a>.</p>
+
+<p>Ox is based on project Loom, which requires JDK 21. Thankfully, once again, it’s super easy to get up and running.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-cats-effect.sc --jvm temurin:21
+</code></pre></div></div>
+
+<h1 id="style-6-direct-style-with-ox-and-structured-concurrency">Style 6: Direct-style with <a href="https://ox.softwaremill.com">Ox</a> and structured-concurrency</h1>
+
+<p><a href="https://ox.softwaremill.com/latest/structured-concurrency/index.html#what-is-structured-concurrency">what-is-structured-concurrency</a></p>
+
+<blockquote>
+  <p>Structured concurrency is an approach where the lifetime of a thread is determined by the syntactic structure of the code.</p>
+</blockquote>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep com.softwaremill.ox::core:0.5.13</span>
+<span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Failure</span><span class="o">,</span> <span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">,</span> <span class="nc">Using</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">ox.</span><span class="o">*</span>
+
+<span class="n">supervised</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">source</span> <span class="k">=</span> <span class="nf">useCloseableInScope</span><span class="o">(</span><span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">))</span>
+  <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">url</span> <span class="k">=&gt;</span> <span class="nf">fork</span><span class="o">(</span><span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="o">)).</span><span class="py">join</span><span class="o">())</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="nc">Try</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+    <span class="n">s</span><span class="s">"[$title]($url)"</span>
+  <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Ox provides methods to manage resources.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-cats-effect.sc --jvm temurin:21
+</code></pre></div></div>
+
+<h1 id="other-styles">Other styles</h1>
+
+<p>Other alternatives that I have not tested :</p>
+
+<ul>
+  <li><a href="https://github.com/lampepfl/gears">gears</a>, another direct-style async library for Scala 3.</li>
+  <li><a href="https://github.com/getkyo/kyo">kyo</a>, a toolkit based on algebraic effect.</li>
+</ul>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>This tiny script turned out to be a fun playground to explore the diversity of styles 
+and libraries available in modern Scala. Whether you prefer the simplicity of standard futures, 
+the power of type-safe effects with cats-effect or ZIO, or the readability of direct-style with Ox, 
+you can choose the right tool for your needs — all within the same language.</p>
+
+<p>Having options is empowering. It allows you to write code that matches your mindset, 
+project constraints, and performance goals. If you’ve tried a different approach 
+or library for similar scripting tasks, I’d love to hear about it — 
+feel free to reach out or leave a comment!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[One Script, Many Styles - Exploring Scala's Ecosystem with scala-cli]]></summary></entry><entry xml:lang="fr"><title type="html">Devoxx France 2025 - Jour 2</title><link href="https://www.yannmoisan.com/devoxx-france-2025-jour-2.html" rel="alternate" type="text/html" title="Devoxx France 2025 - Jour 2" /><published>2025-04-22T00:00:00+02:00</published><updated>2025-04-22T00:00:00+02:00</updated><id>https://www.yannmoisan.com/devoxx-france-2025-jour-2</id><content type="html" xml:base="https://www.yannmoisan.com/devoxx-france-2025-jour-2.html"><![CDATA[<h1 id="les-clés-de-larchitecture-pour-les-devs">Les clés de l’architecture pour les devs</h1>
+
+<p>Tout d’abord, chapeau à Eric Le Merdy qui a appris le matin du talk qu’il remplacerait Christian Sperandio.</p>
+
+<p>Le fil rouge de ce talk est un besoin client : un fichier est reçu chaque
+minute, et ces fichiers doivent être aggregés toutes les 15 min</p>
+
+<ul>
+  <li>Ne pas parler solution avant d’avoir compris le problème</li>
+  <li>Faire simple pour valider les hypothèses : 2 briques logique, 1 seul brique physique (avantage: 1 déploiement) = modular monolith</li>
+  <li>Garder des options pour changer (par ex. une interface pour les connecteurs entre module) - Reversible decisions</li>
+  <li>Archi = compromis</li>
+  <li>On teste en prod avec impl. in-memory, on fera la durabilité après</li>
+  <li>Faire du json c’est établir un contrat (les contrats sont partout, ex:<code class="language-plaintext highlighter-rouge">.h</code>/<code class="language-plaintext highlighter-rouge">.c</code>, API, MCP)</li>
+  <li>Les contrats sont pour toujours.</li>
+  <li>Règles de robustesse :
+    <ul>
+      <li>Ignore les évements et les champs inconnus.</li>
+      <li>Ne jamais supprimer un champs ou un événement.</li>
+      <li>Toujours ajouter un nouveau champs pour faire des changements</li>
+    </ul>
+  </li>
+  <li>Faire des ADR</li>
+  <li>ArchUnit est un outil pour tester son archi</li>
+</ul>
+
+<h1 id="booster-le-démarrage-des-applications-java--optimisations-jvm-et-frameworks---olivier-bourgain">Booster le démarrage des applications Java : optimisations JVM et frameworks - Olivier Bourgain</h1>
+
+<p>Le cycle de vie : Build (artefact) -&gt; Docker image -&gt; Deploy</p>
+
+<p>Les frameworks font plein de choses au démarrage : scanner le classpath, parser le bytecode, reflection, génération de code.</p>
+
+<p>La JVM</p>
+<ul>
+  <li>chargement et linking des classes. nature dynamique de la JVM (permet de changer de JDK)</li>
+  <li>génère du code optimisé. Le JIT (optim spéculative) tourne en // de l’application. C1 (rapide), C2 (lent)</li>
+</ul>
+
+<p>Voici une liste des options pour amélirer le temps de démarrage</p>
+
+<ul>
+  <li>Spring Boot - jar extract : 25s -&gt; 19s</li>
+  <li>Spring AOT (un goal maven en +) : 19s -&gt; 18s</li>
+  <li>CDS = Class Data Sharing : permet de précharger et de partager les métadonnées de classes</li>
+  <li>Leyden (à partir de Java 24) : 12s</li>
+  <li>Leyden + Spring AOT : 10s</li>
+  <li>CraC : capture l’image mémoire d’un processus. seulement pour Linux. Dev par Azul. démarrage ~ 100ms</li>
+  <li>Native Image : tps compilation long, pas de reflection, license commercial pour meilleur perf</li>
+</ul>
+
+<p>Attention sur k8s avec limit.cpu &lt; 2</p>
+
+<p>Pour conclure, un petit tableau de recap avec le gain et la simplicité de chaque solution</p>
+
+<h1 id="chapter-lead--retour-dxp-après-3-ans-de-mise-en-place-chez-bforbank---arnaud-mary">Chapter Lead : retour d’XP après 3 ans de mise en place chez BforBank - Arnaud MARY</h1>
+
+<p>Passage de 30 devs à 120 devs.</p>
+
+<p>Les missions:</p>
+<ul>
+  <li>instaurer et partager les bonnes pratiques</li>
+  <li>fluidifier les relations</li>
+  <li>support aux squads</li>
+  <li>vision tech - gestion du backlog tech</li>
+  <li>rayonner autour de nos expertises</li>
+  <li>recruter et accompagner nos talents</li>
+  <li>veille</li>
+</ul>
+
+<h1 id="dans-les-coulisses-des-géants-de-la-tech----rachel-dubois">Dans les coulisses des géants de la Tech ! - Rachel Dubois</h1>
+
+<p>Je l’avoue, j’ai failli loupé ce talk car il ne m’attirait pas plus que cela. Et
+j’ai adoré, un super rythme et des punchlines (j’en cite quelques unes plus
+bas). Pour la street cred, Rachel a notamment travaillé chez Spotify et Vinted.</p>
+
+<p>Elle commence par décrire l’illusion de l’agilité. L’équipe fait tout bien (mais des choses inutiles …). On confond vitesse et impact.</p>
+
+<blockquote>
+  <p>a Product <strong>is not</strong> a list of Jira tickets, it <strong>is not</strong> a roadmap to execute</p>
+</blockquote>
+
+<p>Elle donne ensuite un ex. chez Spotify où une équipe découvre un drop de 8% sur
+une feature. On peut alors transformer un problème en opportunité.</p>
+
+<p>DIBB (data, insight, believe, bet)</p>
+
+<p>L’excellence technique est un pré-requis.</p>
+
+<p>Faire une anti roadmap = la liste des trucs à enlever.</p>
+
+<blockquote>
+  <p>One refacto a day, keeps doctor at bay.</p>
+</blockquote>
+
+<p>Faire attention aux retours des utilisateurs :</p>
+
+<blockquote>
+  <p>Real behaviours trumps declarations every single time.</p>
+</blockquote>
+
+<p>Elle parle de système circulatoire, toutes les données doivent être accessibles.</p>
+
+<p>Le point commun des big techs : elles ont compris que ce qu’elles font, c’est de la tech !</p>
+
+<h1 id="quand-le-terminal-dévore-la-ui--tui-pour-tout-le-monde----thierry-chantier">Quand le Terminal dévore la UI : TUI pour tout le monde ! - Thierry Chantier</h1>
+
+<p><a href="https://noti.st/titimoby/zKCPXc/quand-le-terminal-devore-la-ui-tui-pour-tout-le-monde">slides</a></p>
+
+<p>Commence par données une définition et des exemples : k9s, posting (équivalent de postman)</p>
+
+<p>Thierry va montrer comment développer un TUI dans plusieurs langages</p>
+<ul>
+  <li>Java : n’a pas trouvé de librairie ?</li>
+  <li>Go : cobra</li>
+  <li>Python : typer, meme dev que FastAPI</li>
+  <li>Rust : pleins de petits éléments à assembler. clap / ratatui</li>
+</ul>
+
+<h1 id="vos-requêtes-sql-jusquà-10000-fois-plus-rapides-durablement---alain-lesage">Vos requêtes SQL jusqu’à 10000 fois plus rapides, durablement. - Alain Lesage</h1>
+
+<p>Alain travaille chez Dalibo, une société de référence dans l’ecosystème PostgreSQL.
+Pour l’anecdote, j’ai déjà eu l’occassion de les croiser lors d’une mission à la DGFiP en 2011.</p>
+
+<p>PostgreSQL n’a pas plus de 50% de la même entreprise.</p>
+
+<p>Voici un résumé des takeaways</p>
+
+<ul>
+  <li>autovacuum s’occupe de la maintenance et des stats. aussi possible de vacuum manuel si besoin.</li>
+  <li>Indexation couteuse en stockage/écriture mais indispensable en lecture.</li>
+  <li>Les différents types d’index
+    <ul>
+      <li>monocolonne</li>
+      <li>multicolonne</li>
+      <li>partiel</li>
+      <li>couvrant pour index only scan</li>
+      <li>fonctionnel</li>
+    </ul>
+  </li>
+  <li>et encore
+    <ul>
+      <li>B-Tree, arbre binaire, classique, efficace (probablement 100% de vos index)</li>
+      <li>GIN/GiST : extension PG pour faire du full text search <code class="language-plaintext highlighter-rouge">pg_trgm</code></li>
+      <li>BRIN : pour données ordonnées, par ex. un timestamp</li>
+    </ul>
+  </li>
+  <li>43 vues de supervision : <code class="language-plaintext highlighter-rouge">pg_stats</code></li>
+  <li>EXPLAIN ANALYZE</li>
+  <li><a href="explain.dalibo.com">explain.dalibo.com</a> pour représentation visuelle des plans</li>
+  <li>attention aux micro services. Pas d’acidité multi DB (Ne pas faire une DB par service mais faire un schema par service)</li>
+  <li>attention aux ORMs qui génèrent des requetes avec beaucoup de jointures. PG calcule tous les plans jusqu’à 8 tables.</li>
+  <li>Liens utiles :
+    <ul>
+      <li><a href="https://kb.dalibo.com/">Base de connaissance PostgreSQL</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bof-paris-scala-user-group-modélisation-de-domaines-parlons-en">BoF Paris Scala User Group: Modélisation de domaines, parlons en.</h1>
+
+<p>J’ai assisté au BoF avec Madame, qui m’avait rejoint pour découvrir cet événement dont je parle tant.
+C’est un plaisir d’assister à une présentation du PSUG, ça manquait !</p>
+
+<p>Jon et Stéphane nous ont montré comment modéliser son domaine grace au feature
+de scala 2 et scala 3 ainsi qu’un panorama des librairies pour améliorer encore
+les choses.</p>
+
+<p>En conclusion, ils montrent un recap des features disponible par langage et
+montre que Scala a encore 10 ans d’avance.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Devoxx France 2025 - Jour 2]]></summary></entry><entry xml:lang="fr"><title type="html">Devoxx France 2025 - Jour 3</title><link href="https://www.yannmoisan.com/devoxx-france-2025-jour-3.html" rel="alternate" type="text/html" title="Devoxx France 2025 - Jour 3" /><published>2025-04-22T00:00:00+02:00</published><updated>2025-04-22T00:00:00+02:00</updated><id>https://www.yannmoisan.com/devoxx-france-2025-jour-3</id><content type="html" xml:base="https://www.yannmoisan.com/devoxx-france-2025-jour-3.html"><![CDATA[<h1 id="les-llm-rêvent-ils-de-cavaliers-électriques----thibaut-giraud">Les LLM rêvent-ils de cavaliers électriques ? - Thibaut Giraud</h1>
+
+<p>Thibaut Giraud refute la thèse que les LLMs se réduisent à des perroquets stochastiques.</p>
+
+<p>Il utilise pour cela l’exemple des échecs et montre qu’avec un prompt sous la
+forme d’un PGN, gpt-3.5-turbo-instruct joue entre 1700 et 1800 ELO, ce qui est
+le niveau d’un bon joueur !</p>
+
+<h1 id="30-ans-dhello-world-en-java-avec-les-jdk-10-à-24---jean-michel-doudoux">30 ans d’Hello World en Java avec les JDK 1.0 à 24 - Jean-Michel Doudoux</h1>
+
+<p>Jean-Michel est connu pour avoir rédiger le tutoriel Développons en Java (soit
+plusieurs milliers de page !)</p>
+
+<p>Dans ce talk, pour célébrer les 30 ans de Java, il nous montre 34 façons
+d’écrire un HelloWorld. Ca passe notamment par JNI, Nashorn (le moteur d’execution
+Javascript), la FFM API (Foreign Function &amp; Memory API) introduite en JDK 22 jusqu’a la nouvelle API Class-File du JDK 24.</p>
+
+<h1 id="continuations-the-magic-behind-virtual-threads-in-java---balkrishna-rawool">Continuations: The magic behind virtual threads in Java - Balkrishna Rawool</h1>
+
+<p>Ce talk est un live coding pour réimplementer les virtuals threads en utilisant
+la continuation API, le but étant de comprendre ce qu’il y a sous le capot.</p>
+
+<p>Les virtual thread ont fait leur apparition en Java 21. Le scheduler permet de
+monter/démonter des virtual threads dans des platform threads.</p>
+
+<p>Une continuation représente l’état courant du programme.
+L’API a deux méthodes pour pause/resume, qui manipulent la call stack.
+Les continuations en Java sont réservées pour une utilisation interne uniquement, 
+il faut donc utiliser ce flag <code class="language-plaintext highlighter-rouge">--add-exports java.base/jdk.internal.vm=ALL-UNNAMED</code> pour executer les exemples.</p>
+
+<p>Le speaker commence par implémenter un générateur puis passe à la partie virtual
+thread.</p>
+
+<p><a href="https://github.com/balkrishnarawool/continuations">code</a></p>
+
+<h1 id="staff-engineer--les-défis-les-galères-et-comment-les-surmonter">Staff Engineer : Les défis, les galères, et comment les surmonter</h1>
+
+<p>Les speakers travaillent chez BackMarket et Google.</p>
+
+<p>Ils vont parcourir les questionnements auquel on est confronté en tant que staff</p>
+
+<ul>
+  <li>J’ai pas le temps
+    <ul>
+      <li>réduire les interruptions (slack)</li>
+      <li>pour les managers, aider vos staffs à protéger leur temps</li>
+      <li>déléguer, ne pas céder à la tentation: pas le temps de leader, je vais le faire moi-même</li>
+    </ul>
+  </li>
+  <li>J’ai des idées mais personne ne m’écoute
+    <ul>
+      <li>Il faut construire ses relations</li>
+    </ul>
+  </li>
+  <li>Qu’est ce que je suis censé faire
+    <ul>
+      <li>Skip level interview pour dumper la charge mentale de son N+2</li>
+    </ul>
+  </li>
+  <li>Personne ne comprend pourquoi c’est important
+    <ul>
+      <li>Expliquer “qu’est ce qui se passe si on ne le fait pas ?”</li>
+    </ul>
+  </li>
+  <li>J’ai fait quoi ?
+    <ul>
+      <li>Contribution indirectes (qui a mené a un impact)</li>
+    </ul>
+  </li>
+  <li>J’ai l’impression d’être la personne qui dit toujours non
+    <ul>
+      <li>Demander du feedback, votre contribution est probablement apprécié</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="optimisation-des-requêtes-postgresql--parlons-performance-">Optimisation des requêtes PostgreSQL : Parlons Performance !</h1>
+
+<p><a href="https://l_avrot.gitlab.io/slides/perf_20250418.html">slides</a></p>
+
+<p>Rewriter
+    - CTE Processing
+    - Subquery Transformation
+    - Join Reordering (jusqu’à 8 tables)
+    - Predicate pushdown</p>
+
+<p>Planner</p>
+<ul>
+  <li>estimations des couts basés sur les statistiques</li>
+  <li>les fréquences sont basés sur un échantillon de lignes (10%)</li>
+  <li>le calcul du cout utilise des constantes configurables
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">seq_page_cost</code> = 1</li>
+      <li><code class="language-plaintext highlighter-rouge">random_page_cost</code> = 4 (bon il y a 25 ans, possible de mettre 1.1 aujourd’hui avec les SSD)</li>
+      <li><code class="language-plaintext highlighter-rouge">cpu_tuple_cost</code></li>
+      <li><code class="language-plaintext highlighter-rouge">cpu_index_tuple_cost</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Utiliser explain(analyze,verbose,buffer,wal,memory) pour récupérer un max d’info.
+cost=a..b (a pour le temps de recup la première ligne, b pour toutes les lignes)</p>
+
+<p>Performance red flags</p>
+<ul>
+  <li>Seq Scan on large tables</li>
+  <li>Huge differences between estimated and actual rows</li>
+  <li>High-cost Sort or Hash operations</li>
+  <li>Nested Loop joins with large outer relations</li>
+  <li>Filter conditions (vs. Index Cond)</li>
+</ul>
+
+<p>Vérifier l’utilisation de vos index, il y a des stats là-dessus 
+Chercher les index dupliqués.</p>
+
+<p>Rows removed by filter. si selectivité basse (entre 5 et 10%), PG utilise un scan seq</p>
+
+<p>Pour finir, il y a un quizz on doit trouver le problème à partir d’une requete
+et du résultat du EXPLAIN ANALYZE.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Devoxx France 2025 - Jour 3]]></summary></entry><entry xml:lang="fr"><title type="html">Devoxx France 2025 - Jour 1</title><link href="https://www.yannmoisan.com/devoxx-france-2025-jour-1.html" rel="alternate" type="text/html" title="Devoxx France 2025 - Jour 1" /><published>2025-04-21T00:00:00+02:00</published><updated>2025-04-21T00:00:00+02:00</updated><id>https://www.yannmoisan.com/devoxx-france-2025-jour-1</id><content type="html" xml:base="https://www.yannmoisan.com/devoxx-france-2025-jour-1.html"><![CDATA[<h1 id="lintelligence-artificielle-nexiste-pas---luc-julia">L’Intelligence Artificielle n’existe pas - Luc Julia</h1>
+
+<p>Le speaker de la première keynote est Luc Julia, l’inventeur de Siri.
+Il commence par un historique qui débute en 1956 avec les réseaux de neurones (modèle statistique) puis en 1960 les systèmes experts (arbre de décision).</p>
+
+<p>Il dit que l’IA de Hollywood, celle de Musk et d’Altman n’existe pas et n’existera jamais. Il parle plutôt d’IAs (au pluriel).</p>
+
+<p>L’IA n’est pas une révolution, c’est juste un outil (à l’instar du marteau).
+Le prompt est une révolution car il permet l’accessibilité à tous (100M d’utilisateurs de ChatGPT en seulement 2 mois).</p>
+
+<p>Il termine en parlant d’hallucinations et d’erreurs.</p>
+<ul>
+  <li>En avril 2023, un avocat du barreau de New York utilise ChatGPT pour créé une plaidoirie. Les références générées n’existent pas.</li>
+  <li>Luc Julia demande aussi sa bio et apprend à chaque fois des trucs sur lui !</li>
+  <li>L’université de HK montre une pertinence de 63,4% sur des faits vrais.</li>
+</ul>
+
+<p>La solution est la spécialisation : Le fine tuning ou RAG permet d’atteindre 99%.</p>
+
+<p>Il montre aussi le jailbreaking, qui est une course (besoin d’un prompt toujours plus long), pour obtenir la recette de la bombe.</p>
+
+<p>Il termine sur l’impact. A l’inférence, on utilise de l’énergie, et pour construire le modèle, c’est l’équivalent de villes entières.</p>
+
+<h1 id="iceberg-pourquoi-devez-vous-connaitre-ce-nouveau-format-de-stockage-de-données---bertrand-paquet">Iceberg: pourquoi devez-vous connaitre ce nouveau format de stockage de données? - Bertrand Paquet</h1>
+
+<p>Doctolib est déployé sur AWS.
+La plus grosse table, <code class="language-plaintext highlighter-rouge">appointment</code>, représente 3.5 milliards de lignes et 2.5T de data (index compris)</p>
+
+<p>Démo de la performance de différents outils</p>
+<ul>
+  <li>Athena / Glue / S3 (csv). Pb: lent car pas splittable</li>
+  <li>Athena / Glue / S3 (1000 csv). Pb: schema change, update</li>
+</ul>
+
+<p>Apache Iceberg est un table format. Les buts d’un table format sont</p>
+<ul>
+  <li>le support des transaction ACID</li>
+  <li>l’évolution du schema</li>
+</ul>
+
+<p>Refonte de l’archi de stockage à froid (nightly batch jusqu’ici). La nouvelle archi comporte 3 composants</p>
+<ol>
+  <li>PG -&gt; Debezium (comme un replica pour lire le WAL) -&gt; Kafka</li>
+  <li>Sink Kafka -&gt; CDC events</li>
+  <li>CDC events (Iceberg) -&gt; Mirrors tables (Iceberg) avec Spark (MERGED INTO)</li>
+</ol>
+
+<p>Compromis à trouver entre le cout et le délai de rafraichissement</p>
+
+<h1 id="github-copilot--aller-encore-plus-loin-que-la-completion-de-code">GitHub Copilot : Aller encore plus loin que la completion de code</h1>
+
+<p>Live demo sur une appli view/express.</p>
+
+<p>GitHub Copilot a 3 modes :</p>
+<ul>
+  <li>chat: interface de conversation, comme ChatGPT</li>
+  <li>multi-edit: permet de modifier les fichiers</li>
+  <li>agent: assistant multi étapes</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">copilot-instructions.md</code> utilisé par vscode, github.com et bientôt jetbrains.
+ajout de toute la codebase dans le contexte pour le multi-edit.</p>
+
+<p>copilot permet de générer un résumé de la PR, d’analyser une PR. Le mode agent
+pour modèle MCP est capable de créer une issue.</p>
+
+<h1 id="ne-perdez-plus-vos-photos-de-vacances--ou-tout-autre-fichier-important---denis-germain">Ne perdez plus vos photos de vacances 🔥🏠🔥 (ou tout autre fichier important) - Denis Germain</h1>
+
+<p><a href="https://blog.zwindler.fr/talks/2025-3-2-1/index.html">slides</a></p>
+
+<p>Nos données ont plus de valeur que l’on pense. 3 exemples:</p>
+<ul>
+  <li>sa voisine qui a failli perdre 10 ans de photo avec un disque defectueux</li>
+  <li>le thésard qui perd sa clé USB dans le train</li>
+  <li>un mec qui jeté un disque contenant 750M$ de bitcoin</li>
+</ul>
+
+<p>Le risque se calcule : probabilité * impact</p>
+
+<p>Respecter la stratégie 3-2-1 (3 copies, sur 2 supports différents, avec une copie distante)</p>
+
+<p>Conseil : avoir en plus une copie hors ligne pour le risque de ransomware (chiffrement des disques).</p>
+
+<p>Note: Dropbox n’est pas un service de sauvegarde (car pas offline).</p>
+
+<ul>
+  <li>Service de sauvegarde : <a href="https://www.backblaze.com/">backblaze</a></li>
+  <li>Appli open-source: restic, <a href="https://duplicati.com/">duplicati</a> (backup chiffrées, en ligne ou hors ligne, locales ou cloud)</li>
+</ul>
+
+<h1 id="apache-arrow-lanalyse-de-données-haute-performance-et-interopérable---sylvain-wallez">Apache Arrow, l’analyse de données haute performance et interopérable - Sylvain Wallez</h1>
+
+<p><a href="https://docs.google.com/presentation/d/e/2PACX-1vRzNDZkA2e5QHZdAoD3Flcm5xF10a-AZ6VmsXIknVRlFZ4hXP1SVh7kR41ACCEQYvAWecgy0Fbf-slE/pub#slide=id.p">Slides</a></p>
+
+<p>Sylvain est tech lead sur la partie SDK chez Elastic.</p>
+
+<p>Arrow un format orienté colonne, un backend pour Pandas 2.0</p>
+
+<p>Il existe des implémentations dans pleins de langage : Go, Java, TS, Rust, Python, …</p>
+
+<p>zero-copy reads : shared-memory entre Java et Python par ex.</p>
+
+<p>Comparaison avec parquet : parquet est fait pour le stockage (storage), arrow pour le calcul (compute)</p>
+
+<p>Une stack complète est basée sur arrow :</p>
+
+<ul>
+  <li>Arrow: In-memory dataframe</li>
+  <li>Arrow IPC: zero-cost data interchange</li>
+  <li>Arrow Flight</li>
+  <li>Arrow SQL (~ jdbc)</li>
+  <li>DataFusion: SQL execution engine</li>
+  <li>Ballista: Distributed compute engine</li>
+</ul>
+
+<p>ES|QL est un nouveau langage de requete apparu dans Elasticsearch 8.11.
+Il montre le support d’arrow comme format de sortie de ES|QL.</p>
+
+<p>Sylvain a aussi ajouté le support d’ES dans DataFusion en développant un <a href="https://github.com/swallez/elasticsearch-datafusion-tableprovider"><code class="language-plaintext highlighter-rouge">TableProvider</code></a> en Rust.
+Il est ainsi possible de faire des jointures entre un ES et un PG par ex., et aussi d’ingérer efficacement de gros volumes dans ES.</p>
+
+<h1 id="count-min-sketch-bloom-filter-topk-efficient-probabilistic-data-structures---raphael-de-lio">Count-Min Sketch, Bloom Filter, TopK: Efficient probabilistic data structures - Raphael De Lio</h1>
+
+<h1 id="à-la-découverte-dun-ledger-une-bdd-atypique----erwan-gereec">À la découverte d’un Ledger, une BDD atypique ! - Erwan GEREEC</h1>
+
+<p>Un ledger est un <strong>système d’enregistrement</strong> permettant d’accéder à l’historique
+complet et immuable des <strong>transactions</strong> qui y sont effecutées. Il peut être
+centralisé (comme une base de données classique) ou décentralisé (comme une
+blockain).</p>
+
+<p>Démo du ledger de <a href="https://www.formance.com/modules/ledger">Formance</a>.
+Avec Formance, on effectue des transactions entre compte. Un compte est
+identifié par un nom et une balance. Une transaction est un transfert d’un
+compte source vers un compte destination.</p>
+
+<p>Formance utilise Numscript, un langage de script dédié.</p>
+
+<p>On peut calculer automatiquement des comptes agrégés : <code class="language-plaintext highlighter-rouge">practicien:$ID:patient::factures:impayees</code></p>
+
+<p>Il faut partir de vos besoins métiers pour déterminer la structure des comptes à
+mettre en place.</p>
+
+<p>Sandbox gratuite pour essayer.</p>
+
+<p>Liens utiles : https://stripe.com/blog/ledger-stripe-system-for-tracking-and-validating-money-movement</p>
+
+<h1 id="be-more-productive-with-intellij-idea---marit-van-dijk">Be more productive with IntelliJ IDEA - Marit van Dijk</h1>
+
+<p><a href="https://maritvandijk.com/presentations/developer-productivity-in-intellij-idea/">talk</a></p>
+
+<p>En vrac:</p>
+<ul>
+  <li>Shift Shift : Search Everywhere</li>
+  <li>Alt+Enter pour corriger les erreurs</li>
+  <li>F2 va à la prochaine erreur</li>
+  <li>surround with if statement</li>
+  <li>Cmd+J live template</li>
+  <li>Check regexp</li>
+  <li>Explain regexp fragment</li>
+  <li><a href="https://www.jetbrains.com/junie/">Junie</a>, un agent pour déléguer ses tâches</li>
+</ul>]]></content><author><name></name></author><summary type="html"><![CDATA[Devoxx France 2025 - Jour 1]]></summary></entry><entry xml:lang="en"><title type="html">My post mortem for the codingame Winter Challenge 2024</title><link href="https://www.yannmoisan.com/winter-challenge-2024.html" rel="alternate" type="text/html" title="My post mortem for the codingame Winter Challenge 2024" /><published>2025-01-06T00:00:00+01:00</published><updated>2025-01-06T00:00:00+01:00</updated><id>https://www.yannmoisan.com/winter-challenge-2024</id><content type="html" xml:base="https://www.yannmoisan.com/winter-challenge-2024.html"><![CDATA[<style>
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin: 20px auto;
+    }
+    th, td {
+        border: 1px solid black;
+        text-align: center;
+        padding: 0px;
+        font-size: 48px;
+        width: 60px; /* Fixed width */
+        height: 60px; /* Fixed height */
+    }
+</style>
+
+<ul>
+  <li>Rank: #99/3900</li>
+  <li>Language: Scala</li>
+  <li>LOC: 1000</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>December is always a challenging month, especially with the Advent of Code daily puzzles. 
+By mid-December, as my motivation for Advent of Code began to decrease, 
+I received an invitation for the CodinGame Winter Challenge, 
+scheduled from December 19 to January 6. Despite trying to resist, I ultimately registered.</p>
+
+<p>I’m also proud of my older son, who created a CodinGame account and decided to participate 
+for the first time. With just a little help correcting Python coding mistakes in the IDE, 
+he successfully progressed through the wood league and ultimately reached the silver league. 
+Congrats to him!</p>
+
+<h2 id="strategy">Strategy</h2>
+
+<p>This contest was particularly friendly to heuristic approaches, 
+allowing participants to achieve good ranks with a heuristic-only bot. 
+Therefore, I decided not to implement a simulation this time.</p>
+
+<p>For each turn, I generated all possible actions: a cartesian product of 
+available locations within a distance of 1, different organ types, 
+and the four directions, plus all spore possibilities.</p>
+
+<p>For each action, I computed a score.</p>
+
+<h2 id="the-scoring-function">The scoring function</h2>
+
+<p>Score values by organ type : Tentacle &gt; Harvester &gt; Sporer &gt; Basic</p>
+
+<p>Each type had a specific scoring function:</p>
+
+<ul>
+  <li>Tentacle
+    <ul>
+      <li>The closer to the opponent, the highest score</li>
+      <li>If at a distance of 1 from the opponent (figure 1),
+        <ul>
+          <li>I used also the number of destroyed opponent organs</li>
+          <li>and also a boost if the location isn’t controlled by another of my tentacles (not as in fig 2)</li>
+        </ul>
+      </li>
+      <li>If at a distance of 2/3, the idea is to prevent the opponent from growing toward us. (figure 3’
+        <ul>
+          <li>and also a boost if the target of the tentacle is controlled by an opponent tentacle (figure 4)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Figure 1 (score 3.1)</p>
+
+<table>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: red;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Figure 2 (score 3.0)</p>
+
+<table>
+    <tr>
+        <td>&nbsp;</td>
+        <td style="color: blue;">&#x25BC;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: red;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Figure 3 (score 2.8)</p>
+
+<table>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: blue; ">&nbsp;</td>
+        <td style="color: red;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Figure 4 (score 2.9)</p>
+
+<table>
+    <tr>
+        <td style="color: blue;">&#x25A0;</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B6;</td>
+        <td style="color: blue; ">&nbsp;</td>
+        <td style="color: red;">&#x25C0;</td>
+    </tr>
+</table>
+
+<ul>
+  <li>Harvester
+    <ul>
+      <li>The fewer harvesters of this type, the higher the score.</li>
+    </ul>
+  </li>
+  <li>Sporer
+    <ul>
+      <li>I computed an expected number of roots (based on the number of proteins harvested) 
+  and scored positively if under this number.</li>
+      <li>I aimed to encourage sporers with a longer line of sight.</li>
+    </ul>
+  </li>
+  <li>Basic
+    <ul>
+      <li>Either move towards the enemy or target a needed protein (for all protein types without a harvester on them, we targeted the closest).</li>
+    </ul>
+  </li>
+  <li>Spore
+    <ul>
+      <li>We targeted the location with the most protein within a distance of 2.</li>
+      <li>and favor the farthest from the sporer</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Additionally,</p>
+<ul>
+  <li>penalties were applied for growing on protein
+    <ul>
+      <li>almost no penalty if it’s on the shortest path to the target (to avoid being stuck when there are no alternatives).</li>
+      <li>bigger penalties for growing on an harvested protein.</li>
+      <li>smaller penalties for growing on regular protein.
+        <ul>
+          <li>if no more resources for this type, the penalty becomes &gt; 1 (reward)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>A distance bonus was also applied to encourage movement towards the target.</p>
+
+<p>Here is the score calculation formula</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>finalScore = penalty * (score + distbonus)
+</code></pre></div></div>
+
+<h2 id="multi-agent">Multi agent</h2>
+
+<p>We selected organisms in decreasing order of scores, updating resources each time to avoid invalid actions. 
+The goal is to prevent scenarios where the optimal action is unavailable because the resource was already used for a less beneficial action on another organism.</p>
+
+<p>However, I still faced the limitation where two organisms could decide to harvest the same protein simultaneously.</p>
+
+<h2 id="code-reuse">Code reuse</h2>
+
+<p>I reused grid code from a previous contest. It represents the grid as a one-dimension array which is more efficient in term of memory and cpu (cache locality). 
+It was largely a copy-paste job as I didn’t use a bundler this time.</p>
+
+<h2 id="timeout-issues">Timeout issues</h2>
+
+<p>I encountered performance issues that caused some battles to be lost due to timeouts. 
+After some random guesses, I concluded that I needed better optimization. 
+Using a real profiler, I achieved a 3x performance gain by replacing a <code class="language-plaintext highlighter-rouge">Set</code> with a <code class="language-plaintext highlighter-rouge">List</code>.</p>
+
+<p>Initially, I used a <code class="language-plaintext highlighter-rouge">Set</code> to return all growable locations at depth 1, 
+not realizing that the cartesian product operation happened on <code class="language-plaintext highlighter-rouge">Set</code>, which is costly due to the computation of numerous hash codes.</p>
+
+<h2 id="fine-tuning">Fine tuning</h2>
+<p>On the last day, I set up BrutalTester to test some ideas with a better feedback loop 
+than waiting for a submit.</p>
+
+<h2 id="things-to-improve">Things to improve</h2>
+
+<h3 id="scoring-as-double">Scoring as double</h3>
+
+<p>My score is currently a double, but I believe using an integer would be a better approach because:</p>
+
+<ul>
+  <li>It’s faster to compute.</li>
+  <li>It avoids annoying floating-point issues, like <code class="language-plaintext highlighter-rouge">0.19999999999999998</code></li>
+</ul>
+
+<h3 id="local-minimum">local minimum</h3>
+
+<p>The drawback of using depth 0 is that the bot will go for a local minimun.
+In the example below, it will harvest A, which prevents the harvesting of B later on.</p>
+
+<table>
+    <tr>
+        <td>W</td>
+        <td>A</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td style="color: blue; background-color: #f9e79f;">&#x25B2;</td>
+        <td style="color: blue;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>A better situation after two turns would have been</p>
+
+<table>
+    <tr>
+        <td>W</td>
+        <td>A</td>
+        <td style="color: blue;">&#x25C0;</td>
+    </tr>
+    <tr>
+        <td>B</td>
+        <td style="color: blue;">&#x25C0;</td>
+        <td style="color: blue;">&#x25A0;</td>
+    </tr>
+</table>
+
+<p>Unfortunately, I couldn’t find a simple way to implement this !</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I thoroughly enjoyed the long-duration format during the winter holidays, which allowed participation whenever I had time.</p>
+
+<p>I personally enjoy grid-based challenges; in the past, I really liked games like Pac-Man and Wondev Woman, for example.</p>
+
+<p>The map generator added plenty of diversity, offering different scenarios such as open worlds versus labyrinths and varying numbers of proteins.</p>
+
+<p>I found the challenge both interesting and fun. The rules were simple, but implementing effective strategies was far from easy.</p>
+
+<p>The battles were also entertaining to watch.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[My post mortem for the codingame Winter Challenge 2024]]></summary></entry><entry xml:lang="en"><title type="html">My notes on scala.io 2024</title><link href="https://www.yannmoisan.com/scala-io-2024.html" rel="alternate" type="text/html" title="My notes on scala.io 2024" /><published>2024-12-08T00:00:00+01:00</published><updated>2024-12-08T00:00:00+01:00</updated><id>https://www.yannmoisan.com/scala-io-2024</id><content type="html" xml:base="https://www.yannmoisan.com/scala-io-2024.html"><![CDATA[<p>Scala.io is an awesome independant Scala conference in France.
+This year’s event took place on November 7–8, 2024, at EPITA in Paris. Kudos to the organizers for their outstanding effort in making this event happen!</p>
+
+<p>Here are a few takeaways</p>
+
+<h2 id="surprise-opening-keynote---v-kasas">Surprise Opening Keynote - V. Kasas</h2>
+
+<p>A smaller edition than ever in terms of CFP submissions, attendees, sponsors.</p>
+
+<p>Scala is dying, some reasons:</p>
+<ul>
+  <li>Drama in the community</li>
+  <li>Insisting too much on pure FP pushes people away</li>
+  <li>External: Java stole features to Scala</li>
+</ul>
+
+<p>Hope</p>
+<ul>
+  <li>At Databricks, any part of the code must be understandable in 2 min (so no cats, no implicits, …)</li>
+  <li>Propose solution when people are suffering (ex. of mix between either and validated)</li>
+  <li>lot of possible creative usage of TASTy</li>
+  <li>It’s up to us to spread the love for Scala.</li>
+</ul>
+
+<h2 id="building-robust-applications-with-kyo-a-hands-on-introduction---a-hearn">Building Robust Applications with Kyo: A Hands-on Introduction - A. Hearn</h2>
+
+<ul>
+  <li>kyo-data : low allocation</li>
+  <li>kyo-prelude : side-effect free algebraic effect</li>
+  <li>kyo-core</li>
+  <li>kyo-scheduler : high perf</li>
+</ul>
+
+<p>Definition of effect = A description of what you want, produced when executed.</p>
+
+<p>Syntax: <code class="language-plaintext highlighter-rouge">File &lt; (IO &amp; Resource)</code></p>
+
+<p>Pro:</p>
+<ul>
+  <li>removes <code class="language-plaintext highlighter-rouge">F.pure</code> usage</li>
+  <li>no need for <code class="language-plaintext highlighter-rouge">flatMap</code></li>
+  <li>direct style (cps compiler plugin behind the hood)</li>
+</ul>
+
+<h2 id="tools-for-scala-startups---d-ciocîrlan">Tools for Scala Startups - D. Ciocîrlan</h2>
+
+<p>Scala is underrated for full stack products</p>
+
+<h2 id="computer-algebra-in-scala---r-jolly">Computer algebra in Scala - R. Jolly</h2>
+
+<p>Explanation of design choices between OO (enrichment) vs Functional (type classes).</p>
+
+<h2 id="calculating-is-funnier-than-guessing---r-kuckaertz">Calculating is funnier than guessing - R. Kuckaertz</h2>
+
+<h2 id="slow-auto-inconvenient-semi-escaping-false-dichotomy-with-sanely-automatic-derivation">Slow-Auto, Inconvenient-Semi: escaping false dichotomy with sanely-automatic derivation</h2>
+
+<p>author of chimney lib</p>
+<ul>
+  <li>semi-auto: speed</li>
+  <li>auto: poor error messages</li>
+</ul>
+
+<h2 id="mill-builds-in-scala-3-a-migration-story--j-thompson">Mill builds in Scala 3, a migration story- J. Thompson</h2>
+
+<p>A fascinating talk on Mill’s migration to Scala 3, featuring deep technical insights. James is a Scala 3 compiler contributor.</p>
+
+<ul>
+  <li>Scala 3 is now 3 years old</li>
+  <li>type inference changes when an <code class="language-plaintext highlighter-rouge">else</code> branch is missing</li>
+  <li>Pb with implicit conversion from <code class="language-plaintext highlighter-rouge">Unit</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Mirror</code> doesn’t like <code class="language-plaintext highlighter-rouge">@data</code> annotations from Coursier</li>
+  <li><code class="language-plaintext highlighter-rouge">this</code> in Scala 2 macro is duck typing</li>
+</ul>
+
+<h2 id="plowing-postgres-and-unearthing-hidden-gems---v-bergeron">Plowing Postgres and Unearthing Hidden Gems - V. Bergeron</h2>
+
+<p>At Ledger, migration from Cassandra (ETL) to PG (ELT)</p>
+
+<ul>
+  <li>Use modern SQL as much as possible</li>
+  <li>avoid SQL codegen (thus lib like quill, slick)</li>
+  <li>repo pattern is harmful</li>
+  <li>DDL can be tested with a transaction</li>
+  <li>use explain (analyze, costs, verbose, buffers)</li>
+  <li>linearization = state pattern</li>
+  <li>use Common Table Expression (CTE)</li>
+  <li>subquery in select =&gt; nested loop join</li>
+</ul>
+
+<h2 id="scala-performance-when-you-should-betray-your-functional-programming-principles---g-renoux">Scala performance: when you should betray your functional programming principles - G. Renoux</h2>
+
+<p>At Datadome, the bottleneck is CPU, not IO, even with 200k rps (the load is distributed across 100+ nodes)</p>
+
+<h2 id="programming-a-language---n-rinaudo">Programming a Language - N. Rinaudo</h2>
+
+<p>As always, a very interesting talk where Nicolas demonstrated writing an interpreter for an AST, step by step.</p>
+
+<ul>
+  <li>unary functions are sufficient</li>
+  <li>any <code class="language-plaintext highlighter-rouge">for</code> loop can be rewritten with a <code class="language-plaintext highlighter-rouge">while</code></li>
+  <li>any <code class="language-plaintext highlighter-rouge">while</code>    can be rewritten with a recursion</li>
+</ul>]]></content><author><name></name></author><summary type="html"><![CDATA[My notes on scala.io 2024]]></summary></entry><entry xml:lang="en"><title type="html">Advent of Code 2024, insights from the first week</title><link href="https://www.yannmoisan.com/advent-of-code-2024-week1.html" rel="alternate" type="text/html" title="Advent of Code 2024, insights from the first week" /><published>2024-12-07T00:00:00+01:00</published><updated>2024-12-07T00:00:00+01:00</updated><id>https://www.yannmoisan.com/advent-of-code-2024-week1</id><content type="html" xml:base="https://www.yannmoisan.com/advent-of-code-2024-week1.html"><![CDATA[<p>It’s been 10 years since I started enjoying <a href="https://adventofcode.com/2024">Advent of Code</a>, 
+a series of daily coding exercises in December. 
+Over this time, I’ve learned a lot, and I firmly believe that practice makes you a better developer. 
+Since the time required to solve these exercises is still manageable, 
+I’d like to share a wrap-up of the first week—mostly because I probably won’t have time to do it later.</p>
+
+<p>In this post, we will explore practical coding insights and demonstrate how Scala’s powerful features can simplify problem-solving. 
+We’ll also highlight how reusable code can save time. The post will showcase examples and tools that you can incorporate into your own work.</p>
+
+<h1 id="day1">Day1</h1>
+
+<p>This was a perfect opportunity to use <code class="language-plaintext highlighter-rouge">zip</code> and <code class="language-plaintext highlighter-rouge">unzip</code>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">((</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">),</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">)).</span><span class="py">unzip</span>
+<span class="k">val</span> <span class="nv">res0</span><span class="k">:</span> <span class="o">(</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="nc">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">),</span><span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">6</span><span class="o">))</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nv">pair</span><span class="o">.</span><span class="py">_1</span><span class="o">.</span><span class="py">zip</span><span class="o">(</span><span class="nv">pair</span><span class="o">.</span><span class="py">_2</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">res2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">((</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">),</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
+</code></pre></div></div>
+
+<p>With these built-in methods, there’s no need to loop explicitly over collections, and the intent is clearer.</p>
+
+<p>Similarly, to count occurrences in a list, verbose code like this:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">).</span><span class="py">groupBy</span><span class="o">(</span><span class="n">identity</span><span class="o">).</span><span class="py">view</span><span class="o">.</span><span class="py">mapValues</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">length</span><span class="o">).</span><span class="py">toMap</span>
+<span class="k">val</span> <span class="nv">res1</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Map</span><span class="o">[</span><span class="kt">Int</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>can be simplified using <code class="language-plaintext highlighter-rouge">groupMapReduce</code>:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">).</span><span class="py">groupMapReduce</span><span class="o">(</span><span class="n">identity</span><span class="o">)(</span><span class="k">_=&gt;</span><span class="mi">1</span><span class="o">)(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">res4</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Map</span><span class="o">[</span><span class="kt">Int</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>This simple exercise reveals how much the Scala collection library shines !</p>
+
+<h1 id="day2">Day2</h1>
+
+<p>Once again, sliding windows proved useful for grouping elements in pairs, 
+making it easy to handle iteration logic involving the current element and its predecessor.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">).</span><span class="py">sliding</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Another handy method was <code class="language-plaintext highlighter-rouge">patch</code>, which, despite its somewhat unintuitive name, is effective for removing elements from a collection.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">).</span><span class="py">patch</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="nc">Nil</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">res6</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h1 id="day3">Day3</h1>
+
+<p>This day was a tough reminder that I’m still too slow with regular expressions 
+(I never seem to remember how escaping works with triple-quote syntax in Scala). 
+I also had to refresh my memory on the non-greedy syntax <code class="language-plaintext highlighter-rouge">.*?</code>.</p>
+
+<h1 id="day5">Day5</h1>
+
+<p>String interpolation continues to be a convenient way to destructure strings:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="n">s</span><span class="s">"${fst}|${snd}"</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nv">fst</span><span class="o">.</span><span class="py">toInt</span><span class="o">,</span> <span class="nv">snd</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>I wasted a lot of time due to a silly mistake: using <code class="language-plaintext highlighter-rouge">i</code> instead of <code class="language-plaintext highlighter-rouge">arr(i)</code>. Since both are integers, the compiler didn’t catch it.</p>
+
+<p>For part two, I initially reimplemented a bubble sort before realizing I could just use the built-in <code class="language-plaintext highlighter-rouge">sortWith</code>. 
+Ultimately, the task boiled down to writing code to compare two elements:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">def</span> <span class="nf">lt</span><span class="o">(</span><span class="n">orderingRules</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Set</span><span class="o">[</span><span class="kt">Int</span><span class="o">]])</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">{</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span>
+  <span class="nv">orderingRules</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="n">a</span><span class="o">).</span><span class="py">exists</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">contains</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h1 id="day-6">Day 6</h1>
+
+<p>Over the years, I’ve extracted reusable code for Advent of Code. 
+This time, I reused a grid implementation, which was helpful. 
+However, the design wasn’t great, and I lost some time figuring out how it worked.</p>
+
+<p>The upside? It worked on the first try, avoiding common coding mistakes like off-by-one errors.</p>
+
+<h1 id="day7">Day7</h1>
+
+<p>This was the day where a 32-bit integer overflow occurred. Fortunately, it happened during parsing, and the error message made it clear:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span><span class="kt">error</span><span class="o">]</span> <span class="nv">java</span><span class="o">.</span><span class="py">lang</span><span class="o">.</span><span class="py">NumberFormatException</span><span class="k">:</span> <span class="kt">For</span> <span class="kt">input</span> <span class="kt">string:</span> <span class="err">"634495747544"</span>
+</code></pre></div></div>
+
+<p>I also reused a combinatorics method that I had extracted in previous years. 
+Honestly, it’s satisfying to see how clear and straightforward the code can be in Scala:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>object Day7 extends MultiPuzzle[Long, Long] {
+  val opsPart1: List[(Long, Long) =&gt; Long] = List(_ + _, _ * _)
+  val opsPart2: List[(Long, Long) =&gt; Long] = List(_ + _, _ * _, (a, b) =&gt; s"$a$b".toLong)
+
+  override def part1(input: Iterator[String]): Long = common(input, opsPart1)
+
+  override def part2(input: Iterator[String]): Long = common(input, opsPart2)
+
+  private def common(input: Iterator[String], ops: List[(Long, Long) =&gt; Long]) =
+    input.map { s =&gt;
+      val numbers    = s.split("[: ]+").map(_.toLong)
+      val candidates = Combinatorics.permutationsWithReplacement(ops, numbers.length - 2)
+      val equationCouldBeTrue = candidates.exists { candidate =&gt;
+        val (expected :: fst :: tail) = numbers.toList
+        val actual                    = tail.zip(candidate).foldLeft(fst) { case (acc, (cur, op)) =&gt; op(acc, cur) }
+        actual == expected
+      }
+      if (equationCouldBeTrue) numbers.head else 0
+    }.sum
+}
+</code></pre></div></div>
+
+<p>If you’re interested, you can find <a href="https://github.com/yannmoisan/advent-of-code/">all my solutions on Github</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Advent of Code 2024, insights from the first week]]></summary></entry><entry xml:lang="en"><title type="html">Debugging a Scala Compilation Issue, a journey into Variance and LUB</title><link href="https://www.yannmoisan.com/debugging-a-scala-compilation-issue.html" rel="alternate" type="text/html" title="Debugging a Scala Compilation Issue, a journey into Variance and LUB" /><published>2024-11-30T00:00:00+01:00</published><updated>2024-11-30T00:00:00+01:00</updated><id>https://www.yannmoisan.com/debugging-a-scala-compilation-issue</id><content type="html" xml:base="https://www.yannmoisan.com/debugging-a-scala-compilation-issue.html"><![CDATA[<p>At work, I recently encountered a tricky compilation issue. To debug it, 
+I extracted the minimal amount of code necessary to reproduce the problem. 
+After a lot of experimentation, I sought help from a French Scala community. 
+By chance, my colleague Marc came to the rescue. 
+Since this issue might affect others, I’m detailing the journey in this post 
+to help you understand and resolve similar challenges.</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>The issue revolves around the following types:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">Payload1</span>
+<span class="k">trait</span> <span class="nc">Payload2</span>
+<span class="k">trait</span> <span class="nc">Rejection</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">ARejection</span><span class="o">(</span><span class="n">reason</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Rejection</span> <span class="k">with</span> <span class="nc">Payload1</span> <span class="k">with</span> <span class="nc">Payload2</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">BRejection</span><span class="o">(</span><span class="n">reason</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Rejection</span> <span class="k">with</span> <span class="nc">Payload1</span> <span class="k">with</span> <span class="nc">Payload2</span>
+</code></pre></div></div>
+
+<p>For better visualization, here’s a class diagram:</p>
+
+<p><img src="assets/mermaid-diagram-2024-11-30-154437.svg" alt="class diagram" /></p>
+
+<h2 id="what-are-we-trying-to-achieve">What Are We Trying to Achieve?</h2>
+
+<p>The objective is to create a reusable <em>error handler</em> that can handle various payload types, such as <code class="language-plaintext highlighter-rouge">Payload1</code> or <code class="language-plaintext highlighter-rouge">Payload2</code>.</p>
+
+<p>In the real use case, the ZIO library is involved. However, since the issue is unrelated to ZIO itself, this simplified version is sufficient.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">ZIO</span><span class="o">[</span><span class="kt">+A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">catchSome</span><span class="o">[</span><span class="kt">A1</span> <span class="k">&gt;:</span> <span class="kt">A</span><span class="o">](</span><span class="n">pf</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">ZIO</span><span class="o">[</span><span class="kt">A1</span><span class="o">]])</span> <span class="k">:</span> <span class="kt">ZIO</span><span class="o">[</span><span class="kt">A1</span><span class="o">]</span> <span class="k">=</span> <span class="nv">pf</span><span class="o">.</span><span class="py">applyOrElse</span><span class="o">(</span><span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">,</span> <span class="o">(</span><span class="k">_</span> <span class="k">:</span> <span class="kt">Throwable</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="k">this</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">handleA</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">ZIO</span><span class="o">[</span><span class="kt">ARejection</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="k">_:</span> <span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span> <span class="nc">ZIO</span><span class="o">(</span><span class="nc">ARejection</span><span class="o">(</span><span class="s">"a"</span><span class="o">))</span>
+<span class="o">}</span>
+
+<span class="k">new</span> <span class="nc">ZIO</span><span class="o">(</span><span class="k">new</span> <span class="nc">Payload1</span><span class="o">()</span> <span class="o">{}).</span><span class="py">catchSome</span><span class="o">(</span><span class="n">handleA</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="why-does-this-work">Why Does This Work?</h2>
+
+<p>The method <code class="language-plaintext highlighter-rouge">catchSome</code> expects a <code class="language-plaintext highlighter-rouge">PartialFunction[Throwable, ZIO[Payload1]]</code>, but we’re passing a <code class="language-plaintext highlighter-rouge">PartialFunction[Throwable, ZIO[ARejection]]</code>.
+To understand why this works, we need to discuss <strong>variance</strong>.</p>
+
+<h2 id="variance">Variance</h2>
+
+<p>This isn’t a variance tutorial, but if you’re unfamiliar, I recommend <a href="https://docs.scala-lang.org/tour/variances.html">Scala’s variance documentation</a>. 
+For our purposes, here’s a brief overview:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">f</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">ARejection</span> <span class="k">=</span> <span class="nv">ARejection</span><span class="o">.</span><span class="py">apply</span>
+<span class="k">val</span> <span class="nv">g</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">Rejection</span> <span class="k">=</span> <span class="n">f</span>
+</code></pre></div></div>
+
+<p>This works because:</p>
+<ul>
+  <li>Functions are <strong>covariant</strong> in their return type (<code class="language-plaintext highlighter-rouge">trait Function1[-T1, +R]</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">ARejection</code> is a subtype of <code class="language-plaintext highlighter-rouge">Rejection</code></li>
+</ul>
+
+<p>Thus, <code class="language-plaintext highlighter-rouge">String =&gt; ARejection</code> is a subtype of <code class="language-plaintext highlighter-rouge">String =&gt; Rejection</code></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">h</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">ZIO</span><span class="o">[</span><span class="kt">ARejection</span><span class="o">]</span> <span class="k">=</span> <span class="n">name</span> <span class="k">=&gt;</span> <span class="nc">ZIO</span><span class="o">(</span><span class="nc">ARejection</span><span class="o">(</span><span class="n">name</span><span class="o">))</span>
+<span class="k">val</span> <span class="nv">i</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nc">ZIO</span><span class="o">[</span><span class="kt">Rejection</span><span class="o">]</span> <span class="k">=</span> <span class="n">h</span>
+</code></pre></div></div>
+
+<p>It <strong>still</strong> works because:</p>
+<ul>
+  <li>ZIO is covariant on its type</li>
+  <li><code class="language-plaintext highlighter-rouge">ARejection</code> is a subtype of <code class="language-plaintext highlighter-rouge">Rejection</code></li>
+</ul>
+
+<p>So <code class="language-plaintext highlighter-rouge">ZIO[ARejection]</code> is a subtype of <code class="language-plaintext highlighter-rouge">ZIO[Rejection]</code></p>
+
+<p>And because functions are covariant in their return type, <code class="language-plaintext highlighter-rouge">String =&gt; ZIO[ARejection]</code> is a subtype of <code class="language-plaintext highlighter-rouge">String =&gt; ZIO[Rejection]</code></p>
+
+<p>Here’s a visual representation of the relationships:</p>
+
+<p><img src="assets/mermaid-diagram-2024-11-30-164742.svg" alt="class diagram" /></p>
+
+<h2 id="the-compilation-issue">The compilation issue</h2>
+
+<p>Now, we’d like to manage a second type of exception, triggering a BRejection. Here are two straightforward solutions:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">handleB</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">ZIO</span><span class="o">[</span><span class="kt">BRejection</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="k">_:</span> <span class="kt">IllegalStateException</span> <span class="o">=&gt;</span> <span class="nc">ZIO</span><span class="o">(</span><span class="nc">BRejection</span><span class="o">(</span><span class="s">"b"</span><span class="o">))</span>
+<span class="o">}</span>
+
+<span class="k">new</span> <span class="nc">ZIO</span><span class="o">(</span><span class="k">new</span> <span class="nc">Payload1</span><span class="o">()</span> <span class="o">{}).</span><span class="py">catchSome</span><span class="o">(</span><span class="n">handleA</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">solution1</span> <span class="k">:</span> <span class="kt">ZIO</span><span class="o">[</span><span class="kt">Payload1</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ZIO</span><span class="o">(</span><span class="k">new</span> <span class="nc">Payload1</span><span class="o">()</span> <span class="o">{})</span>
+  <span class="o">.</span><span class="py">catchSome</span><span class="o">(</span><span class="nv">handleA</span><span class="o">.</span><span class="py">orElse</span><span class="o">(</span><span class="n">handleB</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="nv">solution2</span> <span class="k">:</span> <span class="kt">ZIO</span><span class="o">[</span><span class="kt">Payload1</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ZIO</span><span class="o">(</span><span class="k">new</span> <span class="nc">Payload1</span><span class="o">()</span> <span class="o">{})</span>
+  <span class="o">.</span><span class="py">catchSome</span><span class="o">(</span><span class="n">handleA</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">catchSome</span><span class="o">(</span><span class="n">handleB</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>While these work, they aren’t as elegant as they could be. Ideally, we’d like a single, unified handler:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">handle</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Throwable</span>, <span class="kt">ZIO</span><span class="o">[</span><span class="kt">X</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="k">_:</span> <span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span> <span class="nc">ZIO</span><span class="o">(</span><span class="nc">ARejection</span><span class="o">(</span><span class="s">"a"</span><span class="o">))</span>
+  <span class="k">case</span> <span class="k">_:</span> <span class="kt">IllegalStateException</span> <span class="o">=&gt;</span> <span class="nc">ZIO</span><span class="o">(</span><span class="nc">BRejection</span><span class="o">(</span><span class="s">"b"</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="what-is-the-expected-type-of-x-">What is the expected type of <code class="language-plaintext highlighter-rouge">X</code> ?</h2>
+
+<p>The Scala compiler computes the <strong>least upper bound (LUB)</strong> of the branch types. 
+The LUB is the most specific type that is a supertype of all branches.</p>
+
+<p>For ARejection and BRejection, the LUB is <code class="language-plaintext highlighter-rouge">Rejection with Payload1 with Payload2</code> because they share these traits.</p>
+
+<p>Thus, the inferred type X is <code class="language-plaintext highlighter-rouge">Rejection with Payload1 with Payload2</code>.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Scala’s powerful type system can sometimes introduce surprising challenges, even for seemingly simple tasks. 
+While it may be tempting to duplicate code instead of generalizing, doing so can lead to missed learning opportunities.</p>
+
+<p>By exploring variance and the mechanics of type inference, we’ve seen how Scala arrives at its conclusions. 
+Understanding concepts like LUB and variance not only helps solve problems but also deepens our understanding of Scala itself.</p>
+
+<p>Next time you encounter such an issue, take it as a chance to dive into the type system—you might learn something valuable!</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Debugging a Scala Compilation Issue, a journey into Variance and LUB]]></summary></entry><entry xml:lang="fr"><title type="html">Simulateur de revenus pour freelance</title><link href="https://www.yannmoisan.com/simulateur-revenus-pour-freelance.html" rel="alternate" type="text/html" title="Simulateur de revenus pour freelance" /><published>2024-09-28T00:00:00+02:00</published><updated>2024-09-28T00:00:00+02:00</updated><id>https://www.yannmoisan.com/simulateur-revenus-pour-freelance</id><content type="html" xml:base="https://www.yannmoisan.com/simulateur-revenus-pour-freelance.html"><![CDATA[<script>
+    function updateDouble() {
+// 2024
+// PASS 43992e brut
+// 6762 brut pour valider 4T de retraite
+// 8230 par foyer fiscale tax PUMa
+        // Récupère la valeur de l'input
+
+        let imposition = document.querySelector('input[name="imposition"]:checked').value;
+        //console.log(selectedValue)
+
+        let salaireNet = parseFloat(document.getElementById("numberInput").value);
+        let ca = parseFloat(document.getElementById("ca").value);
+        let nombreDeParts = parseFloat(document.getElementById("nombreDeParts").value);
+        let autresRevenus = parseFloat(document.getElementById("autresRevenus").value);
+
+        // Calcule le double
+        let chargesSocialesSasuIS = salaireNet * 0.80;
+        let chargesSocialesSasuIR = salaireNet * 0.80;
+        let chargesSocialesEurlIS = salaireNet * 0.45;
+        let chargesSocialesEurlIR = (ca / 1.45) * 0.45;
+
+        let salaireSuperBrutSasuIS = salaireNet + chargesSocialesSasuIS;
+        let salaireSuperBrutSasuIR = salaireNet + chargesSocialesSasuIR;
+        let salaireSuperBrutEurlIS = salaireNet + chargesSocialesEurlIS;
+        let salaireSuperBrutEurlIR = salaireNet + chargesSocialesEurlIR;
+
+        let beneficeBrutSasuIS = ca - salaireSuperBrutSasuIS;
+        let beneficeBrutSasuIR = ca - salaireSuperBrutSasuIR;
+        let beneficeBrutEurlIS = ca - salaireSuperBrutEurlIS;
+        let beneficeBrutEurlIR = ca - salaireSuperBrutEurlIR;
+
+        let isSasuIS = beneficeBrutSasuIS < 42500 ? beneficeBrutSasuIS * 0.15 : 0.15 * 42500 + (beneficeBrutSasuIS - 42500) * 0.25;
+        let isSasuIR = 0
+        let isEurlIS = beneficeBrutEurlIS < 42500 ? beneficeBrutEurlIS * 0.15 : 0.15 * 42500 + (beneficeBrutEurlIS - 42500) * 0.25;
+        let isEurlIR = 0
+
+        let beneficeNetSasuIS = beneficeBrutSasuIS - isSasuIS;
+        let beneficeNetSasuIR = beneficeBrutSasuIR - isSasuIR;
+        let beneficeNetEurlIS = beneficeBrutEurlIS - isEurlIS;
+        let beneficeNetEurlIR = beneficeBrutEurlIR - isEurlIR;
+
+        let cotisationsSocialesSasuIS = 0
+        let cotisationsSocialesSasuIR = 0
+        let cotisationsSocialesEurlIS = beneficeNetEurlIS * 0.45
+        let cotisationsSocialesEurlIR = 0
+
+        let revenuImposableSasuIS = salaireNet + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
+        let revenuImposableSasuIR = ca - salaireNet * 0.54 // les charges patronales sont deductibles
+        let revenuImposableEurlIS = salaireNet * 0.9 + (imposition === "flat_tax" ? 0 : beneficeNetSasuIS * 0.6)
+        let revenuImposableEurlIR = ca - chargesSocialesEurlIR // les charges sont deductibles ?
+
+        let ratioIrSasuIS = revenuImposableSasuIS / (revenuImposableSasuIS + autresRevenus)
+        let ratioIrSasuIR = revenuImposableSasuIR / (revenuImposableSasuIR + autresRevenus)
+        let ratioIrEurlIS = revenuImposableEurlIS / (revenuImposableEurlIS + autresRevenus)
+        let ratioIrEurlIR = revenuImposableEurlIR / (revenuImposableEurlIR + autresRevenus)
+
+        let irSasuIS = calculImpot2(revenuImposableSasuIS + autresRevenus, nombreDeParts)
+        let irSasuIR = calculImpot2(revenuImposableSasuIR + autresRevenus, nombreDeParts) // les charges patronales sont deductibles
+        let irEurlIS = calculImpot2(revenuImposableEurlIS + autresRevenus, nombreDeParts)
+        let irEurlIR = calculImpot2(revenuImposableEurlIR + autresRevenus, nombreDeParts)
+
+        let flatTaxSasuIS = beneficeNetSasuIS * ((imposition == "flat_tax") ? 0.30 : 0.172)
+        let flatTaxSasuIR = 0
+        let flatTaxEurlIS = beneficeNetEurlIS * ((imposition == "flat_tax") ? 0.128 : 0) //beneficeNetEurlIS * 0.128
+        let flatTaxEurlIR = 0
+
+        let dividendesNetSasuIS = beneficeNetSasuIS - flatTaxSasuIS - cotisationsSocialesSasuIS
+        let dividendesNetSasuIR = 0
+        let dividendesNetEurlIS = beneficeNetEurlIS - flatTaxEurlIS - cotisationsSocialesEurlIS
+        let dividendesNetEurlIR = 0
+
+        let revenuNetSasuIS = salaireNet - irSasuIS[0] * ratioIrSasuIS + dividendesNetSasuIS
+        let revenuNetSasuIR = ca - chargesSocialesSasuIR - irSasuIR[0] * ratioIrSasuIR
+        let revenuNetEurlIS = salaireNet - irEurlIS[0] * ratioIrEurlIS + dividendesNetEurlIS
+        let revenuNetEurlIR = ca - chargesSocialesEurlIR - irEurlIR[0] * ratioIrEurlIR
+        // Affiche le résultat
+        //document.getElementById("salaireSuperBrutSasuIS").innerText = salaireSuperBrutSasuIS;
+        document.getElementById("chargesSocialesSasuIS").innerText = show(chargesSocialesSasuIS);
+        document.getElementById("chargesSocialesSasuIR").innerText = show(chargesSocialesSasuIR);
+        document.getElementById("chargesSocialesEurlIS").innerText = show(chargesSocialesEurlIS);
+        document.getElementById("chargesSocialesEurlIR").innerText = show(chargesSocialesEurlIR);
+
+        document.getElementById("salaireNetSasuIS").innerText = show(salaireNet);
+        document.getElementById("salaireNetSasuIR").innerText = show(salaireNet);
+        document.getElementById("salaireNetEurlIS").innerText = show(salaireNet);
+        document.getElementById("salaireNetEurlIR").innerText = show(ca - chargesSocialesEurlIR);
+
+        document.getElementById("isSasuIS").innerText = show(isSasuIS);
+        //document.getElementById("isSasuIR").innerText = show(isSasuIR);
+        document.getElementById("isEurlIS").innerText = show(isEurlIS);
+
+        //document.getElementById("cotisationsSocialesSasuIS").innerText = show(cotisationsSocialesSasuIS);
+        //document.getElementById("cotisationsSocialesSasuIR").innerText = show(cotisationsSocialesSasuIR);
+        document.getElementById("cotisationsSocialesEurlIS").innerText = show(cotisationsSocialesEurlIS);
+
+        document.getElementById("dividendesNetSasuIS").innerText = show(dividendesNetSasuIS);
+        //document.getElementById("dividendesNetSasuIR").innerText = show(dividendesNetSasuIR);
+        document.getElementById("dividendesNetEurlIS").innerText = show(dividendesNetEurlIS);
+
+        document.getElementById("flatTaxSasuIS").innerText = show(flatTaxSasuIS);
+        //document.getElementById("flatTaxSasuIR").innerText = show(flatTaxSasuIR);
+        document.getElementById("flatTaxEurlIS").innerText = show(flatTaxEurlIS);
+
+        document.getElementById("irSasuIS").innerText = showImpot(irSasuIS);
+        document.getElementById("irSasuIR").innerText = showImpot(irSasuIR);
+        document.getElementById("irEurlIS").innerText = showImpot(irEurlIS);
+        document.getElementById("irEurlIR").innerText = showImpot(irEurlIR);
+
+        document.getElementById("revenuImposableSasuIS").innerText = show(revenuImposableSasuIS);
+        document.getElementById("revenuImposableSasuIR").innerText = show(revenuImposableSasuIR);
+        document.getElementById("revenuImposableEurlIS").innerText = show(revenuImposableEurlIS);
+        document.getElementById("revenuImposableEurlIR").innerText = show(revenuImposableEurlIR);
+
+        document.getElementById("revenuNetSasuIS").innerText = show(revenuNetSasuIS);
+        document.getElementById("revenuNetSasuIR").innerText = show(revenuNetSasuIR);
+        document.getElementById("revenuNetEurlIS").innerText = show(revenuNetEurlIS);
+        document.getElementById("revenuNetEurlIR").innerText = show(revenuNetEurlIR);
+    }
+
+   function showImpot(arr) {
+        return isNaN(arr[0]) ? "" : Math.round(arr[0]) + " (" + (100*arr[1]).toFixed(1) + "%)"
+   }
+   function show(n) {
+       return isNaN(n) ? "" : Math.round(n)
+       } 
+
+    function calculImpot2(salaireNet, nombreDeParts) {
+        // PLAFONNEMENT DES EFFETS DU QUOTIENT FAMILIAL
+        let impot = nombreDeParts * calculImpot(salaireNet / nombreDeParts)
+        if (nombreDeParts > 2) {
+            let impot2parts = 2 * calculImpot(salaireNet / 2)
+            impot = Math.max(impot, impot2parts - 1759 * (2 * (nombreDeParts - 2)))
+        }
+        return [impot, impot/salaireNet]
+    }
+
+    function calculImpot(salaireNet) {
+        let impot = 0;
+
+        // Tranche 0% : de 0 à 10 777 €
+        if (salaireNet <= 11294) {
+            return impot;
+        }
+
+        // Tranche 11% : de 10 778 € à 27 478 €
+        if (salaireNet > 11294 && salaireNet <= 28797) {
+            impot += (salaireNet - 11294) * 0.11;
+            return impot;
+        }
+
+        // Tranche 30% : de 27 479 € à 78 570 €
+        if (salaireNet > 28797 && salaireNet <= 82341) {
+            impot += (28797 - 11294) * 0.11;  // 11% sur la première tranche
+            impot += (salaireNet - 28797) * 0.30;
+            return impot;
+        }
+
+        // Tranche 41% : de 78 571 € à 168 994 €
+        if (salaireNet > 82341 && salaireNet <= 177106) {
+            impot += (28797 - 11294) * 0.11;  // 11% sur la première tranche
+            impot += (82341 - 28797) * 0.30;  // 30% sur la deuxième tranche
+            impot += (salaireNet - 82341) * 0.41;
+            return impot;
+        }
+
+        // Tranche 45% : au-delà de 168 994 €
+        if (salaireNet > 177106) {
+            impot += (28797 - 11294) * 0.11;  // 11% sur la première tranche
+            impot += (82341 - 28797) * 0.30;  // 30% sur la deuxième tranche
+            impot += (177106 - 82341) * 0.41; // 41% sur la troisième tranche
+            impot += (salaireNet - 177106) * 0.45; // 45% sur le reste
+            return impot;
+        }
+    }
+</script>
+
+<p>Chiffre d’affaires annuel : <input type="number" id="ca" oninput="updateDouble()" /></p>
+
+<p>Salaire net annuel : <input type="number" id="numberInput" oninput="updateDouble()" /></p>
+
+<p>Imposition des dividendes :
+<input type="radio" id="option1" name="imposition" value="flat_tax" checked="" oninput="updateDouble()" />
+<label for="option1">Flat tax</label>
+<input type="radio" id="option2" name="imposition" value="bareme" oninput="updateDouble()" />
+<label for="option2">Barême progressif</label></p>
+
+<div style="background-color: #f0f8ff;margin-bottom: 15px;">
+    <p>Foyer fiscal</p>
+    <div style="margin-bottom: 15px;">
+        Nombre de parts : <input type="number" id="nombreDeParts" oninput="updateDouble()" /> 
+    </div>
+    <div style="margin-bottom: 15px;">
+        Autres revenus nets imposables : <input type="number" id="autresRevenus" oninput="updateDouble()" />
+    </div>
+</div>
+
+<table border="0" cellspacing="0" cellpadding="0" class="ta1">
+    <colgroup>
+        <col width="121" />
+        <col width="131" />
+        <col width="135" />
+        <col width="99" />
+        <col width="99" />
+        <col width="99" />
+        <col width="99" />
+    </colgroup>
+    <tbody>
+        <tr class="ro1">
+            <td colspan="3" style="text-align:left;">&nbsp;</td>
+            <td style="text-align:left;">SASU IS</td>
+            <td style="text-align:left;">SASU IR</td>
+            <td style="text-align:left;">EURL IS</td>
+            <td style="text-align:left;">EURL IR</td>
+        </tr>
+        <tr class="ro1">
+            <td rowspan="2" style="text-align:left;">Dépenses</td>
+            <td rowspan="2" style="text-align:left;">Salaire super brut</td>
+            <td style="text-align:left;">Charges sociales</td>
+            <td style="text-align:right;"><span id="chargesSocialesSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="chargesSocialesSasuIR">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="chargesSocialesEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="chargesSocialesEurlIR">&nbsp;</span></td>
+        </tr>
+        <tr class="ro1">
+            <td style="text-align:left;">Salaire net</td>
+            <td style="text-align:right;"><span id="salaireNetSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="salaireNetSasuIR">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="salaireNetEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="salaireNetEurlIR">&nbsp;</span></td>
+        </tr>
+        <tr class="ro1">
+            <td rowspan="4" style="text-align:left;">Bénéfices bruts</td>
+            <td rowspan="3" style="text-align:left;">Bénéfices net</td>
+            <td style="text-align:left;">Dividendes net</td>
+            <td style="text-align:right;"><span id="dividendesNetSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="dividendesNetSasuIR">n/a</span></td>
+            <td style="text-align:right;"><span id="dividendesNetEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="dividendesNetEurlIR">n/a</span></td>
+        </tr>
+        <tr class="ro1">
+            <td style="text-align:left;">Impôts sur dividendes</td>
+            <td style="text-align:right;"><span id="flatTaxSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="flatTaxSasuIR">n/a</span></td>
+            <td style="text-align:right;"><span id="flatTaxEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="flatTaxEurlIR">n/a</span></td>
+        </tr>
+        <tr class="ro1">
+            <td style="text-align:left;">Cotisations sociales</td>
+            <td style="text-align:right;"><span id="cotisationsSocialesSasuIS">n/a</span></td>
+            <td style="text-align:right;"><span id="cotisationsSocialesSasuIR">n/a</span></td>
+            <td style="text-align:right;"><span id="cotisationsSocialesEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="cotisationsSocialesEurlIR">n/a</span></td>
+        </tr>
+        <tr class="ro1">
+            <td colspan="2" style="text-align:left;">IS</td>
+            <td style="text-align:right;"><span id="isSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="isSasuIR">n/a</span></td>
+            <td style="text-align:right;"><span id="isEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="isEurlIR">n/a</span></td>
+        </tr>
+        <tr class="ro1">
+            <td colspan="3" style="text-align:left;">Revenu imposable</td>
+            <td style="text-align:right;"><span id="revenuImposableSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="revenuImposableSasuIR">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="revenuImposableEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="revenuImposableEurlIR">&nbsp;</span></td>
+        </tr>
+        <tr class="ro1">
+            <td colspan="3" style="text-align:left;">Impôt sur le revenu</td>
+            <td style="text-align:right;"><span id="irSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="irSasuIR">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="irEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="irEurlIR">&nbsp;</span></td>
+        </tr>
+        <tr class="ro1">
+            <td colspan="3" style="text-align:left;">Revenu net d’impôts</td>
+            <td style="text-align:right;"><span id="revenuNetSasuIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="revenuNetSasuIR">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="revenuNetEurlIS">&nbsp;</span></td>
+            <td style="text-align:right;"><span id="revenuNetEurlIR">&nbsp;</span></td>
+        </tr>
+    </tbody>
+</table>
+
+<h1 id="simulateur-de-revenus-pour-freelance">Simulateur de revenus pour freelance</h1>
+
+<p>Vous êtes en fin de droits Pôle Emploi ou n’avez pas droit au chômage ? Ce simulateur est fait pour vous.</p>
+
+<p><a href="micro-entreprise-ou-sasu.html">Après avoir exploré les options pour les bénéficiaires du chômage</a>, ce simulateur
+vous guide dans le choix du statut juridique le plus avantageux fiscalement, en toute simplicité.</p>
+
+<h1 id="pourquoi-ce-simulateur-">Pourquoi ce simulateur ?</h1>
+
+<p>Comparer les différents statuts d’entreprise, comme l’EURL et la SASU, peut être complexe. 
+Ce simulateur simplifie cette comparaison pour vous permettre de faire un choix éclairé. 
+Il prend en compte l’impôt sur le revenu afin de vous offrir une analyse complète et équitable.</p>
+
+<blockquote>
+  <p>⚠️ <strong>Disclaimer</strong> : Je ne suis pas expert-comptable. 
+Ce simulateur a pour but de vous donner une idée approximative des flux financiers. Il ne remplace pas un conseil professionnel.</p>
+</blockquote>
+
+<h1 id="que-compare-ce-simulateur-">Que compare ce simulateur ?</h1>
+
+<p>Le simulateur compare deux types de structures juridiques :</p>
+
+<ul>
+  <li>EURL (Entreprise Unipersonnelle à Responsabilité Limitée)</li>
+  <li>SASU (Société par Actions Simplifiée Unipersonnelle)</li>
+</ul>
+
+<p>Pour chaque structure, deux options fiscales sont prises en compte :</p>
+
+<ul>
+  <li>Impôt sur les Sociétés (IS).</li>
+  <li>Impôt sur le Revenu (IR).</li>
+</ul>
+
+<h1 id="simplicité-dans-le-calcul">Simplicité dans le calcul</h1>
+
+<p>Afin de simplifier l’utilisation, les charges d’exploitation (frais généraux, loyers, assurances, etc.) ne sont pas intégrées au calcul, 
+car elles ne modifient pas la logique de comparaison. Il vous suffit de soustraire vos charges d’exploitation de votre chiffre d’affaires pour obtenir le montant à indiquer dans le simulateur.</p>
+
+<h1 id="liens">Liens</h1>
+
+<ul>
+  <li><a href="https://decodage-fiscal.fr/guides-simulateurs/simulateur-complet-independant-freelance">Simulateur complet pour freelance</a></li>
+  <li><a href="http://sasu.mokatech.net/">Simulateur pour freelance en SASU</a></li>
+  <li><a href="https://mon-entreprise.urssaf.fr/simulateurs/sasu">Urssaf - simulateur SASU</a></li>
+  <li><a href="https://mon-entreprise.urssaf.fr/simulateurs/eurl">Urssaf - simulateur EURL</a></li>
+  <li><a href="https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2024/pdf_som/21-calcul_impot_361a374.pdf">Calcul de l’IR</a></li>
+</ul>]]></content><author><name></name></author><summary type="html"><![CDATA[Simulateur de revenus pour freelance]]></summary></entry><entry xml:lang="fr"><title type="html">Micro-entreprise ou SASU</title><link href="https://www.yannmoisan.com/micro-entreprise-ou-sasu.html" rel="alternate" type="text/html" title="Micro-entreprise ou SASU" /><published>2024-09-27T00:00:00+02:00</published><updated>2024-09-27T00:00:00+02:00</updated><id>https://www.yannmoisan.com/micro-entreprise-ou-sasu</id><content type="html" xml:base="https://www.yannmoisan.com/micro-entreprise-ou-sasu.html"><![CDATA[<p>Vous êtes au chômage et vous envisagez de vous lancer en tant qu’indépendant ? Cet article est fait pour vous.</p>
+
+<p>Se lancer en tant qu’indépendant en période de chômage peut être une opportunité idéale. Cependant, vous devrez rapidement faire face à deux décisions cruciales</p>
+
+<ol>
+  <li>Quel statut juridique choisir ?</li>
+  <li>Que choisir entre l’ARCE (aide sous forme de capital versée en deux fois) et l’ARE (allocation chômage mensuelle) ?</li>
+</ol>
+
+<p>Malheureusement, les informations disponibles sont souvent contradictoires, et rares sont les simulations qui intègrent l’impôt sur le revenu dans leurs calculs.</p>
+
+<p>Dans cet article, nous comparons deux options populaires : la micro-entreprise et la SASU (Société par Actions Simplifiée Unipersonnelle), à travers un exemple concret.</p>
+
+<p>Prenons comme exemple un chiffre d’affaires annuel de 100 000 € et des droits totaux à l’ARE de 100 000 € également.</p>
+
+<h1 id="micro-entreprise">Micro-entreprise</h1>
+
+<p>En tant que micro-entrepreneur, il est recommandé de demander l’ACRE (exonération partielle de cotisations sociales la première année) et de choisir l’ARCE plutot que l’ARE.</p>
+
+<p>Attention : En choisissant l’ARCE, vous cessez d’être inscrit comme demandeur d’emploi, ce qui met fin à certains avantages comme la portabilité de la mutuelle
+et l’accès à certaines prestations sociales en cas de non-rémunération.</p>
+
+<h2 id="première-année-avec-acre-et-arce">Première année (avec ACRE et ARCE)</h2>
+
+<ul>
+  <li>Cotisations sociales = 100 000 € * 11% = 11 000 €</li>
+  <li>Revenu net avant impôt sur le revenu = 100 000 € - 11 000 € = 89 000 €</li>
+  <li>Impôt sur le revenu
+    <ul>
+      <li>Revenu imposable = 100 000 € - 34% = 66 000 €</li>
+      <li>Revenu de l’ARCE = 100 000 € * 60% = 60 000 €</li>
+      <li>Impôts sur le revenu = 36 611 €</li>
+    </ul>
+  </li>
+  <li>Salaire net après impôt = 89 000 € + 60 000 € - 36 611 € = 112 389 €</li>
+</ul>
+
+<h2 id="deuxième-année-sans-acre-et-sans-arce">Deuxième année (sans ACRE et sans ARCE)</h2>
+
+<ul>
+  <li>Cotisations sociales = 100 000 € * 22% = 22 000 €</li>
+  <li>Revenu net avant impôt sur le revenu = 100 000 € - 22 000 € = 78 000 €</li>
+  <li>Impôt sur le revenu
+    <ul>
+      <li>Revenu imposable = 100 000 € - 34% = 66 000 €</li>
+      <li>Impôts sur le revenu = 13 393 €</li>
+    </ul>
+  </li>
+  <li>Salaire net après impôt = 78 000 - 13 393 = 64 607 €</li>
+</ul>
+
+<h2 id="synthèse">Synthèse</h2>
+
+<p>Le salaire net après impôt sur deux ans est de 176 996 €</p>
+
+<h1 id="sasu">SASU</h1>
+
+<p>Avec la SASU, il est recommandé de choisir l’ARE plutot que l’ARCE, car 
+vous pouvez continuer à percevoir l’ARE à 100% tant que vous ne vous versez pas de rémunération.
+Cette stratégie suppose que le montant de
+l’ARE soit suffisant pour couvrir vos besoins personnels.</p>
+
+<p>En SASU, le calcul est identique pour les 2 années</p>
+
+<ul>
+  <li>Impôt sur les Sociétés (IS) = 20 750 €</li>
+  <li>Bénéfice net = 100 000 € - 20 750 € = 79 250 €</li>
+  <li>Dividende net = 79 250 € * 70% = 55 475 €</li>
+  <li>Impôt sur le revenu
+    <ul>
+      <li>Revenu de l’ARE = 50 000 €</li>
+      <li>Impôts sur le revenu = 8 593 €</li>
+    </ul>
+  </li>
+  <li>Salaire net après impôt = 55 475 € + 50 000 € - 8 593 € = 96 882 €</li>
+</ul>
+
+<h2 id="synthèse-1">Synthèse</h2>
+
+<p>Le salaire net après impôt sur deux ans est de 96 882 € * 2 = 193 764 €</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Les deux statuts, micro-entreprise et SASU, sont viables, et la période de chômage est souvent idéale pour démarrer une activité. 
+Les allocations chômage apportent une trésorerie précieuse qui permet de limiter les risques inhérents à la création d’entreprise.</p>
+
+<p>Toutefois, si vous cherchez à optimiser fiscalement votre situation, 
+la SASU offre des avantages, notamment avec la possibilité de cumuler l’ARE et une fiscalité plus favorable sur les dividendes.</p>
+
+<h1 id="liens">Liens</h1>
+
+<ul>
+  <li><a href="https://numbr.co/guides/">Numbr - Les guides</a>: Les guides de mon expert comptable en ligne</li>
+  <li><a href="https://numbr.co/guides/freelance-et-chomage-le-point-sur-vos-droits/">Numbr - Freelance et chomage</a></li>
+  <li><a href="https://www.youtube.com/watch?v=pSMq5n3Nk6A">Dougs - ARE ou ARCE</a>: Les vidéos de Dougs (expert comptable en ligne) sont très didactiques.</li>
+  <li><a href="https://candidat.francetravail.fr/portail-simulateurs/">Simulateurs France Travail</a>: pour anticiper le montant de l’ARE</li>
+</ul>]]></content><author><name></name></author><summary type="html"><![CDATA[Micro-entreprise ou SASU, Quel statut choisir en période de chômage ?]]></summary></entry></feed>

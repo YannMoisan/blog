@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Configurer weechat et bitlbee | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Configurer weechat et bitlbee" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Configurer weechat et bitlbee" />
+<meta property="og:description" content="Configurer weechat et bitlbee" />
+<link rel="canonical" href="https://www.yannmoisan.com/weechat.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/weechat.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-12-23T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Configurer weechat et bitlbee" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2013-12-23T00:00:00+01:00","datePublished":"2013-12-23T00:00:00+01:00","description":"Configurer weechat et bitlbee","headline":"Configurer weechat et bitlbee","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/weechat.html"},"url":"https://www.yannmoisan.com/weechat.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Configurer weechat et bitlbee</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2013-12-23T00:00:00+01:00" itemprop="datePublished">Dec 23, 2013
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Dans ce billet, nous allons voir comment configurer <a href="http://www.weechat.org/">WeeChat</a>, un client
+IRC en ncurses et <a href="http://www.bitlbee.org">bitlbee</a>, une passerelle entre IRC et les protocoles
+de messageries instantanées.</p>
+
+<h2 id="weechat">Weechat</h2>
+
+<p>Passer l’installation et le premier lancement, on peut taper <code class="language-plaintext highlighter-rouge">/help</code> pour commencer la
+configuration.</p>
+
+<p>Pour se connecter à un serveur et rejoindre un canal</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/connect freenode
+/join #[canal]
+</code></pre></div></div>
+
+<p>Pour automatiser cela entre deux lancements</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/set irc.server.freenode.autoconnect on
+/set irc.server.freenode.autojoin "#weechat-fr,#archlinux-fr"
+/set irc.server.freenode.command "/msg nickserv identify {your password}"
+</code></pre></div></div>
+
+<p>La dernière ligne permet de s’identifier automatiquement. Il faut avoir au préalable enregistrer son
+pseudo sur NickServ <sup><a href="#cite1">[1]</a></sup>, ce que je vous conseille pour éviter qu’on usurpe votre
+identité.</p>
+
+<p>Pour ajouter des mappings (vimesques, évidemment)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/key bind meta-j /buffer +1
+/key bind meta-k /buffer -1
+</code></pre></div></div>
+
+<p>Pour installer des plugins, comme <code class="language-plaintext highlighter-rouge">buffer.pl</code> et <code class="language-plaintext highlighter-rouge">beep.pl</code> pour déclencher un beep lors d’un
+highlight. Ce beep est intercepté par mon WM pour me highlither le workspace.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/script install buffer.pl
+/script install beep.pl
+</code></pre></div></div>
+
+<p>Pour fixer quelques problèmes avec le thème solarized.<sup><a href="#cite3">[3]</a></sup></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/set weechat.bar.status.color_bg 0
+/set weechat.bar.title.color_bg 0
+/set weechat.color.chat_inactive_buffer lightblue
+</code></pre></div></div>
+
+<p>Pour vos backups, la configuration de weechat est dans <code class="language-plaintext highlighter-rouge">~/.weechat</code></p>
+
+<h2 id="bitlbee">Bitlbee</h2>
+
+<p>Tout d’abord, installer bitlbee et démarrer le service.</p>
+
+<p>Pour se connecter (weechat créé alors un buffer &amp;bitlbee)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/connect localhost
+</code></pre></div></div>
+
+<p>Comme pour weechat, l’aide est incluse en tapant help dans le buffer &amp;bitlbee.</p>
+
+<p>Pour s’enregistrer (afin de sauvegarder sa configuration sur le serveur bitlbee)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>register [pwd]
+</code></pre></div></div>
+
+<p>Pour configurer mon compte gmail</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>account add jabber [login]@gmail.com [pwd]
+account [id] on
+account [id] set nick_format [gtalk]-%full_name
+</code></pre></div></div>
+
+<p>La dernière commande permet d’afficher un préfixe (utile quand on a plusieurs comptes), suivi du nom
+complet (plus lisible que le login).</p>
+
+<p>Pour configurer mon compte pro</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>account add jabber [login]@jabber.portaildulibre.fr [pwd]
+</code></pre></div></div>
+
+<p>Pour configurer une chatroom</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chat add [account] osc@conference.jabber.portaildulibre.fr
+channel [id] set password [password]
+/join #osc
+</code></pre></div></div>
+
+<p>Pour se connecter automatiquement</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/server add im localhost -autoconnect
+/set irc.server.im.command "/msg &amp;bitlbee identify YOUR_PASS"
+/set irc.server.im.autojoin "#osc"
+</code></pre></div></div>
+
+<p>Pour vos backups, la configuration de bitlbee est dans <code class="language-plaintext highlighter-rouge">/var/lib/bitlbee</code></p>
+
+<h2 id="liens-utiles">Liens utiles</h2>
+
+<p id="cite1">[1] <a href="https://freenode.net/kb/answer/registration">Configurer son pseudo IRC</a></p>
+<p id="cite2">[2] <a href="http://www.weechat.org/files/doc/stable/weechat_quickstart.fr.html">Guide de démarrage rapide
+WeeChat</a></p>
+<p id="cite3">[3] <a href="https://gist.github.com/inhies/5145065/raw/7e6027766e719ab19161fd2788b5da924c29c28c/pimping.md">Pimping
+solarized</a></p>
+
+  </div><a class="u-url" href="/weechat.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

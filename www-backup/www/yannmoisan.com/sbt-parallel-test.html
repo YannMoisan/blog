@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>How-to run tests in parallel with sbt | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="How-to run tests in parallel with sbt" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="How-to run tests in parallel with sbt" />
+<meta property="og:description" content="How-to run tests in parallel with sbt" />
+<link rel="canonical" href="https://www.yannmoisan.com/sbt-parallel-test.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/sbt-parallel-test.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-12-17T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="How-to run tests in parallel with sbt" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-12-17T00:00:00+01:00","datePublished":"2019-12-17T00:00:00+01:00","description":"How-to run tests in parallel with sbt","headline":"How-to run tests in parallel with sbt","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/sbt-parallel-test.html"},"url":"https://www.yannmoisan.com/sbt-parallel-test.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">How-to run tests in parallel with sbt</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-12-17T00:00:00+01:00" itemprop="datePublished">Dec 17, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The aim of this post is to clarify how to run tests in parallel with sbt.</p>
+
+<p>The initial motivation is to speed up testing on a Spark project.</p>
+
+<h2 id="2-levels-of-parallelism">2 levels of parallelism</h2>
+
+<p>A frequent source of confusion is that there are multiple levels of parallelism involved.</p>
+
+<h3 id="inside-a-project">inside a project</h3>
+
+<p>sbt maps each test class to a task. sbt runs tasks in parallel and within the same JVM by default.</p>
+
+<p>Serial execution can be forced with :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>parallelExecution in Test := false
+</code></pre></div></div>
+
+<h3 id="cross-project">cross-project</h3>
+
+<p>There is a second level of parallelism. If your build is a cross-project build, sbt also runs tasks
+from the different projects in parallel.</p>
+
+<p>sbt can limit task concurrency based on tags. The task test is tagged by default and this tag is
+propagated to each child task created for each test class.</p>
+
+<p>To restrict the number of concurrently executing tests in all projects, use:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Global / concurrentRestrictions += Tags.limit(Tags.Test, 1)
+</code></pre></div></div>
+
+<p>Here is a short recap</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tags.Test</th>
+      <th>parallelExecution</th>
+      <th>behaviour (cross-project / inside project)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>#cores (default)</td>
+      <td>true</td>
+      <td>parallel / parallel</td>
+    </tr>
+    <tr>
+      <td>#cores (default)</td>
+      <td>false</td>
+      <td>parallel / sequentially</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>true</td>
+      <td>sequentially / sequentially (because we limit globally to one task, i.e. one test class, at once)</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>false</td>
+      <td>WARNING : tests are still run in parallel across projects !!! This is because sbt currently does not tag the generated test task when parallelExecution in Test is set to false. cf <a href="https://github.com/sbt/sbt/issues/2425">#2425</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="forking-">Forking ?</h2>
+
+<p>By default, tests are executed in the same JVM as sbt.</p>
+
+<p>This can be changed with :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fork in Test := true
+</code></pre></div></div>
+
+<p>Hence, all tests will be executed in a single external JVM. By default, tests executed in a forked
+JVM are executed sequentially.</p>
+
+<p>This can be changed with : (the equivalent of parallelExecution)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Test / testForkedParallel := true
+</code></pre></div></div>
+
+<p>Moreover, in forked mode, each project will spawn its own JVM (I did not find a way to run tests
+from all projects in the same forked JVM, the only workaround is to create a dedicated test project
+and put all tests inside it).</p>
+
+<p>By default, all tests are in the same group. It’s possible to change that with <code class="language-plaintext highlighter-rouge">testGrouping</code></p>
+
+<p>For example, if you want each test to be in its own group.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>testGrouping in Test := (testGrouping in Test).value.flatMap { group =&gt;
+  group.tests map (test =&gt; Group(test.name, Seq(test), SubProcess(ForkOptions()))
+}
+</code></pre></div></div>
+
+<p>It’s possible to run multiple forked JVM at the same time :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>concurrentRestrictions := Seq(Tags.limit(Tags.ForkedTestGroup, 2))
+</code></pre></div></div>
+
+<p>Here is a short recap</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tags.ForkedTestGroup</th>
+      <th>testForkedParallel</th>
+      <th>testGrouping</th>
+      <th>behaviour (#JVM / cross-project / inside project)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 (default)</td>
+      <td>false (default)</td>
+      <td>(default)</td>
+      <td>one JVM per project / sequentially / sequentially</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+      <td>one JVM per project / parallel / sequentially</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>true</td>
+      <td> </td>
+      <td>one JVM per project / sequentially / parallel</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td>single</td>
+      <td>one JVM per test</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="back-to-spark">Back to Spark</h2>
+
+<p>The issue with Spark is that it costs a lot to create a <code class="language-plaintext highlighter-rouge">SparkContext</code>. So, some libraries allow to
+reuse it across multiple tests (e.g.
+<a href="https://github.com/holdenk/spark-testing-base">spark-testing-base</a>).</p>
+
+<p>But it’s not thread-safe ! Using what we have learned in the previous sections, there are two
+possibilities :</p>
+
+<ol>
+  <li>
+    <p>Forking. But each project will have its own JVM and its own <code class="language-plaintext highlighter-rouge">SparkContext</code>.</p>
+  </li>
+  <li>
+    <p>Stay in the same JVM and execute all tests sequentially (with <code class="language-plaintext highlighter-rouge">parallelExecution = true</code>
+and <code class="language-plaintext highlighter-rouge">Tags.Test = 1</code>). Warning: the configuration given
+<a href="https://github.com/holdenk/spark-testing-base#special-considerations">here</a> doesn’t work in case of
+multi-project.</p>
+  </li>
+</ol>
+
+<h2 id="why-should-i-trust-you">Why should I trust you?</h2>
+
+<p>I have created a tiny project to test all these configurations :
+<a href="https://github.com/YannMoisan/sbt-parallel">https://github.com/YannMoisan/sbt-parallel</a></p>
+
+<p>It’s a project with 2 subprojects and 2 test classes in each project : Foo(1|2) in project foo and
+Bar(1|2) in project bar. Each test prints 5 messages with a 1s delay between them. So we can see how
+it’s interleaved. Each message contains the class name, the index of the iteration and the pid of
+the JVM</p>
+
+<p>Run <code class="language-plaintext highlighter-rouge">sbt test</code> to see the default behaviour :</p>
+
+<p>The format is <code class="language-plaintext highlighter-rouge">ClassName[iteration][pid]</code></p>
+
+<p>Here is the output for default behaviour</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Foo1[1][39324]
+Foo2[1][39324]
+Bar2[1][39324]
+Bar1[1][39324]
+
+Bar1[2][39324]
+Foo2[2][39324]
+Bar2[2][39324]
+Foo1[2][39324]
+
+Foo1[3][39324]
+Foo2[3][39324]
+Bar2[3][39324]
+Bar1[3][39324]
+
+Bar1[4][39324]
+Foo1[4][39324]
+Foo2[4][39324]
+Bar2[4][39324]
+
+Foo2[5][39324]
+Bar2[5][39324]
+Bar1[5][39324]
+Foo1[5][39324]
+</code></pre></div></div>
+
+<p>Here is the output with forked. As expected, there are 2 different pids (one by project)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Foo1[1][76860]
+Foo1[2][76860]
+Foo1[3][76860]
+Foo1[4][76860]
+Foo1[5][76860]
+
+Foo2[1][76860]
+Foo2[2][76860]
+Foo2[3][76860]
+Foo2[4][76860]
+Foo2[5][76860]
+
+Bar2[1][76861]
+Bar2[2][76861]
+Bar2[3][76861]
+Bar2[4][76861]
+Bar2[5][76861]
+
+Bar1[1][76861]
+Bar1[2][76861]
+Bar1[3][76861]
+Bar1[4][76861]
+Bar1[5][76861]
+</code></pre></div></div>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://www.scala-sbt.org/1.x/docs/Testing.html">sbt official doc : Testing</a></li>
+  <li><a href="https://www.scala-sbt.org/1.x/docs/Forking.html">sbt official doc : Forking</a></li>
+  <li><a href="https://www.scala-sbt.org/1.x/docs/Multi-Project.html">sbt official doc : Multi-Project</a></li>
+  <li><a href="https://www.scala-sbt.org/1.x/docs/Parallel-Execution.html">sbt official doc :
+Parallel-Execution</a></li>
+  <li><a href="https://github.com/sbt/sbt/issues/2425">issue 2425</a></li>
+</ul>
+
+
+  </div><a class="u-url" href="/sbt-parallel-test.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

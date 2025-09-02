@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>1BRC in Scala with Spark | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="1BRC in Scala with Spark" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="1BRC in Scala with Spark" />
+<meta property="og:description" content="1BRC in Scala with Spark" />
+<link rel="canonical" href="https://www.yannmoisan.com/1brc-spark.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/1brc-spark.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-05-16T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="1BRC in Scala with Spark" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-05-16T00:00:00+02:00","datePublished":"2024-05-16T00:00:00+02:00","description":"1BRC in Scala with Spark","headline":"1BRC in Scala with Spark","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/1brc-spark.html"},"url":"https://www.yannmoisan.com/1brc-spark.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">1BRC in Scala with Spark</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-05-16T00:00:00+02:00" itemprop="datePublished">May 16, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Update 2024-06-03: Add sections on scala-cli and datafusion-comet</p>
+
+<p>During January, <a href="https://github.com/gunnarmorling/1brc">The One Billion Row Challenge</a>, a very interesting challenge arose for the Java community.
+The goal is to process a CSV file containing one billion rows as fast as possible.</p>
+
+<p>As soon as the challenge was released, I was wondering how Spark performs in local mode compared to raw Java code.</p>
+
+<p>This post is inspired by <a href="https://rmoff.net/2024/01/03/1%EF%B8%8F%E2%83%A3%EF%B8%8F-1brc-in-sql-with-duckdb/">1BRC in SQL with DuckDB</a> by <a href="https://twitter.com/rmoff/">Robin Moffatt</a>.</p>
+
+<h2 id="setup-the-project">Setup the project</h2>
+
+<p>A project needs to be bootstrapped. Thankfully, sbt has a command for that and holdenk has made a <a href="https://github.com/holdenk/sparkProjectTemplate.g8">template</a> for Spark</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sbt new holdenk/sparkProjectTemplate.g8
+</code></pre></div></div>
+
+<p>Between each attempt, 2 actions need to be performed</p>
+<ol>
+  <li>Use sbt in interactive mode and launch the <code class="language-plaintext highlighter-rouge">package</code> command (very quick, around 1s)</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">spark-submit</code> on an existing Spark installation</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./spark-submit --class com.yannmoisan.1brc.1BRC --master "local[*]" ~/projects/perso/1brc-spark/target/scala-2.12/1brc-spark_2.12-0.0.1.jar
+</code></pre></div></div>
+
+<p>Note: <code class="language-plaintext highlighter-rouge">local[*]</code> is used to leverage all logical cores.</p>
+
+<h2 id="read-the-data">Read the data</h2>
+
+<p>In order to iterate quickly, we’re going to work on a subset of the data and infer the schema.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">spark</span><span class="o">.</span><span class="py">read</span>
+  <span class="o">.</span><span class="py">option</span><span class="o">(</span><span class="s">"inferSchema"</span><span class="o">,</span> <span class="s">"true"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">csv</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/1brc/measurements.txt"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">limit</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">show</span><span class="o">()</span>
+</code></pre></div></div>
+
+<p>And after a long wait (2 minutes), we get a deceptive result</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-------------+
+|          _c0|
++-------------+
+|  Niigata;5.4|
+|     Riga;8.1|
+|Baltimore;4.5|
+|  Irkutsk;5.5|
+|  Almaty;17.3|
++-------------+
+</code></pre></div></div>
+
+<p>There are 2 main differences with the function <code class="language-plaintext highlighter-rouge">read_csv_auto</code> from DuckDB</p>
+
+<ol>
+  <li>Spark has not inferred the delimiter</li>
+  <li>Spark has read the whole file as shown below</li>
+</ol>
+
+<p><img src="assets/1brc-spark.png" alt="slsa-4.jpg" /></p>
+
+<p>Here is an improved version</p>
+
+<ul>
+  <li>the delimiter is explicitly mentioned (to fix 1.)</li>
+  <li>the schema is explicitly provided (to fix 2.).</li>
+</ul>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">schema</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StructType</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">add</span><span class="o">(</span><span class="s">"station_name"</span><span class="o">,</span> <span class="nc">StringType</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">add</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">,</span> <span class="nc">DoubleType</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+<span class="nv">spark</span><span class="o">.</span><span class="py">read</span>
+  <span class="o">.</span><span class="py">option</span><span class="o">(</span><span class="s">"delimiter"</span><span class="o">,</span> <span class="s">";"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">schema</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">csv</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/1brc/measurements.txt"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">limit</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">show</span><span class="o">()</span>
+</code></pre></div></div>
+
+<h2 id="perform-the-calculation">Perform the calculation</h2>
+
+<p>We continue to use the DataFrame API</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">spark</span><span class="o">.</span><span class="py">read</span>
+  <span class="o">.</span><span class="py">option</span><span class="o">(</span><span class="s">"delimiter"</span><span class="o">,</span> <span class="s">";"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">schema</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">csv</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/1brc/measurements.txt"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">groupBy</span><span class="o">(</span><span class="s">"station_name"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">agg</span><span class="o">(</span>
+    <span class="nf">min</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"min_measurement"</span><span class="o">),</span>
+    <span class="nf">avg</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">).</span><span class="py">cast</span><span class="o">(</span><span class="nc">DecimalType</span><span class="o">(</span><span class="mi">8</span><span class="o">,</span> <span class="mi">1</span><span class="o">)).</span><span class="py">as</span><span class="o">(</span><span class="s">"mean_measurement"</span><span class="o">),</span>
+    <span class="nf">max</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"max_measurement"</span><span class="o">)</span>
+  <span class="o">)</span>
+  <span class="o">.</span><span class="py">limit</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">show</span><span class="o">()</span>
+</code></pre></div></div>
+
+<h2 id="format-the-output">Format the output</h2>
+
+<p>As an exercise, the goal here is to use only <a href="https://spark.apache.org/docs/latest/api/sql/index.html">built-in functions</a> for formatting.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">output</span> <span class="k">=</span> <span class="nv">spark</span><span class="o">.</span><span class="py">read</span>
+  <span class="o">.</span><span class="py">option</span><span class="o">(</span><span class="s">"delimiter"</span><span class="o">,</span> <span class="s">";"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">schema</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">csv</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/1brc/measurements.txt"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">groupBy</span><span class="o">(</span><span class="s">"station_name"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">agg</span><span class="o">(</span>
+    <span class="nf">min</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"min_measurement"</span><span class="o">),</span>
+    <span class="nf">avg</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">).</span><span class="py">cast</span><span class="o">(</span><span class="nc">DecimalType</span><span class="o">(</span><span class="mi">8</span><span class="o">,</span> <span class="mi">1</span><span class="o">)).</span><span class="py">as</span><span class="o">(</span><span class="s">"mean_measurement"</span><span class="o">),</span>
+    <span class="nf">max</span><span class="o">(</span><span class="s">"measurement"</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"max_measurement"</span><span class="o">)</span>
+  <span class="o">)</span>
+  <span class="o">.</span><span class="py">select</span><span class="o">(</span>
+    <span class="nf">concat</span><span class="o">(</span>
+      <span class="nf">col</span><span class="o">(</span><span class="s">"station_name"</span><span class="o">),</span>
+      <span class="nf">lit</span><span class="o">(</span><span class="s">"="</span><span class="o">),</span>
+      <span class="nf">concat_ws</span><span class="o">(</span><span class="s">"/"</span><span class="o">,</span> <span class="nf">col</span><span class="o">(</span><span class="s">"min_measurement"</span><span class="o">),</span> <span class="nf">col</span><span class="o">(</span><span class="s">"mean_measurement"</span><span class="o">),</span> <span class="nf">col</span><span class="o">(</span><span class="s">"max_measurement"</span><span class="o">))</span>
+    <span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"formatted_row"</span><span class="o">)</span>
+  <span class="o">)</span>
+  <span class="o">.</span><span class="py">sort</span><span class="o">(</span><span class="s">"formatted_row"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">agg</span><span class="o">(</span><span class="nf">collect_list</span><span class="o">(</span><span class="s">"formatted_row"</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"result"</span><span class="o">))</span>
+  <span class="o">.</span><span class="py">select</span><span class="o">(</span><span class="nf">concat</span><span class="o">(</span><span class="nf">lit</span><span class="o">(</span><span class="s">"{"</span><span class="o">),</span> <span class="nf">array_join</span><span class="o">(</span><span class="nf">col</span><span class="o">(</span><span class="s">"result"</span><span class="o">),</span> <span class="s">", "</span><span class="o">),</span> <span class="nf">lit</span><span class="o">(</span><span class="s">"}"</span><span class="o">)))</span>
+  <span class="o">.</span><span class="py">head</span>
+  <span class="o">.</span><span class="py">getString</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="scala-cli-and-spark">scala-cli and Spark</h2>
+
+<p>A new tool is emerging in the Scala ecosystem : <a href="https://scala-cli.virtuslab.org/">scala-cli</a>. The goal is to simplify the first steps with Scala by completely removing the need for a build system.
+Moreover, this tool has <a href="https://scala-cli.virtuslab.org/spark/">experimental support for Spark</a>. Let me give it a try.</p>
+
+<p>We just need to describe the dependencies at the top of the file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//&gt; using dep org.apache.spark::spark-sql:3.3.0
+//&gt; using scala 2.12.15
+</code></pre></div></div>
+
+<p>And we can run this file without compiling, even without installing Scala or Spark.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run --spark-standalone 1BRC.scala
+</code></pre></div></div>
+
+<p>I think it is a game changer to have such an easy way to run Spark jobs.</p>
+
+<p>Note: it works with the latest version (1.3.2) of scala-cli but I’ve had a compilation issue with 1.3.1</p>
+
+<h2 id="native-runners">native runners</h2>
+
+<p>Via its plugin architecture, Spark now has multiple native runners, aiming to improve Spark performance.
+As DataFusion (an execution engine written in Rust) has gained a lot of traction recently, I would like to test <a href="https://github.com/apache/datafusion-comet">datafusion-comet</a>.</p>
+
+<p>First, we need to build the library (there are now binary releases available at the moment), as explained in the <a href="https://datafusion.apache.org/comet/user-guide/installation.html">installation instructions</a>.</p>
+
+<p>With just a few options added, we can run it with</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>time ./spark-submit \
+    --class com.yannmoisan.1brc.1BRC \
+    --master "local[*]" \
+    --jars ~/projects/perso/datafusion-comet/spark/target/comet-spark-spark3.4_2.12-0.1.0-SNAPSHOT.jar \
+    --conf spark.driver.extraClassPath=~/projects/perso/datafusion-comet/spark/target/comet-spark-spark3.4_2.12-0.1.0-SNAPSHOT.jar \
+    --conf spark.executor.extraClassPath=~/projects/perso/datafusion-comet/spark/target/comet-spark-spark3.4_2.12-0.1.0-SNAPSHOT.jar \
+    --conf spark.sql.extensions=org.apache.comet.CometSparkSessionExtensions \
+    --conf spark.comet.enabled=true \
+    --conf spark.comet.exec.enabled=true \
+    --conf spark.comet.exec.all.enabled=true \
+    --conf spark.comet.explainFallback.enabled=true \
+    ~/projects/perso/1brc-spark/target/scala-2.12/1brc-spark_2.12-0.0.1.jar
+</code></pre></div></div>
+
+<p>Unfortunately, comet is not yet well-suited for this use case because it doesn’t support most parts of the plan, as indicated in the log:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>24/06/03 09:04:07 WARN CometSparkSessionExtensions$CometExecRule: Comet cannot execute some parts of this plan natively because:
+	- Scan csv  is not supported
+	- Comet shuffle is not enabled: spark.comet.exec.shuffle.enabled is not enabled
+	- AQEShuffleRead is not supported
+	- ObjectHashAggregate is not supported
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>With Spark 3.5.0., Scala 2.12 and Java 17, the job takes 2 minutes 30 seconds.</p>
+
+<p>It’s interesting to note that it is possible to run under 2s with <em>highly</em> optimized Java code, so Spark is two orders of magnitude slower in this case.</p>
+
+<p>It’s also interesting to see that volume of data that was considered Big
+Data not long ago can now be processed in a few seconds, on a single machine,
+in Java.</p>
+
+<p>It is also important to note that although many tools offer an API similar to SQL, the devil is in the details because what happens at runtime can be quite different (as we have seen with schema detection in DuckDB and Spark).</p>
+
+
+  </div><a class="u-url" href="/1brc-spark.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

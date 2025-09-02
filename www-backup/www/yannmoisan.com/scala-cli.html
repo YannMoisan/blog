@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli" />
+<meta property="og:description" content="One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli" />
+<link rel="canonical" href="https://www.yannmoisan.com/scala-cli.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/scala-cli.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-08T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-05-08T00:00:00+02:00","datePublished":"2025-05-08T00:00:00+02:00","description":"One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli","headline":"One Script, Many Styles - Exploring Scala’s Ecosystem with scala-cli","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/scala-cli.html"},"url":"https://www.yannmoisan.com/scala-cli.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">One Script, Many Styles - Exploring Scala&#39;s Ecosystem with scala-cli</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-05-08T00:00:00+02:00" itemprop="datePublished">May 8, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Scala is a rich and expressive language, and one of its strengths is the flexibility it offers 
+in how you write your code. Whether you lean towards functional purity, pragmatic scripting, 
+or modern direct-style syntax, there’s likely a Scala flavor that suits your workflow.</p>
+
+<p>In this post, I’ll walk through a simple script I use to help publish my “news of the month” blog series. 
+What starts as a basic task — reading a list of URLs and printing each page’s title — 
+becomes an opportunity to explore different Scala styles, 
+from idiomatic scripting and parallelism with Future, to effect systems like cats-effect, ZIO, 
+and even the direct-style Ox library.</p>
+
+<p>The goal? To showcase how Scala’s ecosystem lets you solve the same problem in multiple elegant ways.</p>
+
+<h1 id="context">Context</h1>
+<p>Each month, I publish a “news of the month” post, a curated list of interesting articles.
+To do so, throughout the month, I collect interesting URLs in a text file.
+In order to automate a bit the creation of the markdown for the post, I wrote a
+script that reads this file, fetches the title for each URL, and prints it to
+the standard output.</p>
+
+<p>Requirements:</p>
+<ul>
+  <li>Do not crash in case of errors (e.g. invalid URLs).</li>
+  <li>Do not leave the file open in case of errors. In this simple case, it is more
+for educational purposes (<code class="language-plaintext highlighter-rouge">Source.fromFile</code> creates an open
+file handle. If we don’t call explicitly <code class="language-plaintext highlighter-rouge">.close()</code>, it causes a file
+descriptor leak. The OS has a limit on the number of concurrently open files, 
+you can check it with <code class="language-plaintext highlighter-rouge">ulimit -n</code> (default is often 256 on macOS).</li>
+</ul>
+
+<h1 id="getting-started-with-scala-cli">Getting Started with <code class="language-plaintext highlighter-rouge">scala-cli</code></h1>
+<p>A simple yet powerful tool has emerged: <a href="https://scala-cli.virtuslab.org">scala-cli</a> 
+that allows to compile and run scala scripts with an automatic setup (no build files).
+The dependencies are declared using a directive in the script file itself.
+So, it’s incredibly easy to experiment with different libraries.</p>
+
+<p>I personally installed it with sdkman <code class="language-plaintext highlighter-rouge">sdk install scala-cli</code>, and I update it with <code class="language-plaintext highlighter-rouge">sdk upgrade scala-cli</code></p>
+
+<p>Here is how <a href="https://scala-cli.virtuslab.org/docs/cookbooks/ide/intellij/">to setup IntelliJ</a>.
+When a new script is added, a pictogram suggests syncing BSP changes (otherwise,
+the script won’t be recognized and you won’t have completions).</p>
+
+<h1 id="style-1-idiomatic-scala">Style 1: Idiomatic scala</h1>
+
+<p>scala-cli supports scripts that end with <code class="language-plaintext highlighter-rouge">.sc</code>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+<span class="k">import</span> <span class="nn">org.jsoup.nodes.Document</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.util._</span>
+
+<span class="nc">Using</span><span class="o">(</span>
+  <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span> <span class="n">source</span> <span class="k">=&gt;</span> <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">foreach</span><span class="o">(</span><span class="n">fetchTitle</span><span class="o">)</span> <span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="nc">Try</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+    <span class="n">s</span><span class="s">"[$title]($url)"</span>
+  <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Since Scala 2.13, we can use the <code class="language-plaintext highlighter-rouge">Using</code> class, which provides support for automatic resource management in Scala.</p>
+
+<p>It’s very lightweight (around 20 lines of code) to write this kind of tasks in Scala (I personnaly prefer
+it over writing a bash script)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-idiomatic.sc
+</code></pre></div></div>
+
+<h1 id="style-2-parallelism-with-future">Style 2: Parallelism with <code class="language-plaintext highlighter-rouge">Future</code></h1>
+
+<p>It is the standard library concurrency.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+<span class="k">import</span> <span class="nn">org.jsoup.nodes.Document</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.</span><span class="o">{</span><span class="nc">Await</span><span class="o">,</span> <span class="nc">Future</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.duration.</span><span class="o">*</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Failure</span><span class="o">,</span> <span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">,</span> <span class="nc">Using</span><span class="o">}</span>
+
+<span class="nc">Using</span><span class="o">(</span>
+  <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span> <span class="n">source</span> <span class="k">=&gt;</span>
+  <span class="k">val</span> <span class="nv">futures</span> <span class="k">=</span> <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">url</span> <span class="k">=&gt;</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="o">))</span>
+  <span class="nv">Await</span><span class="o">.</span><span class="py">result</span><span class="o">(</span><span class="nv">Future</span><span class="o">.</span><span class="py">sequence</span><span class="o">(</span><span class="n">futures</span><span class="o">),</span> <span class="mf">5.</span><span class="n">minutes</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nc">Future</span> <span class="o">{</span>
+    <span class="nc">Try</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+      <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+      <span class="n">s</span><span class="s">"[$title]($url)"</span>
+    <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+      <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The method <code class="language-plaintext highlighter-rouge">fetchTitle</code> now returns a <code class="language-plaintext highlighter-rouge">Future</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-future.sc
+</code></pre></div></div>
+
+<p>Comparison of execution time (measured with <code class="language-plaintext highlighter-rouge">time</code>)</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>user</td>
+      <td>system</td>
+      <td>cpu</td>
+      <td>total</td>
+    </tr>
+    <tr>
+      <td>Style 1</td>
+      <td>3.64s</td>
+      <td>0.38s</td>
+      <td>38%</td>
+      <td>10.78</td>
+    </tr>
+    <tr>
+      <td>Style 2</td>
+      <td>4.88s</td>
+      <td>0.58s</td>
+      <td>73%</td>
+      <td>7.44</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>As expected, the wall-clock time is lower with Style 2.</p>
+
+<h1 id="style-3-effect-library---cats-effect">Style 3: Effect library - cats effect</h1>
+<p>For cats-effect, a scala file must be used (see <a href="https://typelevel.org/cats-effect/docs/faq#scala-cli">cats-effect - faq#scala-cli</a>)</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep org.typelevel::cats-effect:3.6.1</span>
+<span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">IO</span><span class="o">,</span> <span class="nc">IOApp</span><span class="o">,</span> <span class="nc">Resource</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">cats.syntax.all.</span><span class="o">*</span>
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.language.postfixOps</span>
+
+<span class="c1">// https://typelevel.org/cats-effect/docs/faq#scala-cli</span>
+<span class="k">object</span> <span class="nc">Main</span> <span class="k">extends</span> <span class="nv">IOApp</span><span class="o">.</span><span class="py">Simple</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">IO</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">IO</span>
+    <span class="o">.</span><span class="py">blocking</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+      <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+      <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"[$title]($url)"</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="o">.</span><span class="py">handleErrorWith</span><span class="o">(</span><span class="n">e</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url (${e.getMessage})"</span><span class="o">))</span>
+
+  <span class="k">def</span> <span class="nf">run</span><span class="k">:</span> <span class="kt">IO</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nc">Resource</span>
+      <span class="o">.</span><span class="py">fromAutoCloseable</span><span class="o">(</span>
+        <span class="nv">IO</span><span class="o">.</span><span class="py">blocking</span><span class="o">(</span>
+          <span class="nc">Source</span>
+            <span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+            <span class="o">.</span><span class="py">getLines</span><span class="o">()</span>
+            <span class="o">.</span><span class="py">toList</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+      <span class="o">.</span><span class="py">use</span><span class="o">(</span><span class="n">lines</span> <span class="k">=&gt;</span> <span class="nv">lines</span><span class="o">.</span><span class="py">parTraverse</span><span class="o">(</span><span class="n">fetchTitle</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The .get() method performs a synchronous HTTP request. This blocks the current thread until the request completes or fails.
+So, this call should be wrapped in a blocking-safe context : IO.blocking(…).
+This ensures the blocking operation is run on a dedicated thread pool meant for blocking operations, avoiding starvation of compute threads.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Using</code> is replaced by <code class="language-plaintext highlighter-rouge">Resource.fromAutoCloseable</code></p>
+
+<p>The method <code class="language-plaintext highlighter-rouge">fetchTitle</code> now returns an <code class="language-plaintext highlighter-rouge">IO</code>.</p>
+
+<p>We no longer need to use <code class="language-plaintext highlighter-rouge">Try</code>, errors are captured on the
+error channel of <code class="language-plaintext highlighter-rouge">IO</code>.</p>
+
+<p>Note : As opposed to previous implementation, the file is read fully into memory.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-cats-effect.scala
+</code></pre></div></div>
+
+<h1 id="style-4-effect-library---zio">Style 4: Effect library - ZIO</h1>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep "dev.zio::zio:2.1.17"</span>
+<span class="c1">//&gt; using dep "org.jsoup:jsoup:1.20.1"</span>
+
+<span class="k">import</span> <span class="nn">zio._</span>
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+
+<span class="k">object</span> <span class="nc">Main</span> <span class="k">extends</span> <span class="nc">ZIOAppDefault</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Task</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
+    <span class="nc">ZIO</span>
+      <span class="o">.</span><span class="py">attemptBlocking</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="nv">doc</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+        <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"[${doc.title()}]($url)"</span><span class="o">)</span>
+      <span class="o">}</span>
+      <span class="o">.</span><span class="py">catchAll</span><span class="o">(</span><span class="n">e</span> <span class="k">=&gt;</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">succeed</span><span class="o">(</span><span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url - ${e.getMessage}"</span><span class="o">)))</span>
+
+  <span class="k">def</span> <span class="nf">run</span><span class="k">:</span> <span class="kt">ZIO</span><span class="o">[</span><span class="kt">Scope</span>, <span class="kt">Throwable</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+
+    <span class="k">for</span> <span class="o">{</span>
+      <span class="n">source</span> <span class="k">&lt;-</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">fromAutoCloseable</span><span class="o">(</span>
+        <span class="nv">ZIO</span><span class="o">.</span><span class="py">attemptBlocking</span><span class="o">(</span>
+          <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span>
+            <span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span>
+          <span class="o">)</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+      <span class="n">lines</span> <span class="k">&lt;-</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">attemptBlocking</span><span class="o">(</span><span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">().</span><span class="py">toList</span><span class="o">)</span>
+      <span class="k">_</span> <span class="k">&lt;-</span> <span class="nv">ZIO</span><span class="o">.</span><span class="py">foreachParDiscard</span><span class="o">(</span><span class="n">lines</span><span class="o">)(</span><span class="n">fetchTitle</span><span class="o">)</span>
+    <span class="o">}</span> <span class="nf">yield</span> <span class="o">()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>On this case, ZIO is quite similar to cats-effect. The same concepts exist in
+both library.</p>
+
+<p>Here is a summary of the syntax differences</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>cats-effect</td>
+      <td>ZIO</td>
+    </tr>
+    <tr>
+      <td>IO.blocking</td>
+      <td>ZIO.attemptBlocking</td>
+    </tr>
+    <tr>
+      <td>Resource.fromAutocloseable</td>
+      <td>ZIO.fromAutoCloseable</td>
+    </tr>
+    <tr>
+      <td>lines.parTraverse</td>
+      <td>ZIO.foreachParDiscard(lines)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="style-5-direct-style-with-ox-and-high-level-concurrency">Style 5: Direct-style with <a href="https://ox.softwaremill.com">Ox</a> and high-level concurrency</h1>
+
+<p>In a nutshell, direct-style means you don’t have to deal with nested <code class="language-plaintext highlighter-rouge">flatMap</code>/<code class="language-plaintext highlighter-rouge">map</code>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep com.softwaremill.ox::core:0.5.13</span>
+<span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Failure</span><span class="o">,</span> <span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">,</span> <span class="nc">Using</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">ox.</span><span class="o">*</span>
+
+<span class="nc">Using</span><span class="o">(</span>
+  <span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">)</span>
+<span class="o">)</span> <span class="o">{</span> <span class="n">source</span> <span class="k">=&gt;</span>
+  <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">toList</span>
+    <span class="o">.</span><span class="py">foreachPar</span><span class="o">(</span><span class="mi">4</span><span class="o">)(</span><span class="n">fetchTitle</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="nc">Try</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+    <span class="n">s</span><span class="s">"[$title]($url)"</span>
+  <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The method <code class="language-plaintext highlighter-rouge">fetchTitle</code> remains exactly the same as in the first version. The only change
+is the call to <a href="https://ox.softwaremill.com/latest/high-level-concurrency/collections.html#foreachpar">foreachPar</a>.</p>
+
+<p>Ox is based on project Loom, which requires JDK 21. Thankfully, once again, it’s super easy to get up and running.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-cats-effect.sc --jvm temurin:21
+</code></pre></div></div>
+
+<h1 id="style-6-direct-style-with-ox-and-structured-concurrency">Style 6: Direct-style with <a href="https://ox.softwaremill.com">Ox</a> and structured-concurrency</h1>
+
+<p><a href="https://ox.softwaremill.com/latest/structured-concurrency/index.html#what-is-structured-concurrency">what-is-structured-concurrency</a></p>
+
+<blockquote>
+  <p>Structured concurrency is an approach where the lifetime of a thread is determined by the syntactic structure of the code.</p>
+</blockquote>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//&gt; using dep com.softwaremill.ox::core:0.5.13</span>
+<span class="c1">//&gt; using dep org.jsoup:jsoup:1.20.1</span>
+
+<span class="k">import</span> <span class="nn">org.jsoup.Jsoup</span>
+
+<span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="k">import</span> <span class="nn">scala.util.</span><span class="o">{</span><span class="nc">Failure</span><span class="o">,</span> <span class="nc">Success</span><span class="o">,</span> <span class="nc">Try</span><span class="o">,</span> <span class="nc">Using</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">ox.</span><span class="o">*</span>
+
+<span class="n">supervised</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">source</span> <span class="k">=</span> <span class="nf">useCloseableInScope</span><span class="o">(</span><span class="nv">Source</span><span class="o">.</span><span class="py">fromFile</span><span class="o">(</span><span class="s">"/Users/yamo/projects/perso/blog/news-raw/2025-04.txt"</span><span class="o">))</span>
+  <span class="nv">source</span><span class="o">.</span><span class="py">getLines</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">url</span> <span class="k">=&gt;</span> <span class="nf">fork</span><span class="o">(</span><span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="o">)).</span><span class="py">join</span><span class="o">())</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">fetchTitle</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="nc">Try</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">document</span> <span class="k">=</span> <span class="nv">Jsoup</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">url</span><span class="o">).</span><span class="py">get</span><span class="o">()</span>
+    <span class="k">val</span> <span class="nv">title</span> <span class="k">=</span> <span class="nv">document</span><span class="o">.</span><span class="py">title</span><span class="o">()</span>
+    <span class="n">s</span><span class="s">"[$title]($url)"</span>
+  <span class="o">}</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">result</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>      <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"ERROR: $url ($e)"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Ox provides methods to manage resources.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala-cli run fetch-titles-cats-effect.sc --jvm temurin:21
+</code></pre></div></div>
+
+<h1 id="other-styles">Other styles</h1>
+
+<p>Other alternatives that I have not tested :</p>
+
+<ul>
+  <li><a href="https://github.com/lampepfl/gears">gears</a>, another direct-style async library for Scala 3.</li>
+  <li><a href="https://github.com/getkyo/kyo">kyo</a>, a toolkit based on algebraic effect.</li>
+</ul>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>This tiny script turned out to be a fun playground to explore the diversity of styles 
+and libraries available in modern Scala. Whether you prefer the simplicity of standard futures, 
+the power of type-safe effects with cats-effect or ZIO, or the readability of direct-style with Ox, 
+you can choose the right tool for your needs — all within the same language.</p>
+
+<p>Having options is empowering. It allows you to write code that matches your mindset, 
+project constraints, and performance goals. If you’ve tried a different approach 
+or library for similar scripting tasks, I’d love to hear about it — 
+feel free to reach out or leave a comment!</p>
+
+  </div><a class="u-url" href="/scala-cli.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

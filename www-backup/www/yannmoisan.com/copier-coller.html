@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Copier-coller sous Linux | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Copier-coller sous Linux" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Nous allons voir comment copier-coller efficacement sous Linux. Quels sont les presse-papiers disponibles et comment les utiliser avec le terminal, le shell et vim." />
+<meta property="og:description" content="Nous allons voir comment copier-coller efficacement sous Linux. Quels sont les presse-papiers disponibles et comment les utiliser avec le terminal, le shell et vim." />
+<link rel="canonical" href="https://www.yannmoisan.com/copier-coller.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/copier-coller.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-12-22T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Copier-coller sous Linux" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-03-11T00:00:00+01:00","datePublished":"2013-12-22T00:00:00+01:00","description":"Nous allons voir comment copier-coller efficacement sous Linux. Quels sont les presse-papiers disponibles et comment les utiliser avec le terminal, le shell et vim.","headline":"Copier-coller sous Linux","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/copier-coller.html"},"url":"https://www.yannmoisan.com/copier-coller.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Copier-coller sous Linux</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2013-12-22T00:00:00+01:00" itemprop="datePublished">Dec 22, 2013
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Le but de ce billet est d’expliquer comment copier-coller sous GNU/Linux pour les <em>hackers</em>, c.-à-d
+de favoriser le clavier.</p>
+
+<h2 id="les-trois-presse-papiers">Les trois presse-papiers</h2>
+
+<p>Il existe 3 presse-papiers sous X : le primaire, le secondaire et le clipboard.</p>
+
+<p>Le presse-papiers primaire est alimenté par une sélection à la souris et son contenu est collé à la
+souris avec un clic sur le bouton du milieu ou au clavier avec <kbd>Shift</kbd> + <kbd>Insert</kbd>.</p>
+
+<p>Le presse-papiers clipboard est alimenté par une sélection à la souris suivi de <kbd>Ctrl</kbd> + <kbd>C</kbd> et son contenu
+est collé au clavier avec <kbd>Ctrl</kbd> + <kbd>V</kbd>.</p>
+
+<p>Le presse-papiers secondaire ne sert à rien.</p>
+
+<h2 id="vim">Vim</h2>
+
+<p>Vim utilise une terminologie différente : <em>yank</em> <code class="language-plaintext highlighter-rouge">y</code> pour copier et <em>put</em> <code class="language-plaintext highlighter-rouge">p</code> pour coller.</p>
+
+<p>De plus, vim n’utilise pas le clipboard mais des registres. 
+Un registre peut être précisé avant la commande pour copier ou coller (s’il est omis, le registre unnamed <code class="language-plaintext highlighter-rouge">"</code> est utilisé).</p>
+
+<ul>
+  <li>pour copier : <code class="language-plaintext highlighter-rouge">"{register}y{motion}</code></li>
+  <li>pour coller : <code class="language-plaintext highlighter-rouge">"{register}p</code></li>
+</ul>
+
+<p>2 registres spéciaux permettent d’interagir avec le presse-papier : <code class="language-plaintext highlighter-rouge">+</code> le presse-papier clipboard et <code class="language-plaintext highlighter-rouge">*</code> le presse-papier primaire</p>
+
+<p>Pour copier-coller de Vim vers une autre application, j’utilise la configuration suivante :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set clipboard=unnamedplus
+</code></pre></div></div>
+
+<p>Cela permet de synchroniser automatiquement le registre <code class="language-plaintext highlighter-rouge">"</code> (unnamed) avec le registre <code class="language-plaintext highlighter-rouge">+</code>
+(presse-papier clipboard).</p>
+
+<h2 id="le-shell">Le shell</h2>
+
+<p><code class="language-plaintext highlighter-rouge">xsel</code> est un outil en ligne de commande pour interagir avec les presse-papiers.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">xsel -i -p</code> copie l’entrée standard dans le presse-papier primaire</li>
+  <li><code class="language-plaintext highlighter-rouge">xsel -i -b</code> copie l’entrée standard dans le presse-papier clipboard</li>
+  <li><code class="language-plaintext highlighter-rouge">xsel -o -p</code> colle le presse-papier primaire</li>
+  <li><code class="language-plaintext highlighter-rouge">xsel -o -b</code> colle le presse-papier clipboard</li>
+</ul>
+
+<p>Remarque : <code class="language-plaintext highlighter-rouge">xclip</code> est une alternative à <code class="language-plaintext highlighter-rouge">xsel</code>.</p>
+
+<h2 id="le-terminal">Le terminal</h2>
+
+<p>La plupart des terminaux (par ex. gnome terminal) utilise <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> pour copier et
+<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> pour coller. En effet, le raccourci <kbd>Ctrl</kbd> + <kbd>C</kbd> est déjà utilisé par le shell pour 
+terminer un processus.</p>
+
+<p>Si vous utilisez urxvt, un <a href="https://github.com/muennich/urxvt-perls">plugin</a> permet de copier/coller en utilisant le
+presse-papier clipboard avec <kbd>Ctrl</kbd> + <kbd>C</kbd> et <kbd>Ctrl</kbd> + <kbd>V</kbd>.</p>
+
+<h2 id="les-cas-dutilisation">Les cas d’utilisation</h2>
+
+<ul>
+  <li>Firefox vers Vim
+    <ul>
+      <li>Primaire : sélection dans Firefox, <code class="language-plaintext highlighter-rouge">"*p</code> dans Vim (en mode normal).</li>
+      <li>Clipboard : sélection et <kbd>Ctrl</kbd> + <kbd>C</kbd> dans Firefox, <code class="language-plaintext highlighter-rouge">p</code> dans Vim (en mode normal).</li>
+    </ul>
+  </li>
+  <li>Vim vers Firefox
+    <ul>
+      <li>Primaire : <code class="language-plaintext highlighter-rouge">"*y{motion}</code> dans Vim, clic milieu dans Firefox.</li>
+      <li>Clipboard : <code class="language-plaintext highlighter-rouge">y{motion}</code> dans Vim, <kbd>Ctrl</kbd> + <kbd>V</kbd> dans Firefox.</li>
+    </ul>
+  </li>
+  <li>Firefox vers un terminal (pour coller une commande trouver sur le Net)
+    <ul>
+      <li>Primaire : sélection dans Firefox, <kbd>Shift</kbd> + <kbd>Insert</kbd> dans le terminal.</li>
+      <li>Clipboard : sélection et <kbd>Ctrl</kbd> + <kbd>C</kbd> dans Firefox, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> dans le terminal.</li>
+    </ul>
+  </li>
+  <li>Terminal vers Firefox (pour montrer un problème sur un forum)
+    <ul>
+      <li>Primaire : sélection dans le terminal, clic milieu dans Firefox car Firefox ne supporte pas
+<kbd>Shift</kbd> + <kbd>Insert</kbd>.</li>
+      <li>Clipboard : sélection et <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd> dans le terminal, <kbd>Ctrl</kbd> + <kbd>V</kbd> dans Firefox. (préféré pour éviter double
+clic sur le touchpad.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="un-gestionnaire-de-presse-papiers">Un gestionnaire de presse-papiers</h2>
+
+<p>Il n’est pas possible nativement de mettre plusieurs choses dans le presse-papiers, à l’instar des
+registres de Vim. Heureusement, <a href="http://sourceforge.net/projects/gtkclipit/">clipit</a>, un fork de
+Parcellite, est un outil GTK pour faire des copier-coller multiples. On colle avec <kbd>Ctrl</kbd> + <kbd>C</kbd> et au
+moment de coller, on fait <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>H</kbd> pour choisir dans l’historique puis <kbd>Ctrl</kbd> + <kbd>V</kbd>.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>J’utilise plus souvent le clipboard pour éviter le double clic que je ne trouve pas pratique sur le
+touchpad.</p>
+
+<h2 id="liens">Liens</h2>
+
+<ul>
+  <li><a href="http://standards.freedesktop.org/clipboards-spec/clipboards-latest.txt">clipboards-latest.txt</a></li>
+  <li><a href="https://vim.fandom.com/wiki/Accessing_the_system_clipboard">vim - accéder au presse-papier [en]</a></li>
+</ul>
+
+  </div><a class="u-url" href="/copier-coller.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Optimizing your Scala code
+
+---
+
+# Disclaimers
+
+### You ain't gonna need it
+
+### JIT doesn't exist
+
+---
+
+# Memory allocation
+
+> Experience shows that sustained allocation rates of greater than 1 GB/s are
+almost always indicative of performance problems that cannot be corrected by
+tuning the garbage collector. The only way to improve performance in these cases
+is to improve the memory efficiency of the application by refactoring to
+eliminate allocation in critical parts of the application.
+
+From [Optimizing Java](https://www.oreilly.com/library/view/optimizing-java), by Benjamin J. Evans, James Gough &amp; Chris Newland
+
+---
+
+# Either.cond
+
+```scala
+Either.cond(cond, insertion, left)
+```
+
+--
+
+.section[Bad because] `Right(insertion)` is allocated at each call
+
+---
+
+# Either.cond
+
+```scala
+case class Insertion (…) {
+  val right = Right(insertion)
+}
+
+if (cond) insertion.right else Left(left)
+```
+
+---
+
+# memory allocation 6
+
+```scala
+def withoutCP: BidRequestId =
+  BidRequestId(value.stripSuffix("_CP"))
+```
+
+--
+
+.section[Bad because] Always an allocation while in 99% of cases the suffix is
+not there.
+
+---
+
+# method
+
+```scala
+case class Settings(
+  billablePriceAmount: Amount100k,
+  currency: Currency
+) {
+  def billablePrice: MoneyIn[currency.type] =
+    Money(billablePriceAmount, currency)
+  }
+```
+
+--
+
+.section[Bad because] Allocate `Money` at each call
+
+---
+
+# for comprehension
+
+```scala
+for {
+  a <- Some(1)
+  b = f(a)
+} yield b
+```
+
+--
+
+.section[Bad because] Allocates a `Tuple2` [dotty#2573](https://github.com/lampepfl/dotty/issues/2573)
+
+```scala
+Some.apply(1)
+  .map { (a: Int) => val b: Int = Id.f.apply(a); Tuple2.apply(a: Int, b) }
+  .map({ case (a: Int, b) => b })
+```
+
+---
+
+# for comprehension
+
+.section[Prefer] [better-monadic-for](https://github.com/oleg-py/better-monadic-for)
+
+---
+
+# toNel
+
+```scala
+list.toNel.map(f).getOrElse(default)
+```
+
+--
+
+.section[Bad because] Allocate 2 `Option`s
+
+---
+
+# toNel
+
+.section[Prefer]
+
+```scala
+list match {
+    case h::t => f(NonEmptyList(h,t))
+    case _ => default
+```
+
+---
+
+# List.flatMap
+
+```scala
+def as : List[A]
+def f : A => Option[B]
+as.flatMap(f)
+```
+
+--
+
+.section[Bad because] implicit conversion from `Option` to `List`
+
+---
+
+# List.flatMap
+
+.section[Prefer]
+
+```scala
+as.collect(Function.unlift(f))
+```
+
+---
+
+# List.apply
+
+```scala
+List(1)
+```
+
+--
+
+.section[Bad because] it allocates an array
+
+```scala
+object List {
+  override def apply[A](xs: A*): List[A] = xs.toList
+}
+```
+
+```scala
+6: iconst_1
+7: newarray       int
+```
+
+---
+
+# List.apply
+
+.section[Prefer]
+
+```scala
+1 :: Nil
+```
+
+---
+
+# Types in Java
+
+- primitive types : `int`, `long`, `float`, `double`, `byte`, `char`, `short`, `boolean`
+- objects : `java.lang.Object`
+
+int (4 bytes) vs java.lang.Integer (16 bytes)
+
+---
+
+# Types in Java
+
+```java
+jshell> var i = 1
+i ==> 1
+
+jshell> i.toString()
+|  Error:
+|  int cannot be dereferenced
+|  i.toString()
+|  ^--------^
+```
+
+---
+
+# Java value type
+
+[JEP 169](http://openjdk.java.net/jeps/169) : Value Objects
+
+---
+
+# Types in Scala
+
+Unified Type System cf: http://ktoso.github.io/scala-types-of-types/#unified-type-system-any-anyref-anyval
+
+![scala types](http://ktoso.github.io/scala-types-of-types/assets/img/scala-types.png)
+
+---
+
+# toString
+
+```scala
+1.toString
+```
+
+--
+
+.section[Bad because] boxing
+
+```scala
+0: iconst_1
+1: invokestatic  #20                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+4: invokevirtual #23                 // Method java/lang/Object.toString:()Ljava/lang/String;
+```
+
+---
+
+# toString
+
+.section[Prefer] overloaded method `valueOf`
+
+```scala
+String.valueOf(1)
+```
+
+---
+
+# Generics
+
+```scala
+case class Box[A](value: A)
+Box(1)
+```
+
+```scala
+13: iconst_1
+14: invokestatic  #41                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+17: invokespecial #45                 // Method $line37/$read$$iw$Box."<init>":(L$line37/$read$$iw;Ljava/lang/Object;)V
+```
+---
+
+# Generics
+
+```scala
+def buffer = collection.mutable.ArrayBuffer[Int]()
+def f = buffer += 1
+```
+
+```scala
+13: iconst_1
+14: invokestatic  #39                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+17: invokevirtual #45                 // Method scala/collection/mutable/ArrayBuffer.$plus$eq:(Ljava/lang/Object;)Lscala/collection/mutable/Growable;
+```
+
+---
+
+# Diagnose
+
+instances of `java.lang.Long`
+
+---
+
+# How to avoid boxing
+
+- array : `Array[Int]` uses an `int[]`
+- `@specialized`
+- value class
+
+---
+
+# Array[Int]
+
+```scala
+Array(1,2,3).indexOf(2)
+```
+
+--
+
+.section[Bad because] The method `indexOf` on an array of primitives generates boxing of each value.
+
+The array is converted to `ArrayOps` via implicit conversion and at runtime it calls `IndexedSeqOptimized.segmentLength`.
+
+---
+
+# Array[Int]
+
+.section[Prefer] good old `while` loops
+
+Note : in Scala 2.13, `indexOf` has been added on `ArrayOps`. cf: https://github.com/scala/scala/pull/6572
+
+---
+
+# Generics
+
+```scala
+case class Box[A](value: A)
+Box(1)
+```
+
+--
+
+.section[Bad because]
+
+```scala
+13: iconst_1
+14: invokestatic  #41                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+17: invokespecial #45                 // Method $line37/$read$$iw$Box."<init>":(L$line37/$read$$iw;Ljava/lang/Object;)V
+```
+
+---
+
+# Generics
+
+.section[Prefer]
+
+```scala
+case class SpBox[@specialized A](value: A)
+SpBox(1)
+```
+
+```scala
+13: iconst_1
+14: invokespecial #41                 // Method $line39/$read$$iw$SpBox$mcI$sp."<init>":(L$line39/$read$$iw;I)V
+```
+
+cf: https://scalac.io/specialized-generics-object-instantiation/
+
+---
+
+# Tuples
+
+```scala
+final case class Tuple2[
+  @specialized(Int, Long, Double, Char, Boolean) +T1, 
+  @specialized(Int, Long, Double, Char, Boolean) +T2
+]
+(_1: T1, _2: T2)
+```
+
+---
+
+# Tuples
+
+
+```scala
+(1, 1)
+```
+
+--
+
+.section[Good because]
+
+```scala
+scala> (1, 1).getClass
+val res2: Class[_ <: (Int, Int)] = class scala.Tuple2$mcII$sp
+```
+
+---
+
+# Tuples
+
+
+```scala
+(1, "1")
+```
+
+--
+
+.section[Bad because]
+
+```scala
+scala> (1, "1").getClass
+val res3: Class[_ <: (Int, String)] = class scala.Tuple2
+```
+
+---
+
+# Tuples
+
+.section[Prefer]
+
+```scala
+case class IntAndString(i: Int, s: String)
+```
+
+---
+
+# Value class
+
+```scala
+case class Id(value: Long) extends AnyVal
+```
+
+Goal
+
+- typesafe identifier
+- without the runtime overhead of having an object around a `long`
+
+http://ktoso.github.io/scala-types-of-types/#value-class
+
+---
+
+# Value class `hashCode`
+
+```scala
+Id(1L).hashCode
+```
+--
+
+.section[Bad because] allocates
+
+scalac generates code that calls `Id$.hashCode$extension`
+
+```scala
+ 3: aload_0
+ 4: invokevirtual #40                 // Method i:()I
+ 7: invokevirtual #87                 // Method $line24/$read$$iw$Id$.hashCode$extension:(I)I
+ 0: getstatic     #38                 // Field $line24/$read$$iw$Id$.MODULE$:L$line24/$read$$iw$ValueClassInt$;
+10: ireturn
+```
+
+---
+
+# Value class `hashCode`
+
+`:javap Id$.hashCode$extension`
+
+```scala
+0: iload_1
+1: invokestatic  #54                 // Method scala/runtime/BoxesRunTime.boxToInteger:(I)Ljava/lang/Integer;
+4: invokevirtual #111                // Method java/lang/Object.hashCode:()I
+7: ireturn
+```
+
+---
+
+# case class `hashCode`
+
+```scala
+case class Id(value: Long)
+Id(1L).hashCode
+```
+
+--
+
+.section[Bad because] slow
+
+scalac generates this code
+
+```scala
+val h1 = scala.runtime.Statics.mix(-889275714, "Id".hashCode())
+val h2 = scala.runtime.Statics.mix(h1, 1)
+scala.runtime.Statics.finalizeHash(h2, 1)
+```
+
+---
+
+# case class `hashCode`
+
+.section[Prefer]
+
+```scala
+case class Id(value: Long) {
+  override def hashCode(): Int = value.##
+}
+```
+
+> Equivalent to x.hashCode except for boxed numeric types and null. For numerics, it returns a hash value which is consistent with value equality: if two value type instances compare as true, then ## will produce the same hash value for each of them. For null returns a hashcode where null.hashCode throws a NullPointerException.
+
+---
+
+# Value class
+
+When Allocation Is Necessary
+
+https://docs.scala-lang.org/overviews/core/value-classes.html#when-allocation-is-necessary
+
+---
+
+# Equality
+
+```scala
+case class Id(value: Long) extends AnyVal
+id1 === id2
+```
+
+--
+
+.section[Bad because] Boxing
+
+---
+
+# Equality
+
+.section[Prefer]
+
+```scala
+Eq.eqv(id1, id2)
+```
+
+Because
+
+```scala
+trait Eq[@sp A] extends Any with Serializable { self =>
+```
+`
+[cats#3702](https://github.com/typelevel/cats/pull/3702)
+
+---
+
+# Value class and generics
+
+```scala
+case class Foo(id: Id)
+case class Id(value: Long) extends Anyval
+
+ids.contains(foo.id)
+```
+
+--
+
+.section[Bad because] instantiates `Id` at each call
+
+---
+
+# Value class and generics
+
+.section[Prefer]
+
+```scala
+case class Foo(id: Id)
+case class Id(value: Long)
+```
+
+---
+
+# Value class and `hashCode`
+
+```scala
+case class Id(value: Int) extends AnyVal
+case class Key(id1: Id, id2: Id)
+
+key.hashCode()
+```
+
+--
+
+.section[Bad because] instantiates 2 `Id` and 2 `Int`
+
+scalac generates code that calls `ScalaRunTime._hashCode`
+
+```scala
+object ScalaRunTime {
+  def _hashCode(x: Product): Int = MurmurHash3.productHash(x)
+}
+```
+
+which calls
+
+```scala
+def productElement(n: Int): Any
+```
+
+---
+
+# Value class and `hashCode`
+
+.section[Prefer]
+
+```scala
+case class Id(value: Int) extends AnyVal
+case class Key(id1: Id, id2: Id) {
+  override def hashCode(): Int = (id1.value | id2.value << 32).##
+}
+```
+
+---
+
+# Collections
+
+## List
+
+```scala
+val list : List[Int] = ???
+list.size
+```
+
+--
+
+.section[Bad because] O(n)
+
+---
+
+# Collections
+
+## List
+
+```scala
+val list : List[Int] = ???
+list.contains
+```
+
+--
+
+.section[Bad because] O(n)
+
+---
+
+# Collections
+
+## Set
+
+```scala
+val ids : HashSet[Int] = ???
+ids.contains(1)
+```
+
+--
+
+.section[Bad because] `HashSet[Int]` is slow and `contains` generates boxing
+
+---
+
+# Collections
+
+## Set
+
+.section[Prefer] `BitSet` when ids are positive, dense and small
+
+
+
+---
+
+# Collections
+
+## BitSet
+
+```
+val s1 : BitSet = ???
+val s2 : BitSet = ???
+s1.intersect(s2).nonEmpty
+```
+--
+
+.section[Bad because] slow and builds an intermediary set
+
+---
+
+# Collections
+
+## BitSet
+
+.section[Prefer] `java.util.BitSet`
+
+`intersects` return a `Boolean` (25x speed-up)
+
+---
+
+# Collections
+
+## Map
+
+```scala
+val cache : Map[DeviceType, NonEmptyList[PortfolioItem]] = ???
+cache.get(Mobile)
+```
+
+--
+
+.section[Bad because] `HashMap.get` is slow
+
+---
+
+# Collections
+
+## Map
+
+.section[Prefer] Array when ids are small and dense
+
+```scala
+val cache : Array[Option[NonEmptyList[PortfolioItem]]] = ???
+cache(Mobile.value)
+```
+
+lookup is faster and it avoids allocating an `Option`
+
+---
+
+# Collections
+
+## Map
+
+```scala
+val buffer : Map[Int, Double] = ???
+```
+
+--
+
+.section[Bad because] generic collections are slow and memory unefficient
+
+---
+
+# Collections
+
+## Map
+
+.section[Prefer] primitive collections like [fastutil](http://fastutil.di.unimi.it/)
+
+---
+
+# Thanks
+
+@nrinaudo for the inspiration [scala-best-practices](https://nrinaudo.github.io/talk-scala-best-practices/)
+
+    </textarea>
+    <script src="js/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        var slideshow = remark.create({
+        highlightStyle: 'solarized-dark'
+      });
+    </script>
+  </body>
+</html>

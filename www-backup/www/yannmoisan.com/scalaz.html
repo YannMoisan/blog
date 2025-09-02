@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Scalaz from the trenches | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Scalaz from the trenches" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Scalaz from the trenches" />
+<meta property="og:description" content="Scalaz from the trenches" />
+<link rel="canonical" href="https://www.yannmoisan.com/scalaz.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/scalaz.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-09-27T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Scalaz from the trenches" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2014-09-27T00:00:00+02:00","datePublished":"2014-09-27T00:00:00+02:00","description":"Scalaz from the trenches","headline":"Scalaz from the trenches","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/scalaz.html"},"url":"https://www.yannmoisan.com/scalaz.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Scalaz from the trenches</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2014-09-27T00:00:00+02:00" itemprop="datePublished">Sep 27, 2014
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="scalaz"><a href="#scalaz" id="user-content-scalaz" class="anchor"><span class="octicon octicon-link"></span></a>Scalaz</h1>
+
+<p>The aim of this page is to show the use of <a href="https://github.com/scalaz/scalaz">Scalaz</a> on the
+project. Scalaz defines itself as an extension to the core Scala library for functional programming</p>
+
+<h2 id="option"><a href="#option" id="user-content-option" class="anchor"><span class="octicon octicon-link"></span></a>option</h2>
+
+<p>Scalaz pimp your options.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="mf">1.</span><span class="nv">some</span><span class="o">.</span><span class="py">toSuccess</span><span class="o">(</span><span class="s">"error"</span><span class="o">)</span>
+<span class="n">res32</span><span class="k">:</span> <span class="kt">scalaz.Validation</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Success</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nv">None</span><span class="o">.</span><span class="py">toSuccess</span><span class="o">(</span><span class="s">"error"</span><span class="o">)</span>
+<span class="n">res33</span><span class="k">:</span> <span class="kt">scalaz.Validation</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">error</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h2 id="sequence"><a href="#sequence" id="user-content-sequence" class="anchor"><span class="octicon octicon-link"></span></a>sequence</h2>
+
+<p>Scalaz API is hard to read :</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">trait</span> <span class="nc">TraverseOps</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">A</span><span class="o">]</span> <span class="nc">extends</span> <span class="nv">scala</span><span class="o">.</span><span class="py">AnyRef</span> <span class="k">with</span> <span class="nv">scalaz</span><span class="o">.</span><span class="py">syntax</span><span class="o">.</span><span class="py">Ops</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="o">{</span>
+  <span class="k">final</span> <span class="k">def</span> <span class="nf">sequence</span><span class="o">[</span><span class="kt">G</span><span class="o">[</span><span class="k">_</span><span class="o">]</span>, <span class="kt">B</span><span class="o">](</span><span class="k">implicit</span> <span class="n">ev</span> <span class="k">:</span> <span class="kt">scalaz.Leibniz.</span><span class="o">===[</span><span class="kt">A</span>, <span class="kt">G</span><span class="o">[</span><span class="kt">B</span><span class="o">]],</span> <span class="n">G</span> <span class="k">:</span> <span class="kt">scalaz.Applicative</span><span class="o">[</span><span class="kt">G</span><span class="o">])</span> <span class="k">:</span> <span class="kt">G</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="kt">B</span><span class="o">]]</span> <span class="k">=</span> <span class="o">{</span> <span class="cm">/* compiled code */</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Here is some explanation from <a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/example/src/main/scala/scalaz/example/TraverseUsage.scala">Scalaz Traverse
+examples</a>
+:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// An easy to understand first step in using the Traverse typeclass
+// is the sequence operation, which given a Traverse[F] and
+// Applicative[G] turns F[G[A]] into G[F[A]]. This is like "turning
+// the structure 'inside-out'":
+</code></pre></div></div>
+
+<p>So, it allows to do simple things :</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">Option</span><span class="o">(</span><span class="mi">2</span><span class="o">)).</span><span class="py">sequence</span>
+<span class="n">res8</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">))</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">).</span><span class="py">sequence</span>
+<span class="n">res9</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">None</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// The effect of the inner Applicative is used, so in the case of
+// the Option applicative, if any of the values are None instead of
+// Some, the result of the entire computation is None:
+</code></pre></div></div>
+
+<p>Obviously, it can be done without Scalaz by implementing a <code class="language-plaintext highlighter-rouge">sequence</code> method :</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sequence</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">l</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">A</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="nv">l</span><span class="o">.</span><span class="py">foldRight</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="nc">Nil</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">A</span><span class="o">]])((</span><span class="n">oa</span><span class="o">,</span> <span class="n">ola</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">oa</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="n">a</span> <span class="k">=&gt;</span> <span class="nv">ola</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">la</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">::</span> <span class="n">la</span><span class="o">)))</span>
+</code></pre></div></div>
+
+<p>But it seems like reinventing the wheel, and it will only work for <code class="language-plaintext highlighter-rouge">Option</code>, and not for all
+<code class="language-plaintext highlighter-rouge">Applicative</code>s.</p>
+
+<h2 id="validation"><a href="#validation" id="user-content-validation" class="anchor"><span class="octicon octicon-link"></span></a>Validation</h2>
+
+<p>In scala, we use <code class="language-plaintext highlighter-rouge">Either</code> as a return type to represent a method that can fail. Unfortunately, the
+type <code class="language-plaintext highlighter-rouge">Either</code> has some limitations and doesn’t allow to collect a list of errors. Let’s introduce
+new datatypes <code class="language-plaintext highlighter-rouge">Validation</code> to resolve this issue :</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">f</span> <span class="k">=</span> <span class="o">{</span> <span class="n">x</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nf">if</span> <span class="o">(!</span><span class="nv">x</span><span class="o">.</span><span class="py">toLowerCase</span><span class="o">.</span><span class="py">equals</span><span class="o">(</span><span class="n">x</span><span class="o">))</span> <span class="s">"only lowercase allowed"</span><span class="o">.</span><span class="py">failure</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">else</span> <span class="s">"ok2"</span><span class="o">.</span><span class="py">success</span> <span class="o">}</span>
+<span class="n">f</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nv">scalaz</span><span class="o">.</span><span class="py">Validation</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">g</span> <span class="k">=</span> <span class="o">{</span> <span class="n">x</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nf">if</span> <span class="o">(</span><span class="nv">x</span><span class="o">.</span><span class="py">contains</span><span class="o">(</span><span class="s">" "</span><span class="o">))</span> <span class="s">"no space allowed"</span><span class="o">.</span><span class="py">failure</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">else</span> <span class="s">"ok1"</span><span class="o">.</span><span class="py">success</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="o">}</span>
+<span class="n">g</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=&gt;</span> <span class="nv">scalaz</span><span class="o">.</span><span class="py">Validation</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="o">(</span><span class="nf">f</span><span class="o">(</span><span class="s">"A b"</span><span class="o">)</span> <span class="o">|@|</span> <span class="nf">g</span><span class="o">(</span><span class="s">"A b"</span><span class="o">))</span> <span class="o">{</span><span class="k">_</span> <span class="o">+</span> <span class="k">_</span><span class="o">}</span>
+<span class="n">res28</span><span class="k">:</span> <span class="kt">scalaz.Unapply</span><span class="o">[</span><span class="kt">scalaz.Apply</span>,<span class="kt">scalaz.Validation</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]]{</span><span class="k">type</span> <span class="kt">M</span><span class="o">[</span><span class="kt">X</span><span class="o">]</span> <span class="k">=</span> <span class="nv">scalaz</span><span class="o">.</span><span class="py">Validation</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">X</span><span class="o">];</span> <span class="k">type</span> <span class="kt">A</span> <span class="o">=</span> <span class="nc">String</span><span class="o">}</span><span class="k">#</span><span class="n">M</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">only</span> <span class="n">lowercase</span> <span class="n">allowedno</span> <span class="n">space</span> <span class="n">allowed</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Here is some explanation from <a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/example/src/main/scala/scalaz/example/ApplyUsage.scala">Scalaz Apply
+examples</a>
+:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// |@| is refered to as "applicative builder", it allows you to
+// evaluate a function of multiple arguments in a context, similar
+// to apply2, apply3, apply4, etc:
+</code></pre></div></div>
+
+<h2 id="kleisli"><a href="#kleisli" id="user-content-kleisli" class="anchor"><span class="octicon octicon-link"></span></a>Kleisli</h2>
+
+<p>It allows to combine monadic functions</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">f</span> <span class="k">=</span> <span class="o">{</span> <span class="n">x</span> <span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="o">)</span> <span class="o">}</span>
+<span class="n">f</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">def</span> <span class="nf">g</span> <span class="k">=</span> <span class="o">{</span> <span class="n">x</span> <span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">(</span><span class="n">x</span><span class="o">*</span><span class="mi">2</span><span class="o">)</span> <span class="o">}</span>
+<span class="n">g</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=&gt;</span> <span class="nc">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nc">Kleisli</span><span class="o">(</span><span class="n">f</span><span class="o">)</span> <span class="o">&gt;=&gt;</span> <span class="nc">Kleisli</span><span class="o">(</span><span class="n">g</span><span class="o">)</span>
+<span class="n">res10</span><span class="k">:</span> <span class="kt">scalaz.Kleisli</span><span class="o">[</span><span class="kt">Option</span>,<span class="kt">Int</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">scalaz</span><span class="o">.</span><span class="py">KleisliFunctions$$anon$17</span><span class="k">@</span><span class="mf">6442084f</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nf">res10</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">res11</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="mi">8</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Obviously, it can also be done without Scalaz, by implementing a <code class="language-plaintext highlighter-rouge">compose</code> method :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scala&gt; def compose[A,B,C](f: A =&gt; Option[B], g: B =&gt; Option[C]) : A =&gt; Option[C] = a =&gt; f(a).flatMap(g)
+compose: [A, B, C](f: A =&gt; Option[B], g: B =&gt; Option[C])A =&gt; Option[C]
+
+scala&gt; compose(f,g)(3)
+res1: Option[Int] = Some(8)
+</code></pre></div></div>
+
+<p>But it seems like reinventing the wheel, and it will only work for <code class="language-plaintext highlighter-rouge">Option</code>, and not for all
+<code class="language-plaintext highlighter-rouge">Monad</code>s.</p>
+
+<h3 id="to-go-further"><a href="#to-go-further" id="user-content-to-go-further" class="anchor"><span class="octicon octicon-link"></span></a>To go further</h3>
+
+<p>Here are some features that are not used but could be useful.</p>
+
+<ul>
+  <li>tagged type to add type safety on <code class="language-plaintext highlighter-rouge">Id</code> (compositeIds could return <code class="language-plaintext highlighter-rouge">List[Id @@ Composite]</code></li>
+  <li>use ‘Reader’ monad to manage store dependency</li>
+</ul>
+
+<h3 id="links"><a href="#links" id="user-content-links" class="anchor"><span class="octicon octicon-link"></span></a>Links</h3>
+
+<ul>
+  <li><a href="http://eed3si9n.com/learning-scalaz/">Learning scalaz</a></li>
+  <li><a href="https://github.com/scalaz/scalaz/blob/series/7.2.x/example/src/main/scala/scalaz/example">Scalaz
+examples</a></li>
+</ul>
+
+
+  </div><a class="u-url" href="/scalaz.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

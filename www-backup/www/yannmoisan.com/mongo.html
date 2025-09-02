@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Retour d’expérience sur MongoDB | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Retour d’expérience sur MongoDB" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Retour d’expérience sur MongoDB : indexation, aggregation, mongo shell." />
+<meta property="og:description" content="Retour d’expérience sur MongoDB : indexation, aggregation, mongo shell." />
+<link rel="canonical" href="https://www.yannmoisan.com/mongo.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/mongo.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-10-14T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Retour d’expérience sur MongoDB" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2013-10-14T00:00:00+02:00","datePublished":"2013-10-14T00:00:00+02:00","description":"Retour d’expérience sur MongoDB : indexation, aggregation, mongo shell.","headline":"Retour d’expérience sur MongoDB","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/mongo.html"},"url":"https://www.yannmoisan.com/mongo.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Retour d&#39;expérience sur MongoDB</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2013-10-14T00:00:00+02:00" itemprop="datePublished">Oct 14, 2013
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>MongoDB est une base de données NoSQL, très facile à prendre en main.</p>
+
+<p>Comme toujours, il existe quelques subtilités que l’on rencontre avec les vrais projets de la vraie
+vie. Le but de ce billet est de vous en présenter quelques-unes :</p>
+
+<h2 id="les-index-pour-les-requêtes-de-mise-à-jour">Les index pour les requêtes de mise à jour</h2>
+
+<p>Généralement, nous pensons naturellement aux index pour les requêtes en lecture. Les requêtes de
+mise à jour ont la syntaxe suivante :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>db.collection.update(
+  &lt;query&gt;,
+  &lt;update&gt;,
+  {
+    upsert: &lt;Boolean&gt;,
+    multi: &lt;Boolean&gt;,
+  }
+)
+</code></pre></div></div>
+
+<p>Et bien, ces requêtes peuvent aussi tirer parti d’un index, qui sera utilisé pour la requête
+<code class="language-plaintext highlighter-rouge">query</code>.</p>
+
+<h2 id="recherche-sur-un-sous-document">Recherche sur un sous-document</h2>
+
+<p>MongoDB supporte les documents imbriqués. Considérons le document suivant
+<code class="language-plaintext highlighter-rouge">{parent: {child1: 1, child2: 2}}</code><br />
+Cette requête renvoie bien le document ci-dessus :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>db.test.find({"parent.child1": 1})
+</code></pre></div></div>
+
+<p>Par contre, cette requête ne renvoie pas le document ci-dessus :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>db.test.find({"parent": {"child1": 1}})
+</code></pre></div></div>
+
+<p>Seule la notation avec le point permet de spécifier une correspondance partielle sur un
+sous-document. Dans le deuxième cas, MongoDB cherche une correspondance sur l’intégralité du
+sous-document.</p>
+
+<h2 id="aggregation-avec-des-match-successifs">Aggregation avec des $match successifs</h2>
+
+<p>Nous utilisons un index sur a et b : <code class="language-plaintext highlighter-rouge">{"a": 1, "b": 1}</code> Avec le framework d’agrégation, si nous
+utilisons 2 <code class="language-plaintext highlighter-rouge">$match</code> dans le pipeline, la requête est lente.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{$match:{"a": xxx}}, {$match:{"b": xxx}}
+</code></pre></div></div>
+
+<p>Si nous utilisons un seul match, la requête est rapide :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{$match:{"a": xxx, "b": xxx}}
+</code></pre></div></div>
+
+<p>Ces deux requêtes sont équivalentes mais dans le premier cas, l’index ne sert pas à filtrer sur b.</p>
+
+<h2 id="aggregation-et-performance">Aggregation et performance</h2>
+
+<p>MongoDB offre une méthode <code class="language-plaintext highlighter-rouge">explain</code> sur un curseur pour obtenir des informations sur l’exécution de
+la requête : temps d’exécution, index utilisé, … Malheureusement, cette méthode n’existe pas pour le
+framework d’agrégation. À en croire cette <a href="https://jira.mongodb.org/browse/SERVER-4504">issue</a>,
+cela sera disponible en 2.6.</p>
+
+<h2 id="ne-pas-utiliser-use-dans-un-script">Ne pas utiliser use dans un script</h2>
+
+<p>Dans mon premier script, j’ai utilisé l’instruction <code class="language-plaintext highlighter-rouge">use</code>, comme j’ai l’habitude de le faire dans la
+console. Et là, c’est le drame : le client renvoie une erreur peu explicite :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Thu Oct 17 10:29:21.451 SyntaxError: Unexpected identifier at test.js
+</code></pre></div></div>
+
+<p>J’ai mis un peu de temps à comprendre que use est un <em>helper</em> fourni par la console, que ce n’est
+pas une instruction JavaScript valide, et donc que ça ne fonctionne pas dans un script. La liste
+exhaustive des <em>helpers</em> avec leurs équivalents js est décrite sur le site (cf source).</p>
+
+<h2 id="ecrire-un-script-bloquant">Ecrire un script bloquant</h2>
+
+<p>Par défaut, les opérations d’écriture sont asynchrones dans un script (ce qui est le comportement
+opposé à celui des drivers). Le script va donc rendre la main alors que le traitement tourne encore
+en base. Pour attendre la fin, il suffit d’ajout <code class="language-plaintext highlighter-rouge">db.getLastError()</code> à la fin du script.</p>
+
+<h2 id="passer-des-paramètres-à-un-script">Passer des paramètres à un script</h2>
+
+<p>Nous pouvons exécuter un fichier JavaScript en utilisant mongo shell sur le serveur. Cela nous
+permet notamment de scripter la création des index. Nous englobons cela dans un script shell et il
+est parfois utile de passer des paramètres du script shell au JavaScript. Une petite astuce, non
+présente dans la documentation, est nécessaire. Voici le script shell : <code class="language-plaintext highlighter-rouge">monscript.sh</code></p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mongo <span class="nt">--eval</span> <span class="s2">"var mavar='</span><span class="nv">$1</span><span class="s2">'"</span> monscript.js
+</code></pre></div></div>
+
+<p>Et voici le script.js</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>printjson(mavar);
+</code></pre></div></div>
+
+<p>L’idée est d’utiliser l’option <code class="language-plaintext highlighter-rouge">--eval</code>, qui permet de passer au shell un bout de JavaScript, pour
+déclarer une variable globale qui sera accessible dans le script.</p>
+
+<h2 id="source">Source:</h2>
+
+<ul>
+  <li><a href="http://docs.mongodb.org/manual/reference/method/db.collection.find/#query-subdocuments">query
+subdocuments</a></li>
+  <li><a href="http://docs.mongodb.org/manual/tutorial/write-scripts-for-the-mongo-shell/">write scripts for the mongo
+shell</a></li>
+</ul>
+
+
+  </div><a class="u-url" href="/mongo.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

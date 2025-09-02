@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>My post mortem for the codingame Summer Challenge 2024 | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="My post mortem for the codingame Summer Challenge 2024" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="My post mortem for the codingame Summer Challenge 2024" />
+<meta property="og:description" content="My post mortem for the codingame Summer Challenge 2024" />
+<link rel="canonical" href="https://www.yannmoisan.com/summer-challenge-2024.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/summer-challenge-2024.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-06-25T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="My post mortem for the codingame Summer Challenge 2024" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-06-25T00:00:00+02:00","datePublished":"2024-06-25T00:00:00+02:00","description":"My post mortem for the codingame Summer Challenge 2024","headline":"My post mortem for the codingame Summer Challenge 2024","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/summer-challenge-2024.html"},"url":"https://www.yannmoisan.com/summer-challenge-2024.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">My post mortem for the codingame Summer Challenge 2024</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-06-25T00:00:00+02:00" itemprop="datePublished">Jun 25, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul>
+  <li>Rank: 172</li>
+  <li>Language: Scala</li>
+  <li>LOC: 500</li>
+</ul>
+
+<h2 id="strategy">Strategy</h2>
+
+<p>After testing some heuristics to pass the first leagues, I started writing the
+simulation for each mini-game. It’s a pure function (so easily testable) from <code class="language-plaintext highlighter-rouge">(State, Action) =&gt; State</code>.
+In my experience, the first crucial step is to develop a well-tested, bug-free simulation.</p>
+
+<p>Once you have that, you can write an evaluation for each mini game. It’s also a pure function from
+<code class="language-plaintext highlighter-rouge">State =&gt; Double</code>.</p>
+
+<p>Let’s have a look at my evaluation for each mini game :</p>
+
+<ul>
+  <li>Hurdle: my position minus the stun timer (because positive when stunned)</li>
+  <li>Archery: the max distance (~29) minus the euclidian distance from the center</li>
+  <li>Roller: my position plus the stun timer when stunned (because negative when stunned)</li>
+  <li>Diving: the number of points</li>
+</ul>
+
+<p>As you can see, those evaluations are pretty straigthforward.</p>
+
+<p>Next, you need a way to combine the results of each mini-game. For each game, I
+compute a weight that is the inverse of the current number of points for this game. 
+The intuition is to prioritize games that are lagging in terms of medals because the more uniform the scores are, the higher the overall product will be.</p>
+
+<p>Example: if I have 2 gold and 1 silver, my weight is <code class="language-plaintext highlighter-rouge">1 / (2*3 + 1)</code></p>
+
+<p>Once you have that, you can perform a search to find the best action. I’ve
+performed a search at depth 6, without simulating the opponents at all.</p>
+
+<p>To perform the search, I leverage the fact that the branching factor is always
+4, so you can encode the actions as an int and use it as the index of an array.</p>
+
+<p>At depth 6, you explore <code class="language-plaintext highlighter-rouge">4^6 = 4096</code> combinations, so the search returns an array
+of doubles of size 4096.</p>
+
+<h2 id="mixing-some-heuristics">Mixing some heuristics</h2>
+
+<h3 id="last-turn">last turn</h3>
+
+<p>To counterbalance the fact that I don’t simulate my opponents, I’ve used a
+heuristic. If it’s the last turn for a mini-game, I simulate my opponents and
+force an action if I can win a gold or silver medal for sure.</p>
+
+<p>For example, I use a high score for all actions that will produce a score stricly
+greater than the best scores of both my opponents.</p>
+
+<h3 id="the-case-of-diving">the case of diving</h3>
+
+<p>Another heuristic at depth 1 is to determine if I am in a situation where, whatever may
+happen, I’m guaranteed to be first, second or third in the diving game.</p>
+
+<h3 id="unfinished-game">unfinished game</h3>
+
+<p>Towards the end, if there are not enough turns left to complete a game, the evaluation returns 0 for all actions.</p>
+
+<h2 id="a-note-on-performance">A note on performance</h2>
+
+<p>At the top, there are not many players using a garbage-collected language, as
+it can cause timeouts.
+I had to make some improvments. I used the combo JMH and JFR to find the
+hotspots. There is still plenty to do to go further than depth 6.</p>
+
+<h2 id="what-did-not-work">What did not work</h2>
+
+<ul>
+  <li>normalize the scores of mini-game between 0 and 1 to ensure they all contribute fairly to the overall score.</li>
+  <li>Apply a bigger penalty when stunned in the evaluation</li>
+  <li>Remove the penalty when stunned in the evaluation. the intuition was that the
+search would handle it.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>As always, I had very good time participating in this challenge.</p>
+
+<p>I found it’s a good way to find the right balance between code quality and
+delivering value:</p>
+<ul>
+  <li>if your code is a mess, you will strugle to test new ideas and you could have
+some bugs that will make you take bad decisions.</li>
+  <li>if your code is too perfect, as your time is limited, it will reduce the
+number of iterations</li>
+</ul>
+
+<p>I had the feeling that I miss something to pretend to the very top of the
+gold league and I look forward to reading the post-mortem of top players.</p>
+
+  </div><a class="u-url" href="/summer-challenge-2024.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

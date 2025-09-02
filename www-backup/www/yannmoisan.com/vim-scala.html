@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Vim comme IDE Scala | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Vim comme IDE Scala" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Vim comme IDE Scala" />
+<meta property="og:description" content="Vim comme IDE Scala" />
+<link rel="canonical" href="https://www.yannmoisan.com/vim-scala.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/vim-scala.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-04-19T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Vim comme IDE Scala" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2013-04-19T00:00:00+02:00","datePublished":"2013-04-19T00:00:00+02:00","description":"Vim comme IDE Scala","headline":"Vim comme IDE Scala","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/vim-scala.html"},"url":"https://www.yannmoisan.com/vim-scala.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Vim comme IDE Scala</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2013-04-19T00:00:00+02:00" itemprop="datePublished">Apr 19, 2013
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Je suis en cours de conversion de IntelliJ Idea vers Vim, pour développer en Scala. J’ai déjà
+brièvement parlé de Vim et Scala <a href="tdd-en-scala.html">dans ce billet</a>. Le but de ce billet est de
+présenter comment configurer Vim pour avoir les principales fonctionnalités d’un IDE. L’utilisation
+de Vim en entreprise me semble assez marginale en France, comme s’en étonne Bodil Stokke dans ce
+tweet :</p>
+
+<blockquote>
+  <p>« Enterprise guys give me such a feeling of disconnect: they’re arguing IDEA vs Eclipse instead of
+vim vs emacs. »</p>
+</blockquote>
+
+<p>Il me paraît donc important de mentionner que moult développeurs talentueux utilisent Vim. En voici
+quelques-uns qui sont pour moi une source d’inspiration :</p>
+
+<ul>
+  <li><a href="https://twitter.com/derekwyatt">Derek Wyatt</a>, auteur de Akka Concurrency ;</li>
+  <li><a href="https://twitter.com/spf13">Steve Francia</a>, évangéliste 10gen ;</li>
+  <li><a href="https://twitter.com/paulrouget">Paul Rouget</a>, développeur Mozilla ;</li>
+  <li><a href="https://twitter.com/ornicar">Thibault Duplessis</a>, développeur Scala.</li>
+</ul>
+
+<h2 id="coloration-syntaxique">Coloration syntaxique</h2>
+
+<p>Il suffit d’installer le plugin <a href="https://github.com/derekwyatt/vim-scala">vim-scala</a>. Ce plugin gère
+aussi l’indentation et la détection des fichiers scala.</p>
+
+<h2 id="navigation-dans-le-code-source">Navigation dans le code source</h2>
+
+<p><code class="language-plaintext highlighter-rouge">ctags</code> est un outil classique du monde Unix. Il ne supporte pas Scala par défaut, mais il est très
+simple d’ajouter ce support en créant/modifiant un fichier <code class="language-plaintext highlighter-rouge">~/.ctags</code>. <del>Vous pouvez récupérer le
+fichier ici.</del> On peut maintenant sauter à la
+définition du terme sous le curseur en tapant <code class="language-plaintext highlighter-rouge">&lt;C-]&gt;</code>.</p>
+
+<p>Alors que l’IDE recompile de manière transparente le code pour permettre la complétion, il faut
+lancer <code class="language-plaintext highlighter-rouge">ctags</code> à la main. Le mapping suivant permet d’effectuer cela en tapant <code class="language-plaintext highlighter-rouge">F5</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>map &lt;F5&gt; :!ctags -R
+</code></pre></div></div>
+
+<p>Le plugin <a href="https://github.com/majutsushi/tagbar/">tagbar</a> donne un aperçu de la structure du code
+source du fichier courant, comme la vue <em>structure</em> d’IntelliJ Idea. Le langage Scala n’est pas
+supporté par défaut. Il faut ajouter la ligne suivante dans le <code class="language-plaintext highlighter-rouge">.vimrc</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let g:tagbar_type_scala = {
+    \ 'ctagstype' : 'Scala',
+    \ 'kinds'     : [
+        \ 'p:packages:1',
+        \ 'V:values',
+        \ 'v:variables',
+        \ 'T:types',
+        \ 't:traits',
+        \ 'o:objects',
+        \ 'a:aclasses',
+        \ 'c:classes',
+        \ 'r:cclasses',
+        \ 'm:methods'
+    \ ]
+\ }
+</code></pre></div></div>
+
+<p>J’ai noté deux limites : tagbar confond méthode et variable, et les méthodes ne sont pas regroupées
+par objet.</p>
+
+<h2 id="complétion">Complétion</h2>
+
+<p>La complétion de code est native dans Vim. Les commandes sont <code class="language-plaintext highlighter-rouge">&lt;C-n&gt;</code> pour la complétion classique
+et <code class="language-plaintext highlighter-rouge">&lt;C-x&gt;&lt;C-]&gt;</code> pour la complétion basée sur les tags</p>
+
+<h2 id="rechercher-dans-le-projet">Rechercher dans le projet</h2>
+
+<p>ack est un meilleur grep. Le plugin <a href="https://github.com/mileszs/ack.vim">Ack.vim</a> ajoute une
+commande <code class="language-plaintext highlighter-rouge">:Ack [options] {pattern} [{directory}]</code> qui permet de chercher récursivement <em>pattern</em>
+dans <em>directory</em>. Les résultats alimentent le quick fix de Vim. Les mappings suivant permettent de
+faciliter la navigation dans les occurrences du quick fix.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nnoremap &lt;silent&gt; [q :cprevious&lt;CR&gt;
+nnoremap &lt;silent&gt; ]q :cnext&lt;CR&gt;
+nnoremap &lt;silent&gt; [Q :cfirst&lt;CR&gt;
+nnoremap &lt;silent&gt; ]Q :clast&lt;CR&gt;
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">ack</code> recherche par défaut dans le répertoire courant. Il est pratique de configurer son <code class="language-plaintext highlighter-rouge">.ackrc</code> pour
+limiter le bruit en excluant certains fichiers ou répertoires.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--ignore-dir=target
+</code></pre></div></div>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Dans IntelliJ Idea, c’est *Edit</td>
+      <td>Find</td>
+      <td>Find in Path*.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ouvrir-un-fichier">Ouvrir un fichier</h2>
+
+<p>Le plugin <a href="https://github.com/kien/ctrlp.vim">CtrlP</a> ajoute, entre autres, une commande <code class="language-plaintext highlighter-rouge">:CtrlP</code> qui
+ouvre un fichier à partir de son nom, en mode fuzzy. ctrlp trouve la racine du projet en recherchant
+le répertoire <code class="language-plaintext highlighter-rouge">.git</code>. Pour exclure certains fichiers ou répertoires, on utilise le <code class="language-plaintext highlighter-rouge">wildignore</code> de
+vim :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set wildignore=**/target/*
+</code></pre></div></div>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Dans IntelliJ Idea, c’est *Navigation</td>
+      <td>File*.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="compilation">Compilation</h2>
+
+<p>Je ne cherche pas à compiler depuis Vim, j’ouvre un autre terminal pour cela.</p>
+
+<h2 id="consulter-la-doc">Consulter la doc</h2>
+
+<p>Le plugin <a href="https://github.com/mdreves/vim-scaladoc">scaladoc</a> ouvre la Scaladoc avec la commande
+<code class="language-plaintext highlighter-rouge">:Scaladoc</code>.</p>
+
+<h2 id="les-fonctionnalités-manquantes">Les fonctionnalités manquantes</h2>
+
+<p>Voici les fonctionnalités qui n’ont pas d’équivalent dans vim, classées par ordre d’utilité :</p>
+
+<ul>
+  <li>complétion contextuelle : c’est la fonctionnalité qui manque le plus lorsqu’on l’on est habitué
+à travailler dans un IDE, avec un langage statiquement typé. Il semble exister une possibilité
+avec le plugin <code class="language-plaintext highlighter-rouge">neocomplcache</code> ;</li>
+  <li>connaître le type inféré sous le curseur ;</li>
+  <li>refactoring automatique ;</li>
+  <li>live template : à creuser, il semble exister une possibilité avec le plugin snipmate ;</li>
+  <li>debug : il n’est pas possible de mettre des points d’arrêt ;</li>
+  <li>un vérificateur de syntaxe, cela semble possible avec syntastic.</li>
+</ul>
+
+<h2 id="sources">Sources</h2>
+
+<ul>
+  <li><a href="http://kien.github.io/ctrlp.vim/">Documentation du plugin ctrlp.vim</a></li>
+</ul>
+
+
+  </div><a class="u-url" href="/vim-scala.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Understand the essence of the iterator pattern through the example of word count | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Understand the essence of the iterator pattern through the example of word count" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="We will start with a naive implementation of word count (to compute the numbers of characters, words and lines in a text). We’ll perform multiple refactorings to go towards a pure functional approach inspired by the paper The Essence of the Iterator Pattern." />
+<meta property="og:description" content="We will start with a naive implementation of word count (to compute the numbers of characters, words and lines in a text). We’ll perform multiple refactorings to go towards a pure functional approach inspired by the paper The Essence of the Iterator Pattern." />
+<link rel="canonical" href="https://www.yannmoisan.com/wordcount.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/wordcount.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-02T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Understand the essence of the iterator pattern through the example of word count" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2018-03-02T00:00:00+01:00","datePublished":"2018-03-02T00:00:00+01:00","description":"We will start with a naive implementation of word count (to compute the numbers of characters, words and lines in a text). We’ll perform multiple refactorings to go towards a pure functional approach inspired by the paper The Essence of the Iterator Pattern.","headline":"Understand the essence of the iterator pattern through the example of word count","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/wordcount.html"},"url":"https://www.yannmoisan.com/wordcount.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Understand the essence of the iterator pattern through the example of word count</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-03-02T00:00:00+01:00" itemprop="datePublished">Mar 2, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The starting point is that I’m trying to understand the paper <a href="https://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf">The Essence of the Iterator
+Pattern</a>. To help my brain, I
+need to see how these abstract concepts can be useful in a real-world use case. So I’ve decided to
+code a classic use case : word count. The aim is to count the number of chars, words and
+lines in a piece of text. The idea is to take the road from the start, hit the wall and appreciate
+how clever this paper is.</p>
+
+<p>Let’s start with a straightforward solution, that will be enriched step by step.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount1</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">c</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">length</span>
+    <span class="k">val</span> <span class="nv">w</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">split</span><span class="o">(</span><span class="s">"\\w+"</span><span class="o">).</span><span class="py">size</span>
+    <span class="k">val</span> <span class="nv">l</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">count</span><span class="o">(</span><span class="k">_</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span>
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The drawback is that the text is traversed 3 times.</p>
+
+<p>Let’s implement a solution where the text is traversed only once</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount2</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">var</span> <span class="n">nonAlpha</span> <span class="k">=</span> <span class="kc">true</span>
+    <span class="k">var</span> <span class="n">c</span> <span class="k">=</span> <span class="mi">0</span>
+    <span class="k">var</span> <span class="n">w</span> <span class="k">=</span> <span class="mi">0</span>
+    <span class="k">var</span> <span class="n">l</span> <span class="k">=</span> <span class="mi">0</span>
+    <span class="nv">s</span><span class="o">.</span><span class="py">foreach</span> <span class="o">{</span> <span class="n">ch</span> <span class="k">=&gt;</span>
+      <span class="n">c</span> <span class="k">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="nf">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span>
+        <span class="n">l</span> <span class="k">=</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="nf">if</span> <span class="o">(</span><span class="nv">ch</span><span class="o">.</span><span class="py">isLetterOrDigit</span> <span class="o">&amp;&amp;</span> <span class="n">nonAlpha</span><span class="o">)</span>
+        <span class="n">w</span> <span class="k">=</span> <span class="n">w</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="n">nonAlpha</span> <span class="k">=</span> <span class="o">!</span><span class="nv">ch</span><span class="o">.</span><span class="py">isLetterOrDigit</span>
+    <span class="o">}</span>
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>It’s a very imperative style, with a big loop that mutate some variables. As you know,
+mutability is a bad thing. Let’s fix that</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount3</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">init</span> <span class="k">=</span> <span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span>
+    <span class="nf">val</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">foldLeft</span><span class="o">(</span><span class="n">init</span><span class="o">)</span> <span class="o">{</span> <span class="nf">case</span> <span class="o">((</span><span class="n">prevSpace</span><span class="o">,</span> <span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">),</span> <span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span>
+      <span class="o">(</span>
+        <span class="nf">isSpace</span><span class="o">(</span><span class="n">ch</span><span class="o">),</span>
+        <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span>
+        <span class="n">w</span> <span class="o">+</span> <span class="o">(</span><span class="nf">if</span> <span class="o">(!</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">ch</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">prevSpace</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">),</span>
+        <span class="n">l</span> <span class="o">+</span> <span class="o">(</span><span class="nf">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">)</span>
+      <span class="o">)</span>
+    <span class="o">}</span>
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>It’s better, <code class="language-plaintext highlighter-rouge">foldLeft</code> allow abstracting over the traversal logic. But all the counts are mixed
+together which does not respect the single responsibility principle. Let’s separate the concerns.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount4</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">c</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="nf">case</span> <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">}</span>
+
+    <span class="nf">val</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="n">w</span><span class="o">)</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">foldLeft</span><span class="o">((</span><span class="kc">true</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span> <span class="o">{</span> <span class="nf">case</span> <span class="o">((</span><span class="n">prevSpace</span><span class="o">,</span> <span class="n">w</span><span class="o">),</span> <span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span>
+      <span class="o">(</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">ch</span><span class="o">),</span>
+        <span class="n">w</span> <span class="o">+</span> <span class="o">(</span><span class="nf">if</span> <span class="o">(!</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">ch</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">prevSpace</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">)</span>
+      <span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="k">val</span> <span class="nv">l</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">foldLeft</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="nf">case</span> <span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="n">l</span> <span class="o">+</span> <span class="o">(</span><span class="nf">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Damned, the problem of traversing 3 times is back ! The power of functional programming is to
+compose functions. Let’s combine the 3 fold.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount5</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="nf">foldLeft3</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">B</span>, <span class="kt">C</span>, <span class="kt">D</span><span class="o">](</span><span class="n">as</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">A</span><span class="o">])(</span><span class="n">z1</span><span class="k">:</span> <span class="kt">B</span><span class="o">,</span> <span class="n">z2</span><span class="k">:</span> <span class="kt">C</span><span class="o">,</span> <span class="n">z3</span><span class="k">:</span> <span class="kt">D</span><span class="o">)(</span><span class="n">op1</span><span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">,</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">B</span><span class="o">,</span> <span class="n">op2</span><span class="k">:</span> <span class="o">(</span><span class="kt">C</span><span class="o">,</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">C</span><span class="o">,</span> <span class="n">op3</span><span class="k">:</span> <span class="o">(</span><span class="kt">D</span><span class="o">,</span> <span class="kt">A</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">D</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">B</span><span class="o">,</span> <span class="kt">C</span><span class="o">,</span> <span class="n">D</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="nv">z</span> <span class="k">=</span> <span class="o">(</span><span class="n">z1</span><span class="o">,</span> <span class="n">z2</span><span class="o">,</span> <span class="n">z3</span><span class="o">)</span>
+      <span class="nv">as</span><span class="o">.</span><span class="py">foldLeft</span><span class="o">(</span><span class="n">z</span><span class="o">)</span> <span class="o">{</span> <span class="nf">case</span> <span class="o">((</span><span class="n">acc1</span><span class="o">,</span> <span class="n">acc2</span><span class="o">,</span> <span class="n">acc3</span><span class="o">),</span> <span class="n">a</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="o">(</span><span class="nf">op1</span><span class="o">(</span><span class="n">acc1</span><span class="o">,</span> <span class="n">a</span><span class="o">),</span> <span class="nf">op2</span><span class="o">(</span><span class="n">acc2</span><span class="o">,</span> <span class="n">a</span><span class="o">),</span> <span class="nf">op3</span><span class="o">(</span><span class="n">acc3</span><span class="o">,</span> <span class="n">a</span><span class="o">))</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="nf">val</span> <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="o">(</span><span class="k">_</span><span class="o">,</span> <span class="n">w</span><span class="o">),</span> <span class="n">l</span><span class="o">)</span> <span class="k">=</span> <span class="nf">foldLeft3</span><span class="o">(</span><span class="n">s</span><span class="o">)(</span>
+        <span class="mi">0</span><span class="o">,</span>
+        <span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="mi">0</span><span class="o">),</span>
+        <span class="mi">0</span>
+      <span class="o">)(</span>
+        <span class="o">{</span> <span class="nf">case</span> <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">},</span>
+        <span class="o">{</span> <span class="nf">case</span> <span class="o">((</span><span class="n">prevSpace</span><span class="o">,</span> <span class="n">w</span><span class="o">),</span> <span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span>
+          <span class="o">(</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">ch</span><span class="o">),</span>
+            <span class="n">w</span> <span class="o">+</span> <span class="o">(</span><span class="nf">if</span> <span class="o">(!</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">ch</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">prevSpace</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">)</span>
+          <span class="o">)</span>
+        <span class="o">},</span>
+        <span class="o">{</span> <span class="nf">case</span> <span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">ch</span><span class="o">)</span> <span class="k">=&gt;</span>
+          <span class="n">l</span> <span class="o">+</span> <span class="o">(</span><span class="nf">if</span> <span class="o">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">)</span>
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>As a functional programmer, I really enjoy the way that we can create new combinators from existing
+functions. But wait, some more powerful abstractions exist, like <code class="language-plaintext highlighter-rouge">Foldable</code> and <code class="language-plaintext highlighter-rouge">Traversable</code> (for
+counting words, because it’s a stateful process) …</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount6</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">c</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="mi">1</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">l</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">c</span> <span class="k">=&gt;</span> <span class="nf">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">)</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span><span class="k">:</span> <span class="kt">IndexedStateT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">Boolean</span>, <span class="kt">Boolean</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+      <span class="k">for</span> <span class="o">{</span>
+        <span class="n">x</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>
+        <span class="n">y</span> <span class="k">=</span> <span class="o">!</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+        <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">set</span><span class="o">(</span><span class="n">y</span><span class="o">)</span>
+      <span class="o">}</span> <span class="k">yield</span> <span class="nf">if</span> <span class="o">(</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">x</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">val</span> <span class="nv">w</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">f</span><span class="o">).</span><span class="py">run</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="py">value</span><span class="o">.</span><span class="py">_2</span><span class="o">.</span><span class="py">sum</span>
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>We can even merge foldMap together, because if we have a <code class="language-plaintext highlighter-rouge">Monoid[A]</code>, we have for free a
+<code class="language-plaintext highlighter-rouge">Monoid[(A, A)]</code></p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount7</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nf">val</span> <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">foldMap</span><span class="o">(</span><span class="n">c</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nf">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="o">))</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span><span class="k">:</span> <span class="kt">IndexedStateT</span><span class="o">[</span><span class="kt">Eval</span>, <span class="kt">Boolean</span>, <span class="kt">Boolean</span>, <span class="kt">Int</span><span class="o">]</span> <span class="k">=</span>
+      <span class="k">for</span> <span class="o">{</span>
+        <span class="n">x</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>
+        <span class="n">y</span> <span class="k">=</span> <span class="o">!</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+        <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">set</span><span class="o">(</span><span class="n">y</span><span class="o">)</span>
+      <span class="o">}</span> <span class="k">yield</span> <span class="nf">if</span> <span class="o">(</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">x</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">val</span> <span class="nv">w</span> <span class="k">=</span> <span class="nv">s</span><span class="o">.</span><span class="py">toList</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="n">f</span><span class="o">).</span><span class="py">run</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="py">value</span><span class="o">.</span><span class="py">_2</span><span class="o">.</span><span class="py">sum</span>
+    <span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">l</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Now, we are stuck with 2 traversals.</p>
+
+<p>Hopefully, the paper proposes a solution to go further. There is a nice [write-up]
+(https://etorreborre.blogspot.fr/2011/06/essence-of-iterator-pattern.html) by Eric Torreborre.
+Here is below an implementation made by eedesign in its great <a href="http://eed3si9n.com/herding-cats/applicative-wordcount.html">herding
+cats</a> series.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">def</span> <span class="nf">wordcount8</span><span class="o">(</span><span class="n">s</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="c1">// A type alias to treat Int as semigroupal applicative</span>
+    <span class="k">type</span> <span class="kt">Count</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Const</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">A</span><span class="o">]</span>
+
+    <span class="c1">// Tye type parameter to Count is ceremonial, so hardcode it to Unit</span>
+    <span class="k">def</span> <span class="nf">liftInt</span><span class="o">(</span><span class="n">i</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">Count</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Const</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+
+    <span class="c1">// A simple counter</span>
+    <span class="k">def</span> <span class="nf">count</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">Count</span><span class="o">[</span><span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nf">liftInt</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">countChar</span><span class="k">:</span> <span class="kt">AppFunc</span><span class="o">[</span><span class="kt">Count</span>, <span class="kt">Char</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span> <span class="nf">appFunc</span><span class="o">(</span><span class="n">count</span> <span class="k">_</span><span class="o">)</span>
+
+    <span class="k">def</span> <span class="nf">testIf</span><span class="o">(</span><span class="n">b</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">)</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="nf">if</span> <span class="o">(</span><span class="n">b</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="c1">// An applicative functor to count each line</span>
+    <span class="k">val</span> <span class="nv">countLine</span><span class="k">:</span> <span class="kt">AppFunc</span><span class="o">[</span><span class="kt">Count</span>, <span class="kt">Char</span>, <span class="kt">Unit</span><span class="o">]</span> <span class="k">=</span>
+      <span class="n">appFunc</span> <span class="o">{</span> <span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">liftInt</span><span class="o">(</span><span class="nf">testIf</span><span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">'\n'</span><span class="o">))</span> <span class="o">}</span>
+
+    <span class="c1">// To count words, we need to detect transitions from whitespace to non-whitespace.</span>
+    <span class="k">val</span> <span class="nv">countWord</span> <span class="k">=</span>
+      <span class="n">appFunc</span> <span class="o">{</span> <span class="o">(</span><span class="n">c</span><span class="k">:</span> <span class="kt">Char</span><span class="o">)</span> <span class="k">=&gt;</span>
+        <span class="k">for</span> <span class="o">{</span>
+          <span class="n">x</span> <span class="k">&lt;-</span> <span class="n">get</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>
+          <span class="n">y</span> <span class="k">=</span> <span class="o">!</span><span class="nf">isSpace</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+          <span class="k">_</span> <span class="k">&lt;-</span> <span class="nf">set</span><span class="o">(</span><span class="n">y</span><span class="o">)</span>
+        <span class="o">}</span> <span class="k">yield</span> <span class="nf">testIf</span><span class="o">(</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">x</span><span class="o">)</span>
+      <span class="o">}</span> <span class="n">andThen</span> <span class="nf">appFunc</span><span class="o">(</span><span class="n">liftInt</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">countAll</span> <span class="k">=</span> <span class="n">countWord</span> <span class="n">product</span> <span class="n">countLine</span> <span class="n">product</span> <span class="n">countChar</span>
+    <span class="c1">// Run all applicative functions at once</span>
+    <span class="k">val</span> <span class="nv">allResults</span> <span class="k">=</span> <span class="nv">countAll</span><span class="o">.</span><span class="py">traverse</span><span class="o">(</span><span class="nv">data</span><span class="o">.</span><span class="py">toList</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">wordCountState</span> <span class="k">=</span> <span class="nv">allResults</span><span class="o">.</span><span class="py">first</span><span class="o">.</span><span class="py">first</span>
+    <span class="k">val</span> <span class="nv">lineCount</span> <span class="k">=</span> <span class="nv">allResults</span><span class="o">.</span><span class="py">first</span><span class="o">.</span><span class="py">second</span>
+    <span class="k">val</span> <span class="nv">charCount</span> <span class="k">=</span> <span class="nv">allResults</span><span class="o">.</span><span class="py">second</span>
+    <span class="k">val</span> <span class="nv">wordCount</span> <span class="k">=</span> <span class="nv">wordCountState</span><span class="o">.</span><span class="py">value</span><span class="o">.</span><span class="py">runA</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="py">value</span>
+    <span class="o">(</span><span class="nv">charCount</span><span class="o">.</span><span class="py">getConst</span><span class="o">,</span> <span class="nv">wordCount</span><span class="o">.</span><span class="py">getConst</span><span class="o">,</span><span class="nv">lineCount</span><span class="o">.</span><span class="py">getConst</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The main points are :</p>
+
+<ul>
+  <li>each monoid can be transformed to an applicative functor</li>
+  <li>as monoidal functions (<code class="language-plaintext highlighter-rouge">A =&gt; M[B]</code>) can be composed (it’s <code class="language-plaintext highlighter-rouge">Kleisli</code>), applicative function also
+have an interesting composition.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We’ve seen many ways to solve the same problem. Functional programming offers powerful
+abstraction to decouple things and allow composing small parts together to build complex systems. So
+it’s worth spending some time to understand those concepts in order to write better programs.</p>
+
+  </div><a class="u-url" href="/wordcount.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

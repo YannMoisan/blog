@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>My notes on scala.io 2024 | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="My notes on scala.io 2024" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="My notes on scala.io 2024" />
+<meta property="og:description" content="My notes on scala.io 2024" />
+<link rel="canonical" href="https://www.yannmoisan.com/scala-io-2024.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/scala-io-2024.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-12-08T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="My notes on scala.io 2024" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-12-08T00:00:00+01:00","datePublished":"2024-12-08T00:00:00+01:00","description":"My notes on scala.io 2024","headline":"My notes on scala.io 2024","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/scala-io-2024.html"},"url":"https://www.yannmoisan.com/scala-io-2024.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">My notes on scala.io 2024</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-12-08T00:00:00+01:00" itemprop="datePublished">Dec 8, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Scala.io is an awesome independant Scala conference in France.
+This year’s event took place on November 7–8, 2024, at EPITA in Paris. Kudos to the organizers for their outstanding effort in making this event happen!</p>
+
+<p>Here are a few takeaways</p>
+
+<h2 id="surprise-opening-keynote---v-kasas">Surprise Opening Keynote - V. Kasas</h2>
+
+<p>A smaller edition than ever in terms of CFP submissions, attendees, sponsors.</p>
+
+<p>Scala is dying, some reasons:</p>
+<ul>
+  <li>Drama in the community</li>
+  <li>Insisting too much on pure FP pushes people away</li>
+  <li>External: Java stole features to Scala</li>
+</ul>
+
+<p>Hope</p>
+<ul>
+  <li>At Databricks, any part of the code must be understandable in 2 min (so no cats, no implicits, …)</li>
+  <li>Propose solution when people are suffering (ex. of mix between either and validated)</li>
+  <li>lot of possible creative usage of TASTy</li>
+  <li>It’s up to us to spread the love for Scala.</li>
+</ul>
+
+<h2 id="building-robust-applications-with-kyo-a-hands-on-introduction---a-hearn">Building Robust Applications with Kyo: A Hands-on Introduction - A. Hearn</h2>
+
+<ul>
+  <li>kyo-data : low allocation</li>
+  <li>kyo-prelude : side-effect free algebraic effect</li>
+  <li>kyo-core</li>
+  <li>kyo-scheduler : high perf</li>
+</ul>
+
+<p>Definition of effect = A description of what you want, produced when executed.</p>
+
+<p>Syntax: <code class="language-plaintext highlighter-rouge">File &lt; (IO &amp; Resource)</code></p>
+
+<p>Pro:</p>
+<ul>
+  <li>removes <code class="language-plaintext highlighter-rouge">F.pure</code> usage</li>
+  <li>no need for <code class="language-plaintext highlighter-rouge">flatMap</code></li>
+  <li>direct style (cps compiler plugin behind the hood)</li>
+</ul>
+
+<h2 id="tools-for-scala-startups---d-ciocîrlan">Tools for Scala Startups - D. Ciocîrlan</h2>
+
+<p>Scala is underrated for full stack products</p>
+
+<h2 id="computer-algebra-in-scala---r-jolly">Computer algebra in Scala - R. Jolly</h2>
+
+<p>Explanation of design choices between OO (enrichment) vs Functional (type classes).</p>
+
+<h2 id="calculating-is-funnier-than-guessing---r-kuckaertz">Calculating is funnier than guessing - R. Kuckaertz</h2>
+
+<h2 id="slow-auto-inconvenient-semi-escaping-false-dichotomy-with-sanely-automatic-derivation">Slow-Auto, Inconvenient-Semi: escaping false dichotomy with sanely-automatic derivation</h2>
+
+<p>author of chimney lib</p>
+<ul>
+  <li>semi-auto: speed</li>
+  <li>auto: poor error messages</li>
+</ul>
+
+<h2 id="mill-builds-in-scala-3-a-migration-story--j-thompson">Mill builds in Scala 3, a migration story- J. Thompson</h2>
+
+<p>A fascinating talk on Mill’s migration to Scala 3, featuring deep technical insights. James is a Scala 3 compiler contributor.</p>
+
+<ul>
+  <li>Scala 3 is now 3 years old</li>
+  <li>type inference changes when an <code class="language-plaintext highlighter-rouge">else</code> branch is missing</li>
+  <li>Pb with implicit conversion from <code class="language-plaintext highlighter-rouge">Unit</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Mirror</code> doesn’t like <code class="language-plaintext highlighter-rouge">@data</code> annotations from Coursier</li>
+  <li><code class="language-plaintext highlighter-rouge">this</code> in Scala 2 macro is duck typing</li>
+</ul>
+
+<h2 id="plowing-postgres-and-unearthing-hidden-gems---v-bergeron">Plowing Postgres and Unearthing Hidden Gems - V. Bergeron</h2>
+
+<p>At Ledger, migration from Cassandra (ETL) to PG (ELT)</p>
+
+<ul>
+  <li>Use modern SQL as much as possible</li>
+  <li>avoid SQL codegen (thus lib like quill, slick)</li>
+  <li>repo pattern is harmful</li>
+  <li>DDL can be tested with a transaction</li>
+  <li>use explain (analyze, costs, verbose, buffers)</li>
+  <li>linearization = state pattern</li>
+  <li>use Common Table Expression (CTE)</li>
+  <li>subquery in select =&gt; nested loop join</li>
+</ul>
+
+<h2 id="scala-performance-when-you-should-betray-your-functional-programming-principles---g-renoux">Scala performance: when you should betray your functional programming principles - G. Renoux</h2>
+
+<p>At Datadome, the bottleneck is CPU, not IO, even with 200k rps (the load is distributed across 100+ nodes)</p>
+
+<h2 id="programming-a-language---n-rinaudo">Programming a Language - N. Rinaudo</h2>
+
+<p>As always, a very interesting talk where Nicolas demonstrated writing an interpreter for an AST, step by step.</p>
+
+<ul>
+  <li>unary functions are sufficient</li>
+  <li>any <code class="language-plaintext highlighter-rouge">for</code> loop can be rewritten with a <code class="language-plaintext highlighter-rouge">while</code></li>
+  <li>any <code class="language-plaintext highlighter-rouge">while</code>    can be rewritten with a recursion</li>
+</ul>
+
+  </div><a class="u-url" href="/scala-io-2024.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

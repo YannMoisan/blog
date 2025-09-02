@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Continuous Integration for Reactive Web Applications | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Continuous Integration for Reactive Web Applications" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Continuous Integration for Reactive Web Applications, leverage the power of Travis CI, Sauce Labs and Heroku" />
+<meta property="og:description" content="Continuous Integration for Reactive Web Applications, leverage the power of Travis CI, Sauce Labs and Heroku" />
+<link rel="canonical" href="https://www.yannmoisan.com/continuous-integration.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/continuous-integration.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-10-21T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Continuous Integration for Reactive Web Applications" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-10-21T00:00:00+02:00","datePublished":"2015-10-21T00:00:00+02:00","description":"Continuous Integration for Reactive Web Applications, leverage the power of Travis CI, Sauce Labs and Heroku","headline":"Continuous Integration for Reactive Web Applications","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/continuous-integration.html"},"url":"https://www.yannmoisan.com/continuous-integration.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Continuous Integration for Reactive Web Applications</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2015-10-21T00:00:00+02:00" itemprop="datePublished">Oct 21, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>I’ve started a new pet project. It’s an online board game, for two players.</p>
+
+<p>On the technical side, it uses Scala, PlayFramework, Akka and Javascript. For the testing part, I
+use jasmine for javascript unit testing and specs2 with FluentLenium (a library on top of Selenium)
+for functional testing. Thanks to sbt-web, I run all these test with one command : <code class="language-plaintext highlighter-rouge">sbt test</code></p>
+
+<p>As I’m a professional, I write unit tests and functional tests. So I want <a href="http://www.martinfowler.com/articles/continuousIntegration.html">continous
+integration</a> for my project, and
+also continuous deployment to a staging environment. The good news is you can have that for free,
+using Travis CI, Sauce Labs and Heroku. The bad news is that it’s not that smooth to configure, and
+I have encountered a lot of issues. Yes, I really had ALL the following issues :</p>
+
+<h2 id="writing-selenium-tests">Writing Selenium Tests</h2>
+
+<h3 id="htmlunit-support-javascript-really-">HTMLUnit support Javascript, really ?</h3>
+
+<p>PlayFramework provide an example in the documentation. Cool. Unfortunately, when I run my test, I
+have the following error</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[error] Caused by com.gargoylesoftware.htmlunit.ScriptException: TypeError: Cannot find function addEventListener in object [object HTMLDocument]. (http://localhost:19001/assets/awale-ws.js#134)
+</code></pre></div></div>
+
+<p>By default, the test use <code class="language-plaintext highlighter-rouge">HTMLUnitDriver</code> that is not a real browser and do not support all
+Javascript.</p>
+
+<p>The solution is to use <code class="language-plaintext highlighter-rouge">FirefoxDriver</code>.</p>
+
+<h3 id="firefoxdriver-fails-with-play-23">FirefoxDriver fails with Play 2.3</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[error]    IllegalArgumentException: : No enum constant org.openqa.selenium.Platform.Windows 7  (Platform.java:30)
+</code></pre></div></div>
+
+<p>Solution : it’s <a href="https://code.google.com/p/selenium/issues/detail?id=8083">a known bug</a>, you have to
+update selenium version</p>
+
+<h3 id="numeric-id">Numeric id</h3>
+
+<p>I use numeric <code class="language-plaintext highlighter-rouge">id</code>s in the HTML.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;div id="0" class="col"&gt;4&lt;/div&gt;
+</code></pre></div></div>
+
+<p>In my test, I fire an event on this div with <code class="language-plaintext highlighter-rouge">browser.find("#0").click()</code> and the test fails</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InvalidSelectorException: : The given selector #0 is either invalid or does not result in a WebElement.
+</code></pre></div></div>
+
+<p>Selenium doesn’t support that, even if it’s conform with the
+<a href="http://www.w3.org/TR/html5/dom.html#the-id-attribute">spec</a>.</p>
+
+<p>The workaround is to access the element by its position.</p>
+
+<h3 id="as-its-a-multiplayer-game-how-can-i-test-with-multiple-browsers-">As it’s a multiplayer game, how can I test with multiple browsers ?</h3>
+
+<p>After some search on the internet, the Selenium way seems to use multiple windows in the same
+browser instead of using multiple browsers.</p>
+
+<p>Selenium/FluentLenium doesn’t provide a straightforward way to do that. The trick is to use a
+javascript method <code class="language-plaintext highlighter-rouge">window.open</code>.</p>
+
+<p>As I use this code a lot, I’ve written some helpers :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def goToInNewTab(url: String, windowName: String): Fluent = {
+  f.executeScript(s"window.open('${url}', '${windowName}');")
+  f.getDriver.switchTo().window(windowName)
+  f
+}
+</code></pre></div></div>
+
+<h3 id="tests-are-executed-sequentially">Tests are executed sequentially</h3>
+
+<p>By reading the PlayFramework code, I see the following code.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  def running[T](testServer: TestServer)(block: =&gt; T): T = {
+    PlayRunners.mutex.synchronized {
+      try {
+        testServer.start()
+        block
+      } finally {
+        testServer.stop()
+      }
+    }
+  }
+</code></pre></div></div>
+
+<p>Specs2 support parallel execution of tests. But a mutex prevents parallel execution of tests. So
+tests are executed sequentially. And obviously, that will have a negative impact on the overall
+execution time of the test suite.</p>
+
+<p>Not solved for the moment</p>
+
+<h3 id="akka-issue">Akka issue</h3>
+
+<p>I got another strange issue : the first test succeed, but following tests fail.</p>
+
+<p>My code relies on Akka, and I kept a reference to an <code class="language-plaintext highlighter-rouge">ActorRef</code> in an ugly global state.</p>
+
+<p>Unfortunately, after each test, the actor system is restarted, making the reference invalid.</p>
+
+<p>It was solved by using actorSelection to avoid the ref</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val games = context.actorSelection("/user/games")
+</code></pre></div></div>
+
+<p>and using Play <code class="language-plaintext highlighter-rouge">Global</code> object to have a hook at the application start-up.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>object Global extends GlobalSettings {
+  override def onStart(app: Application) {
+    Akka.system.actorOf(Props[GamesActor], "games")
+  }
+}
+</code></pre></div></div>
+
+<h3 id="chromedriver-fails">ChromeDriver fails</h3>
+
+<p>The gameplay use some animations, based on the javascript method <code class="language-plaintext highlighter-rouge">setTimeout</code>.</p>
+
+<p>By default, <code class="language-plaintext highlighter-rouge">ChromeDriver</code> doesn’t display the window. And according to the best resource for web
+developers,
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout#Timeouts_in_inactive_tabs_clamped_to_%3E1000ms">MDN</a>,
+browser have an optimisation that prevents timer events to occur when the window is not visible.</p>
+
+<p>I’m still stuck with that one.</p>
+
+<h2 id="travis-ci">Travis CI</h2>
+
+<p>If you don’t know Travis CI, it’s a continuous integration solution with a simple GitHub
+integration.</p>
+
+<p>You can install the CLI with <code class="language-plaintext highlighter-rouge">gem install travis</code></p>
+
+<p>Travis CI has a decent<a href="http://docs.travis-ci.com/user/languages/scala/">Scala support</a>. You just
+have to add a <code class="language-plaintext highlighter-rouge">.travis.yml</code> file in the root of your repository. And that’s it. By default, travis
+will run <code class="language-plaintext highlighter-rouge">sbt test</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>language: scala
+scala:
+- 2.11.1
+</code></pre></div></div>
+
+<p>If you’re lazy, you can generate this file by using <code class="language-plaintext highlighter-rouge">travis init</code></p>
+
+<h3 id="java-8">Java 8</h3>
+
+<p>Hum, here is a compilation issue :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[error] /home/travis/build/YannMoisan/awale/app/actors/EventStore.scala:3: object time is not a member of package java
+
+[error] import java.time.LocalDateTime
+</code></pre></div></div>
+
+<p>Let’s check the travis console :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ jdk_switcher use default
+Switching to Oracle JDK7 (java-7-oracle), JAVA_HOME will be set to /usr/lib/jvm/java-7-oracle
+</code></pre></div></div>
+
+<p>Bingo ! By default, Travis CI uses Java 7 and my application requires Java 8. Let’s configure that :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jdk:
+- oraclejdk8
+</code></pre></div></div>
+
+<h3 id="gui-tests-fails">GUI tests fails</h3>
+
+<p>Setup is really easy, isn’t it ? I’m ready to run my first build and … TADA ! Here is the error :
+` Error: no display specified`</p>
+
+<p>Hum. This one smells bad. Ready to install an X server ? Just kidding !</p>
+
+<p>Travis CI allow you to do some GUI tests. Firefox is installed by default and you just have to
+<a href="http://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-%28e.g.-a-Web-browser%29">configure
+Xvfb</a></p>
+
+<h3 id="downloading-the-whole-internet">Downloading the whole internet</h3>
+
+<p>At each build, sbt download the whole internet.</p>
+
+<p>Travis CI provides <a href="http://docs.travis-ci.com/user/caching/#Arbitrary-directories">caching</a>, let’s
+configure that :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cache:
+  directories:
+    - $HOME/.m2/repository
+    - $HOME/.sbt
+    - $HOME/.ivy2
+</code></pre></div></div>
+
+<h3 id="github-release">GitHub release</h3>
+
+<p>I want to make a release after each build. So I can deploy easily to production each successful
+build.</p>
+
+<p>It’s feasible but not straightforward. There is a <a href="https://github.com/travis-ci/travis-ci/issues/1476">feature
+request</a>.</p>
+
+<p>As my project is on GitHub, it’s a logic solution to use GitHub release.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>travis setup releases
+</code></pre></div></div>
+
+<p>Here are the steps, with the matching travis configuration :</p>
+
+<ul>
+  <li>build the artefact</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- after_success:
+  - sbt dist
+</code></pre></div></div>
+
+<ul>
+  <li>create a tag</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- after_success:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - export GIT_TAG=build-$TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER
+  - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+  - git push origin $GIT_TAG
+</code></pre></div></div>
+
+<ul>
+  <li>release</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: …
+    file: target/universal/awale-1.0-SNAPSHOT.zip
+    on:
+      repo: YannMoisan/awale
+</code></pre></div></div>
+
+<h3 id="heroku">Heroku</h3>
+
+<p>Houra ! I have some tests to guarantee the quality of my builds. I’m therefore confident enough to
+deploy automatically on a staging environment.</p>
+
+<p>If you don’t know Heroku, it’s a PaaS, that support a lot of technology, including Scala and
+Playframework.</p>
+
+<p>Travis CI provides an <a href="http://docs.travis-ci.com/user/deployment/heroku/">Heroku integration</a>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>travis setup heroku
+</code></pre></div></div>
+
+<p>Traditionnaly, you set up a Git remote and each commit is deployed on Heroku (after a <code class="language-plaintext highlighter-rouge">git push</code>).
+The benefit of using Travis CI is, by design, you only deploy successful build.</p>
+
+<h3 id="multi-provider-issue">Multi provider issue</h3>
+
+<p>Travis CI supports deployment to multiple providers, but there is a <a href="https://github.com/travis-ci/travis.rb/issues/201">known
+issue</a> in the CLI : <code class="language-plaintext highlighter-rouge">travis setup</code> doesn’t
+support it.</p>
+
+<h2 id="sauce-labs">Sauce Labs</h2>
+
+<p>If you don’t know SauceLabs, it’s a cloud solution to test a web app on a lot of
+<a href="https://saucelabs.com/platforms/">OS/browser</a> combination. And it’s free for <em>open source</em> project.</p>
+
+<p>Sauce Labs provides an integration with Travis CI, and Travis CI provide an integration with Sauce
+Labs.</p>
+
+<ul>
+  <li><a href="http://docs.travis-ci.com/user/sauce-connect/">Travis doc</a></li>
+</ul>
+
+<p>The main point is to configure sauce-connect, a tunnel to secure communication between Travis CI and
+Sauce Labs.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>addons:
+  sauce_connect:
+    no_ssl_bump_domains: all
+</code></pre></div></div>
+
+<h3 id="use-sauce-labs-only-for-on-ci">Use Sauce Labs only for on CI</h3>
+
+<p>I want to use Sauce Labs only for Travis CI builds, and not for local builds. Locally, I only use
+Firefox Driver to have a quick feedback loop.</p>
+
+<p>PlayFramework doesn’t provide built-in support for that.</p>
+
+<p>Travis CI set an environnement variable <code class="language-plaintext highlighter-rouge">CI</code>, so we can detect on which environnement the test is
+running.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>trait EnvAwareDriver {
+  def localDrivers: Seq[String =&gt; WebDriver]
+  def remoteDrivers: Seq[String =&gt; WebDriver]
+
+  def drivers: Seq[String =&gt; WebDriver] = if (System.getenv("CI") != "true") 
+    localDrivers 
+  else 
+    remoteDrivers
+}
+</code></pre></div></div>
+
+<h3 id="set-the-tunnel-identifier-the-build-number-and-the-name">Set the tunnel identifier, the build number and the name</h3>
+
+<p>You must set the tunnel identifier to allow communication between Travis CI and Sauce Labs. The
+build number and the name are useful to generate a comprehensive dashboard.</p>
+
+<p>PlayFramework doesn’t provide built-in support for that.</p>
+
+<p>As previously, Travis CI set some environment variables that we can use. Let’s do that with
+<em>Enhanced my library</em> pattern :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>object SauceLabs {
+  implicit class SauceLabsCapabilities(caps: DesiredCapabilities) {
+    def setSauceLabs(name: String) = {
+      caps.setCapability("tunnelIdentifier", System.getenv("TRAVIS_JOB_NUMBER"))
+      caps.setCapability("build", System.getenv("TRAVIS_BUILD_NUMBER"))
+      caps.setCapability("name", name)
+    }
+}  
+</code></pre></div></div>
+
+<p>The full code is provided below.</p>
+
+<p>For the name, I propagate to the driver factory the label of the <em>specs2</em> example.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"my example" in ((s: String) =&gt; new WithBrowser(driver(s)) {
+</code></pre></div></div>
+
+<h3 id="timeout">Timeout</h3>
+
+<p>Some tests fail, client are disconnected for unknown reason. Nothing in the log, the kind of
+situation that developers hate.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Command duration or timeout: 85 milliseconds
+</code></pre></div></div>
+
+<p>One more time, I’ve spent a lot of time to fix this one. The root cause was instantiation of all
+<code class="language-plaintext highlighter-rouge">RemoteWebDriver</code> at the beginning of the suite. Unfortunately, an HTTP connection is created during
+the object construction.</p>
+
+<p>And Sauce Labs timeout connections after 90 seconds.</p>
+
+<h3 id="the-revenge-of-the-timeout">The revenge of the timeout</h3>
+
+<p>Some tests fail, client are disconnected for unknown reason. Nothing in the log, the kind of
+situation that developers hate.</p>
+
+<p>After wasting a lot of time to investigate, I’ve found that it was due to timeout. In fact, when you
+use WebSocket, there is a magic option for Sauce Connect, not documented that you SHOULD have !</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>no_ssl_bump_domains: all
+</code></pre></div></div>
+
+<p>Good to know : I’ve reported an <a href="https://github.com/travis-ci/travis-ci/issues/4927">issue</a> :
+<code class="language-plaintext highlighter-rouge">travis lint</code> reports a false negative with this option.</p>
+
+<h3 id="how-can-i-run-a-test-against-multiple-drivers">How can I run a test against multiple drivers</h3>
+
+<p>The PlayFramework provides an example, but it runs with only one driver.</p>
+
+<p>And the specs2 source code is not as easy to read. I’ve come up with this trait :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>trait MultiBrowser {
+  self : Specification =&gt;
+
+  def drivers : Seq[String =&gt; WebDriver]
+
+  def browsers(u: (String =&gt; WebDriver) =&gt; Unit) = examplesBlock {
+    for (driver &lt;- drivers) {
+      u(driver)
+    }
+  }
+}
+</code></pre></div></div>
+
+<h3 id="network-latency">Network latency</h3>
+
+<p>Locally, the browser and the server runs on the same machine. So far so good.</p>
+
+<p>But in CI env, it is not the case anymore, and latency appears, especially when your application
+uses WebSocket. So some tests that have always passed locally, fail randomly remotely. Personally,
+I’ve found this issue is really tough and sometimes makes GUI testing time consuming.</p>
+
+<p>The workaround is to use <code class="language-plaintext highlighter-rouge">await</code> method.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>browser.await().atMost(5, TimeUnit.SECONDS).until("#invitation").areDisplayed()
+</code></pre></div></div>
+
+<h3 id="problem--status-unknown">Problem : Status unknown</h3>
+
+<p>Now it’s configured, you want to display the information on your <code class="language-plaintext highlighter-rouge">README</code> page. So you add the
+snippet as explained in the Sauce Labs documentation and … the status is unknown !</p>
+
+<p>PlayFramework doesn’t provide built-in support for Sauce Labs, you have to update the status of each
+test manually by using the REST API provided by Sauce Labs.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>It’s awesome to reap the benefit from these tools, and moreover for free because I do open source.
+Sauce Labs provides also free support, and it rocks (thanks guys for your help)!</p>
+
+<p>These cloud-based tools makes my life a lot easier : I receive a mail when a build fails (once, i
+received an email by getting my kids to school), I can check the overall status of my project on the
+<a href="https://github.com/yannmoisan/awale">README</a>. Releases and deployments are fully automated.</p>
+
+<h2 id="helpers-methods">Helpers methods</h2>
+
+<p>I’ve started to implement some helpers methods. There are still too much boilerplate in the tests
+and I definitely need to improve the design.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>abstract class WithBrowserAndSauceLabsUpdater[WEBDRIVER &lt;: WebDriver](
+                                                                       webDriver: WebDriver = WebDriverFactory(Helpers.HTMLUNIT),
+                                                                       app: FakeApplication = FakeApplication(),
+                                                                       port: Int = Helpers.testServerPort) extends WithBrowser(webDriver, app, port) {
+
+  // call synchronously the Sauce Labs REST API
+  def updateJob(sessionId: SessionId, passed: Boolean) = {
+    val holder: WSRequestHolder = WS.url(s"https://saucelabs.com/rest/v1/yamo93/jobs/${sessionId}")
+    val data = Json.obj("passed" -&gt; passed)
+    val f = holder.withAuth("yamo93", "xxx", WSAuthScheme.BASIC).put(data).map(t =&gt; {println(t.body)})
+    Await.result (f, Duration(5, TimeUnit.SECONDS))
+  }
+
+  def getSessionId() : Option[SessionId] = webDriver match {
+    case remote : RemoteWebDriver =&gt; Some(remote.getSessionId)
+    case _ =&gt; None
+  }
+
+  override def around[T: AsResult](t: =&gt; T): Result = {
+    var maybeResult : Option[Result] = None
+    val maybeSessionId = getSessionId()  // call before browser.quit() in super.around
+    try {
+      maybeResult = Some(super.around(t))
+      maybeResult.get
+    }
+    finally {
+      maybeSessionId.foreach { updateJob(_, maybeResult.map(_.isSuccess).getOrElse(false)) }
+    }
+  }
+}
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/continuous-integration.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

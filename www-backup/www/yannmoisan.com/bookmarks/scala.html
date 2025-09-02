@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Scala resources | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Scala resources" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Blog de Yann Moisan Scala, Java, Linux" />
+<meta property="og:description" content="Blog de Yann Moisan Scala, Java, Linux" />
+<link rel="canonical" href="https://www.yannmoisan.com/bookmarks/scala.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/bookmarks/scala.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Scala resources" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Blog de Yann Moisan Scala, Java, Linux","headline":"Scala resources","url":"https://www.yannmoisan.com/bookmarks/scala.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Scala resources</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Here is the list of my favorite articles collected during my 10 years of language practice.</p>
+
+<h2 id="best-practices">Best practices</h2>
+
+<ul>
+  <li><a href="https://blog.ssanj.net/posts/2019-05-01-why-are-default-parameter-values-considered-bad-in-scala.html">Why are Default Parameter Values Considered Bad in Scala?</a></li>
+  <li><a href="https://dkomanov.medium.com/scala-try-with-resources-735baad0fd7d">try-with-resources</a></li>
+  <li><a href="https://nrinaudo.github.io/scala-best-practices">scala-best-practices</a></li>
+  <li><a href="https://nrinaudo.github.io/scala-best-practices/definitions/adt.html">ADT</a></li>
+  <li><a href="https://nrinaudo.github.io/scala-best-practices/definitions/referential_transparency.html">referential transparency</a></li>
+</ul>
+
+<h2 id="type-system">Type System</h2>
+
+<h3 id="awesome-overview">Awesome overview</h3>
+
+<ul>
+  <li><a href="https://kubuszok.com/compiled/kinds-of-types-in-scala/">Kinds of types in Scala</a>, A master piece, highly recommended read</li>
+  <li><a href="http://ktoso.github.io/scala-types-of-types/">Scala’s Types of Types</a></li>
+  <li><a href="https://heather.miller.am/blog/types-in-scala.html">Types in Scala</a></li>
+</ul>
+
+<h3 id="specific-topics">Specific topics</h3>
+
+<ul>
+  <li><a href="https://www.codecentric.de/wissens-hub/blog/phantom-types-scala">Phantom Types in Scala</a> phantom types never get instantiated. They are used to encode type constraints.</li>
+  <li><a href="https://typelevel.org/blog/2015/07/13/type-members-parameters.html">Type members are [almost] type parameters</a> type members VS type parameters.</li>
+  <li><a href="https://typelevel.org/blog/2015/07/16/method-equiv.html">When are two methods alike?</a></li>
+  <li><a href="http://gigiigig.github.io/posts/2015/09/13/aux-pattern.html">A short introduction to the <code class="language-plaintext highlighter-rouge">Aux</code> pattern</a> a trick to overcome a limitation with path dependent type.</li>
+  <li><a href="https://gist.github.com/smarter/2e1c564c83bae58c65b4f3f041bfb15f">Generalized Algebraic Data Types in Scala</a></li>
+  <li><a href="http://tpolecat.github.io/2015/04/29/f-bounds.html">Returning the “Current” Type in Scala</a> An F-bounded type is parameterized over its own subtypes. <code class="language-plaintext highlighter-rouge">trait Pet[A &lt;: Pet[A]]</code>. And also subtyping VS ad-hoc polymorphism.</li>
+  <li><a href="https://failex.blogspot.com/2013/06/fake-theorems-for-free.html">Fake Theorems for Free </a> why you should not use <code class="language-plaintext highlighter-rouge">Object#equals</code> and <code class="language-plaintext highlighter-rouge">Object#hashCode</code></li>
+  <li><a href="https://github.com/typelevel/kind-projector">Compiler plugin for making type lambdas (type projections) easier to write</a></li>
+  <li><a href="https://blog.bruchez.name/posts/generalized-type-constraints-in-scala/">Generalized type constraints in Scala (without a PhD)</a>, About <code class="language-plaintext highlighter-rouge">&lt;:&lt;</code> and <code class="language-plaintext highlighter-rouge">=:=</code> syntax</li>
+  <li><a href="https://scalac.io/blog/specialized-generics-avoid-object-instantiation/">Avoiding Unnecessary Object Instantiation with Specialized Generics</a>, <code class="language-plaintext highlighter-rouge">@specialized</code></li>
+  <li><a href="https://scalac.io/blog/typeclasses-in-scala/">Type classes in Scala</a></li>
+  <li><a href="http://adriaanm.github.io/files/higher.pdf">Generics of a Higher Kind</a></li>
+  <li><a href="https://medium.com/@sinisalouc/overcoming-type-erasure-in-scala-8f2422070d20">Overcoming type erasure in Scala</a></li>
+</ul>
+
+<h2 id="category-theory">Category theory</h2>
+
+<ul>
+  <li><a href="https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">Functors, Applicatives, And Monads In Pictures</a></li>
+  <li><a href="https://etorreborre.blogspot.com/2011/06/essence-of-iterator-pattern.html">The Essence of the Iterator Pattern</a></li>
+  <li><a href="http://blog.higher-order.com/blog/2013/08/20/free-monads-and-free-monoids/">Free Monoids and Free Monads</a></li>
+  <li><a href="http://blog.higher-order.com/blog/2014/03/19/monoid-morphisms-products-coproducts/">Monoid Morphisms, Products, and Coproducts</a></li>
+  <li><a href="https://typelevel.org/blog/2018/11/02/semirings.html">A tale on Semirings</a></li>
+  <li><a href="https://typelevel.org/blog/2014/06/22/mapping-sets.html">How can we map a Set?</a>, on coyoneda</li>
+</ul>
+
+<h2 id="advanced---free-monad-vs-tagless-final">Advanced - Free monad VS tagless final</h2>
+
+<ul>
+  <li><a href="http://days2012.scala-lang.org/sites/days2012/files/bjarnason_trampolines.pdf">Stackless Scala With Free Monads</a></li>
+  <li><a href="https://perevillega.com/posts/understanding-free-monads/">On Free Monads</a></li>
+  <li><a href="https://www.beyondthelines.net/programming/introduction-to-tagless-final/">Introduction to Tagless final</a></li>
+  <li><a href="https://scalac.io/blog/tagless-final-pattern-for-scala-code/">Exploring Tagless Final pattern for extensive and readable Scala code</a></li>
+</ul>
+
+<h2 id="concurrency">Concurrency</h2>
+
+<ul>
+  <li><a href="https://typelevel.org/blog/2017/05/02/io-monad-for-cats.html">An IO monad for cats</a></li>
+  <li><a href="https://typelevel.org/blog/2018/06/07/shared-state-in-fp.html">Shared State in Functional Programming</a></li>
+  <li><a href="https://impurepics.com/posts/2018-07-13-referential-transparency-wild.html">Why should you care about RT</a></li>
+  <li><a href="https://gist.github.com/djspiewak/46b543800958cf61af6efa8e072bfd5c">Thread Pools</a></li>
+  <li><a href="https://www.youtube.com/watch?v=83pXEdCpY4A">Talk - Intro to Cats-Effect (Gavin Bisesi)</a></li>
+  <li><a href="https://www.youtube.com/watch?v=g_jP47HFpWA">Talk - The Making of an IO - Daniel Spiewak</a></li>
+</ul>
+
+<h2 id="various">Various</h2>
+
+<ul>
+  <li><a href="http://www.lihaoyi.com/post/ImplicitDesignPatternsinScala.html">Implicit Design Patterns in Scala</a></li>
+  <li><a href="https://www.originate.com/thinking/scrap-your-cake-pattern-boilerplate-dependency-injection-using-the-reader-monad.html">Scrap Your Cake Pattern Boilerplate: Dependency Injection</a></li>
+  <li><a href="https://pabloernesto.github.io/2022/05/22/fibonacci.html">A brief tour of Scala: two classic problems</a>, Fibonacci …</li>
+</ul>
+
+<h2 id="blogs">Blogs</h2>
+
+<ul>
+  <li><a href="http://blog.higher-order.com/">Runar Bjarnason</a>, author of Functional Programming in Scala</li>
+  <li><a href="http://tpolecat.github.io/">Rob Norris a.k.a. tpolecat</a>, author of doobie</li>
+  <li><a href="http://www.lihaoyi.com/">Li Haoyi</a>, author of ammonite</li>
+  <li><a href="https://etorreborre.blogspot.com/">Eric Torreborre</a>, author of specs2</li>
+  <li><a href="https://meta.plasm.us/">Travis Brown</a>, author of circe</li>
+  <li><a href="https://typelevel.org/blog/">Typelevel</a>, the blog of the typelevel organization</li>
+  <li><a href="https://blog.bruchez.name/categories/programming/">Erik Bruchez</a></li>
+  <li><a href="https://jonasboner.com/">Jonas Boner</a>, CTO of Lightbend</li>
+  <li><a href="https://debasishg.blogspot.com/">Debasish Ghosh</a>, author of Functional and Reactive Domain Modeling</li>
+  <li><a href="https://warski.org/">Adam Warski</a>, R&amp;D at SoftwareMill</li>
+  <li><a href="https://eed3si9n.com/">Eugene Yokota</a>, sbt core dev</li>
+  <li><a href="https://kubuszok.com/">Mateusz Kubuszok</a>, author of chimney</li>
+  <li><a href="https://gvolpe.com/">Gabriel Volpe</a>, author of Practical FP in Scala</li>
+  <li><a href="https://alexn.org/">Alexandru Nedelcu</a>, author of monix</li>
+  <li><a href="https://nrinaudo.github.io/">Nicolas Rinaudo</a>, awesome speaker</li>
+</ul>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

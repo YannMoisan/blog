@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Chain of responsability with Scala partial functions | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Chain of responsability with Scala partial functions" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Chain of responsability with Scala partial functions" />
+<meta property="og:description" content="Chain of responsability with Scala partial functions" />
+<link rel="canonical" href="https://www.yannmoisan.com/scala-partial-functions.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/scala-partial-functions.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-05-04T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Chain of responsability with Scala partial functions" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-05-04T00:00:00+02:00","datePublished":"2023-05-04T00:00:00+02:00","description":"Chain of responsability with Scala partial functions","headline":"Chain of responsability with Scala partial functions","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/scala-partial-functions.html"},"url":"https://www.yannmoisan.com/scala-partial-functions.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Chain of responsability with Scala partial functions</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2023-05-04T00:00:00+02:00" itemprop="datePublished">May 4, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="partial-functions">Partial functions</h2>
+
+<p>In this article, we will explore a fundamental yet highly useful feature of Scala: partial functions.</p>
+
+<p>A partial function (as opposed to a total function) is a function that is not defined for all possible inputs. 
+A partial function <code class="language-plaintext highlighter-rouge">g: A =&gt; B</code> is a function for which there exist some values <code class="language-plaintext highlighter-rouge">a</code> in the domain <code class="language-plaintext highlighter-rouge">A</code> such that <code class="language-plaintext highlighter-rouge">g(a)</code> is not defined.
+Scala has a good support of partial functions.</p>
+
+<h2 id="chain-of-responsability">Chain of responsability</h2>
+<p>At Devoxx France 2023, <a href="https://twitter.com/yanaga">Edson Yanaga</a> gave a talk in which he revisits the GoF design patterns using the new features of Java. 
+Here is his <a href="https://github.com/yanaga/revisiting-design-patterns/blob/main/src/main/java/com/google/developers/wallet/chain/revisited/RevisitedChainOfResponsibility.java">implementation of the Chain of Responsability pattern</a>. 
+During the talk, I thought to myself that it’s even easier in Scala.</p>
+
+<p>For illustration purposes, let’s take the example of the <a href="https://codingdojo.org/kata/FizzBuzz/">FizzBuzz</a> kata.</p>
+
+<p>Here is the implementation in Scala:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">FizzBuzz</span> <span class="k">extends</span> <span class="nc">App</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">multipleOfThree</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">=&gt;</span> <span class="s">"Fizz"</span>
+  <span class="o">}</span>
+  <span class="k">val</span> <span class="nv">multipleOfFive</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">=&gt;</span> <span class="s">"Buzz"</span>
+  <span class="o">}</span>
+  <span class="k">val</span> <span class="nv">multipleOfBoth</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">=&gt;</span> <span class="s">"FizzBuzz"</span>
+  <span class="o">}</span>
+  <span class="k">val</span> <span class="nv">default</span><span class="k">:</span> <span class="kt">PartialFunction</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">i</span> <span class="k">=&gt;</span> <span class="nv">i</span><span class="o">.</span><span class="py">toString</span>
+  <span class="o">}</span>
+
+  <span class="k">val</span> <span class="nv">fizzBuzz</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="n">multipleOfBoth</span><span class="o">,</span> <span class="n">multipleOfThree</span><span class="o">,</span> <span class="n">multipleOfFive</span><span class="o">,</span> <span class="n">default</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">reduce</span><span class="o">(</span><span class="k">_</span> <span class="n">orElse</span> <span class="k">_</span><span class="o">)</span>
+
+  <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">100</span><span class="o">).</span><span class="py">foreach</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="nf">fizzBuzz</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The Chain of Responsibility is implemented using the <code class="language-plaintext highlighter-rouge">orElse</code> method to chain the calls.</p>
+
+<p>I also frequently use this technique to implement my heuristics in bot programming competitions on <a href="https://www.codingame.com">codingame</a>. 
+This allows me to easily change the priorities of actions just by changing the order in the list.</p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://blog.bruchez.name/posts/scala-partial-functions-without-phd/">scala partial functions without phd</a></li>
+</ul>
+
+  </div><a class="u-url" href="/scala-partial-functions.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

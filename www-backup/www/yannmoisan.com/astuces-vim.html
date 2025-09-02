@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Mes astuces Vim | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Mes astuces Vim" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Mes astuces Vim" />
+<meta property="og:description" content="Mes astuces Vim" />
+<link rel="canonical" href="https://www.yannmoisan.com/astuces-vim.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/astuces-vim.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-02-04T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Mes astuces Vim" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2013-02-04T00:00:00+01:00","datePublished":"2013-02-04T00:00:00+01:00","description":"Mes astuces Vim","headline":"Mes astuces Vim","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/astuces-vim.html"},"url":"https://www.yannmoisan.com/astuces-vim.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Mes astuces Vim</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2013-02-04T00:00:00+01:00" itemprop="datePublished">Feb 4, 2013
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Voici quelques astuces que j’ai apprises en jouant à VimGolf</p>
+
+<h2 id="gagner-une-frappe-de-touche">Gagner une frappe de touche</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>long</th>
+      <th>court</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">hx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">X</code></td>
+      <td>supprimer le caractère avant le curseur</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">j^</code></td>
+      <td><code class="language-plaintext highlighter-rouge">+</code></td>
+      <td>aller au premier caractère non vide de la ligne suivante</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">k^</code></td>
+      <td><code class="language-plaintext highlighter-rouge">-</code></td>
+      <td>aller au premier caractère non vide de la ligne précédente</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">d$</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D</code></td>
+      <td>supprimer jusqu’à la fin de la ligne</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">jdd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">JD</code></td>
+      <td>supprimer la ligne du dessous</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">2dd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dj</code></td>
+      <td>supprimer la ligne courant et celle du dessous</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">%</code></td>
+      <td>aller à la prochaine parenthèse fermante</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="quelques-commandes-ex">Quelques commandes Ex</h2>
+
+<p>Commençons par un rappel historique : Vim est le successeur de Vi qui est lui-même le successeur de
+Ex.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>normal</th>
+      <th>commande</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">jdd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">:+d</code></td>
+      <td>supprimer la ligne du dessous</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">yyjp</code></td>
+      <td><code class="language-plaintext highlighter-rouge">:t+</code></td>
+      <td>Copier la ligne courante en dessous de la ligne du dessous</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ddggP</code></td>
+      <td><code class="language-plaintext highlighter-rouge">:m0</code></td>
+      <td>Déplacer la ligne courante au début du fichier</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="opérateurs-commençant-par-g">Opérateurs commençant par g</h2>
+
+<p>Avec Vim, il suffit de doubler les opérateurs pour qu’ils s’appliquent à la ligne courante. Par
+exemple : <code class="language-plaintext highlighter-rouge">dd</code>. Et pour certains opérateurs, il existe même une syntaxe raccourcie.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>long</th>
+      <th>court</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">gugu</code></td>
+      <td><code class="language-plaintext highlighter-rouge">guu</code></td>
+      <td>mettre la ligne courante en minuscule</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">gUgU</code></td>
+      <td><code class="language-plaintext highlighter-rouge">gUU</code></td>
+      <td>mettre la ligne courante en majuscule</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">g?g?</code></td>
+      <td><code class="language-plaintext highlighter-rouge">g??</code></td>
+      <td>mettre la ligne courante en ROT13</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">g~g~</code></td>
+      <td><code class="language-plaintext highlighter-rouge">g~~</code></td>
+      <td>inverser la casse de ligne courante</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="recherche-et-substitution">Recherche et substitution</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>long</th>
+      <th>court</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">:g/^/m0</code></td>
+      <td>inverser l’ordre du fichier</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">:s</code></td>
+      <td><code class="language-plaintext highlighter-rouge">&amp;</code></td>
+      <td>répéter la dernière substitution</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">:%s//~/g</code></td>
+      <td><code class="language-plaintext highlighter-rouge">g&amp;</code></td>
+      <td>répéter la dernière substitution sur tout le fichier</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">@:</code></td>
+      <td>répéter la dernière ex commande</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="quelques-commandes-avec-la-touche-ctrl">Quelques commandes avec la touche Ctrl</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>commande</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;C-x&gt;&lt;C-l&gt;</code></td>
+      <td>en mode insertion, complétion pour une ligne entière</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;C-n&gt;</code> / <code class="language-plaintext highlighter-rouge">&lt;C-p&gt;</code></td>
+      <td>en mode insertion, insérer le mot suivant/précédent correspondant (complétion)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;C-o&gt;</code></td>
+      <td>revenir au dernier emplacement visité</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;C-a&gt;</code> / <code class="language-plaintext highlighter-rouge">&lt;C-x&gt;</code></td>
+      <td>en mode normal, incrémenter / décrémenter le prochain nombre sur la ligne</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="entourer-un-mot">Entourer un mot</h2>
+
+<p>Pour entourer un mot avec des parenthèses, nous faisons généralement en mode normal
+<code class="language-plaintext highlighter-rouge">i(&lt;Esc&gt;ea)&lt;Esc&gt;</code>, ce qui fait 7 touches. Mais il existe plus efficace : <code class="language-plaintext highlighter-rouge">cw()&lt;Esc&gt;P</code>, ce qui fait 6
+touches.</p>
+
+<p>Malheureusement, ce n’est pas rejouable avec la commande <code class="language-plaintext highlighter-rouge">.</code>. Pour pallier cela, on peut faire
+<code class="language-plaintext highlighter-rouge">cw(&lt;c-r&gt;&lt;c-o&gt;")</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:h i_CTRL-R_CTRL-O
+</code></pre></div></div>
+
+<p>Dernière possibilité, utiliser le plugin <a href="https://github.com/tpope/vim-surround">vim-surround</a> de
+Tim Pope. Il suffit alors de faire <code class="language-plaintext highlighter-rouge">veS"</code>.</p>
+
+  </div><a class="u-url" href="/astuces-vim.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

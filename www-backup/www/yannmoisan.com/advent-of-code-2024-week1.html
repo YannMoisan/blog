@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Advent of Code 2024, insights from the first week | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Advent of Code 2024, insights from the first week" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="Advent of Code 2024, insights from the first week" />
+<meta property="og:description" content="Advent of Code 2024, insights from the first week" />
+<link rel="canonical" href="https://www.yannmoisan.com/advent-of-code-2024-week1.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/advent-of-code-2024-week1.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-12-07T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Advent of Code 2024, insights from the first week" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-12-07T00:00:00+01:00","datePublished":"2024-12-07T00:00:00+01:00","description":"Advent of Code 2024, insights from the first week","headline":"Advent of Code 2024, insights from the first week","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/advent-of-code-2024-week1.html"},"url":"https://www.yannmoisan.com/advent-of-code-2024-week1.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Advent of Code 2024, insights from the first week</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-12-07T00:00:00+01:00" itemprop="datePublished">Dec 7, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>It’s been 10 years since I started enjoying <a href="https://adventofcode.com/2024">Advent of Code</a>, 
+a series of daily coding exercises in December. 
+Over this time, I’ve learned a lot, and I firmly believe that practice makes you a better developer. 
+Since the time required to solve these exercises is still manageable, 
+I’d like to share a wrap-up of the first week—mostly because I probably won’t have time to do it later.</p>
+
+<p>In this post, we will explore practical coding insights and demonstrate how Scala’s powerful features can simplify problem-solving. 
+We’ll also highlight how reusable code can save time. The post will showcase examples and tools that you can incorporate into your own work.</p>
+
+<h1 id="day1">Day1</h1>
+
+<p>This was a perfect opportunity to use <code class="language-plaintext highlighter-rouge">zip</code> and <code class="language-plaintext highlighter-rouge">unzip</code>.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">((</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">),</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">)).</span><span class="py">unzip</span>
+<span class="k">val</span> <span class="nv">res0</span><span class="k">:</span> <span class="o">(</span><span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">],</span> <span class="nc">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">])</span> <span class="k">=</span> <span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">),</span><span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">6</span><span class="o">))</span>
+
+<span class="n">scala</span><span class="o">&gt;</span> <span class="nv">pair</span><span class="o">.</span><span class="py">_1</span><span class="o">.</span><span class="py">zip</span><span class="o">(</span><span class="nv">pair</span><span class="o">.</span><span class="py">_2</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">res2</span><span class="k">:</span> <span class="kt">List</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">((</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">),</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">),</span> <span class="o">(</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
+</code></pre></div></div>
+
+<p>With these built-in methods, there’s no need to loop explicitly over collections, and the intent is clearer.</p>
+
+<p>Similarly, to count occurrences in a list, verbose code like this:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">).</span><span class="py">groupBy</span><span class="o">(</span><span class="n">identity</span><span class="o">).</span><span class="py">view</span><span class="o">.</span><span class="py">mapValues</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">length</span><span class="o">).</span><span class="py">toMap</span>
+<span class="k">val</span> <span class="nv">res1</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Map</span><span class="o">[</span><span class="kt">Int</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>can be simplified using <code class="language-plaintext highlighter-rouge">groupMapReduce</code>:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">).</span><span class="py">groupMapReduce</span><span class="o">(</span><span class="n">identity</span><span class="o">)(</span><span class="k">_=&gt;</span><span class="mi">1</span><span class="o">)(</span><span class="k">_</span><span class="o">+</span><span class="k">_</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">res4</span><span class="k">:</span> <span class="kt">scala.collection.immutable.Map</span><span class="o">[</span><span class="kt">Int</span>,<span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">2</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>This simple exercise reveals how much the Scala collection library shines !</p>
+
+<h1 id="day2">Day2</h1>
+
+<p>Once again, sliding windows proved useful for grouping elements in pairs, 
+making it easy to handle iteration logic involving the current element and its predecessor.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">).</span><span class="py">sliding</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+<span class="nc">List</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Another handy method was <code class="language-plaintext highlighter-rouge">patch</code>, which, despite its somewhat unintuitive name, is effective for removing elements from a collection.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">).</span><span class="py">patch</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="nc">Nil</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">res6</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+</code></pre></div></div>
+
+<h1 id="day3">Day3</h1>
+
+<p>This day was a tough reminder that I’m still too slow with regular expressions 
+(I never seem to remember how escaping works with triple-quote syntax in Scala). 
+I also had to refresh my memory on the non-greedy syntax <code class="language-plaintext highlighter-rouge">.*?</code>.</p>
+
+<h1 id="day5">Day5</h1>
+
+<p>String interpolation continues to be a convenient way to destructure strings:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="n">s</span><span class="s">"${fst}|${snd}"</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="nv">fst</span><span class="o">.</span><span class="py">toInt</span><span class="o">,</span> <span class="nv">snd</span><span class="o">.</span><span class="py">toInt</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>I wasted a lot of time due to a silly mistake: using <code class="language-plaintext highlighter-rouge">i</code> instead of <code class="language-plaintext highlighter-rouge">arr(i)</code>. Since both are integers, the compiler didn’t catch it.</p>
+
+<p>For part two, I initially reimplemented a bubble sort before realizing I could just use the built-in <code class="language-plaintext highlighter-rouge">sortWith</code>. 
+Ultimately, the task boiled down to writing code to compare two elements:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">def</span> <span class="nf">lt</span><span class="o">(</span><span class="n">orderingRules</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">Set</span><span class="o">[</span><span class="kt">Int</span><span class="o">]])</span><span class="k">:</span> <span class="o">(</span><span class="kt">Int</span><span class="o">,</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Boolean</span> <span class="k">=</span> <span class="o">{</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span>
+  <span class="nv">orderingRules</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="n">a</span><span class="o">).</span><span class="py">exists</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">contains</span><span class="o">(</span><span class="n">b</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h1 id="day-6">Day 6</h1>
+
+<p>Over the years, I’ve extracted reusable code for Advent of Code. 
+This time, I reused a grid implementation, which was helpful. 
+However, the design wasn’t great, and I lost some time figuring out how it worked.</p>
+
+<p>The upside? It worked on the first try, avoiding common coding mistakes like off-by-one errors.</p>
+
+<h1 id="day7">Day7</h1>
+
+<p>This was the day where a 32-bit integer overflow occurred. Fortunately, it happened during parsing, and the error message made it clear:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span><span class="kt">error</span><span class="o">]</span> <span class="nv">java</span><span class="o">.</span><span class="py">lang</span><span class="o">.</span><span class="py">NumberFormatException</span><span class="k">:</span> <span class="kt">For</span> <span class="kt">input</span> <span class="kt">string:</span> <span class="err">"634495747544"</span>
+</code></pre></div></div>
+
+<p>I also reused a combinatorics method that I had extracted in previous years. 
+Honestly, it’s satisfying to see how clear and straightforward the code can be in Scala:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>object Day7 extends MultiPuzzle[Long, Long] {
+  val opsPart1: List[(Long, Long) =&gt; Long] = List(_ + _, _ * _)
+  val opsPart2: List[(Long, Long) =&gt; Long] = List(_ + _, _ * _, (a, b) =&gt; s"$a$b".toLong)
+
+  override def part1(input: Iterator[String]): Long = common(input, opsPart1)
+
+  override def part2(input: Iterator[String]): Long = common(input, opsPart2)
+
+  private def common(input: Iterator[String], ops: List[(Long, Long) =&gt; Long]) =
+    input.map { s =&gt;
+      val numbers    = s.split("[: ]+").map(_.toLong)
+      val candidates = Combinatorics.permutationsWithReplacement(ops, numbers.length - 2)
+      val equationCouldBeTrue = candidates.exists { candidate =&gt;
+        val (expected :: fst :: tail) = numbers.toList
+        val actual                    = tail.zip(candidate).foldLeft(fst) { case (acc, (cur, op)) =&gt; op(acc, cur) }
+        actual == expected
+      }
+      if (equationCouldBeTrue) numbers.head else 0
+    }.sum
+}
+</code></pre></div></div>
+
+<p>If you’re interested, you can find <a href="https://github.com/yannmoisan/advent-of-code/">all my solutions on Github</a>.</p>
+
+  </div><a class="u-url" href="/advent-of-code-2024-week1.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

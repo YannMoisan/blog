@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>De Linux à OS X | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="De Linux à OS X" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Les difficultés du passage de Linux à OS X pour un développeur" />
+<meta property="og:description" content="Les difficultés du passage de Linux à OS X pour un développeur" />
+<link rel="canonical" href="https://www.yannmoisan.com/osx.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/osx.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-05-29T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="De Linux à OS X" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2014-05-29T00:00:00+02:00","datePublished":"2014-05-29T00:00:00+02:00","description":"Les difficultés du passage de Linux à OS X pour un développeur","headline":"De Linux à OS X","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/osx.html"},"url":"https://www.yannmoisan.com/osx.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">De Linux à OS X</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2014-05-29T00:00:00+02:00" itemprop="datePublished">May 29, 2014
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Mon nouveau boulot me fournit gentiment un Mac Book Pro. Malgré mes réticences à utiliser un système
+d’exploitation propriétaire, j’ai décidé de relever le défi de mon collègue
+<a href="https://twitter.com/vbehar">Vincent</a> et d’utiliser OS X. Me voici donc sur la route de la
+transition de Linux vers OS X.</p>
+
+<h2 id="clavier">Clavier</h2>
+
+<p>La première difficulté est le clavier; les touches ⌘ Command et ⌥ Option sont inversées, et il n’y a
+qu’un seul Control, à contrario des règles d’ergonomie. Heureusement, j’utilise un clavier externe
+et ma disposition de clavier qwerty-lafayette est disponible sur OS X<sup><a href="#cite1">[1]</a></sup>, merci
+<a href="https://twitter.com/fabi1cazenave">kaze</a> !</p>
+
+<p>Voici les raccourcis que j’utilise le plus :</p>
+
+<p>Command Tab</p>
+
+<p>Sélectionne la prochaine application dans la liste des applications ouvertes</p>
+
+<p>Command ←/→</p>
+
+<p>se déplace d’un onglet vers la gauche / droite dans iTerm2</p>
+
+<p>Option Espace</p>
+
+<p>Lance alfred, qui me sert de lanceur de programme</p>
+
+<p>Command Enter</p>
+
+<p>Affiche le terminal</p>
+
+<p>Control ↓</p>
+
+<p>Affiche toutes les fenêtres de l’application courante</p>
+
+<h2 id="gestionnaire-de-paquet">Gestionnaire de paquet</h2>
+
+<p>Aussi bizarre que cela puisse paraitre à un utilisateur de Linux, OS X n’a pas de gestionnaire de
+paquets par défaut. Il faut installer <a href="http://brew.sh/">Homebrew</a> pour y remédier et ensuite
+installer ses <a href="mes-programmes-preferes.html">programmes préférés</a> (ex: tig, ag, …).</p>
+
+<h2 id="terminal">Terminal</h2>
+
+<p>J’ai suivi les conseils et installé <a href="http://www.iterm2.com/#/section/home">iTerm2</a> pour remplacer le
+terminal par défaut. J’ai ensuite installé le thème solarized, configuré la touche Meta qui est
+désactivé par défaut ainsi qu’un raccourci clavier système pour avoir un terminal toujours
+rapidement accessible.</p>
+
+<h2 id="gnu-vs-bsd">GNU vs BSD</h2>
+
+<p>OS X est un UNIX dérivé de BSD et les utilitaires de base ont de subtiles différences avec les
+versions GNU. Je vous recommande d’installer et d’utiliser les versions GNU.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install coreutils
+</code></pre></div></div>
+
+<p>Pour avoir la coloration avec ls, c’est <code class="language-plaintext highlighter-rouge">--color=auto</code> pour GNU et <code class="language-plaintext highlighter-rouge">-G</code> pour BSD. On doit donc avoir
+dans sa config :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if [[ $(uname -s) == "Darwin" ]]; then
+alias ls='ls -G'
+else 
+alias ls='ls --color=auto'
+fi
+</code></pre></div></div>
+
+<p>sed : le fonctionnement de l’option <code class="language-plaintext highlighter-rouge">-i</code> diffère par ex. Heureusement il est possible d’installer
+GNU sed et de remplacer la version OS X</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install gnu-sed --default-names
+</code></pre></div></div>
+
+<p>Et d’autres programmes ont aussi des différences pénibles comme <code class="language-plaintext highlighter-rouge">date</code>, <code class="language-plaintext highlighter-rouge">csplit</code>, <code class="language-plaintext highlighter-rouge">awk</code> …</p>
+
+<p><code class="language-plaintext highlighter-rouge">ctags</code> semble aussi avoir des différences au niveau des expressions régulières. J’ai remplacé <code class="language-plaintext highlighter-rouge">\s</code>
+par <code class="language-plaintext highlighter-rouge">[ \t]</code>. Ce qui se fait avec la commande suivante dans Vim : <code class="language-plaintext highlighter-rouge">:%s/\\s/[ \\t]/g</code></p>
+
+<h2 id="vim">Vim</h2>
+
+<p>La version de Vim installée par défaut est trop vieille<sup><a href="#cite2">[2]</a></sup>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install macvim --with-cscope --with-lua --override-system-vim
+</code></pre></div></div>
+
+<p>Le path de Vim diffère de celui du SHELL, ce qui fait que ctags ne fonctionne pas dans Vim. Voici la
+commande pour corriger cela<sup><a href="#cite3">[3]</a></sup> :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod ugo-x /usr/libexec/path_helper
+</code></pre></div></div>
+
+<p>Par défaut, ma configuration du clipboard ne fonctionnait pas<sup><a href="#cite4">[4]</a></sup>. J’ai remplacé :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set clipboard=unnamedplus
+</code></pre></div></div>
+
+<p>par :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set clipboard=unnamed,unnamedplus
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>J’ai perdu pas mal de temps pour retrouver une utilisation similaire à celle que j’ai sous Linux,
+mais passée cette étape, mon <em>workflow</em> est sensiblement le même.</p>
+
+<p>Les regrets : le gestionnaire de fenêtre <a href="http://i3wm.org/">i3</a> me manque. En effet, je trouve Aqua
+inadapté pour des utilisateurs avancés, notamment car cette interface n’est pas conçue pour être
+pilotée au clavier.</p>
+
+<p>Pour être honnête, il faut aussi reconnaitre à OS X quelques qualités : une grande homogénéité de
+l’interface (Command-C / Command-V pour copier / coller fonctionne partout), certains programmes
+sont très pratiques (par ex. <a href="http://kapeli.com/dash">Dash</a> pour centraliser les javadocs).</p>
+
+<h2 id="liens">Liens</h2>
+
+<p id="cite1">[1] <a href="http://fabi1cazenave.github.io/qwerty-lafayette/">http://fabi1cazenave.github.io/qwerty-lafayette/</a></p>
+<p id="cite2">[2] <a href="https://github.com/dotphiles/dotzsh#mac-os-x">https://github.com/dotphiles/dotzsh#mac-os-x</a></p>
+<p id="cite3">[3] <a href="http://www.codeography.com/2013/06/11/install-macvim-with-lua-support.html">http://www.codeography.com/2013/06/11/install-macvim-with-lua-support.html</a></p>
+<p id="cite4">[4] <a href="http://vim.wikia.com/wiki/Mac_OS_X_clipboard_sharing">http://vim.wikia.com/wiki/Mac_OS_X_clipboard_sharing</a></p>
+
+  </div><a class="u-url" href="/osx.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

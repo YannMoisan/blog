@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="6C_Yu8j-I-U3pjFBjHojSiqvDPxhKJuYqap_tSXV8M4" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Créer une archive .tar.gz | Yann Moisan</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="Créer une archive .tar.gz" />
+<meta property="og:locale" content="fr" />
+<meta name="description" content="Création d’une archive .tar.gz en Java" />
+<meta property="og:description" content="Création d’une archive .tar.gz en Java" />
+<link rel="canonical" href="https://www.yannmoisan.com/creer-une-archive-tar-gz.html" />
+<meta property="og:url" content="https://www.yannmoisan.com/creer-une-archive-tar-gz.html" />
+<meta property="og:site_name" content="Yann Moisan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2011-04-11T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Créer une archive .tar.gz" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2011-04-11T00:00:00+02:00","datePublished":"2011-04-11T00:00:00+02:00","description":"Création d’une archive .tar.gz en Java","headline":"Créer une archive .tar.gz","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.yannmoisan.com/creer-une-archive-tar-gz.html"},"url":"https://www.yannmoisan.com/creer-une-archive-tar-gz.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" /><link type="application/atom+xml" rel="alternate" href="https://www.yannmoisan.com/feed.xml" title="Yann Moisan" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Yann Moisan</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/">Posts</a><a class="page-link" href="/news-from-last-month.html">News from last month</a><a class="page-link" href="/a-propos.html">About me</a><a class="page-link" href="/bookmarks.html">Bookmarks</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Créer une archive .tar.gz</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2011-04-11T00:00:00+02:00" itemprop="datePublished">Apr 11, 2011
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Aujourd’hui, nous allons voir comment créer en Java une archive au format <code class="language-plaintext highlighter-rouge">.tar.gz</code>, à partir de
+plusieurs fichiers d’entrée. Ce format est en fait une archive au format tar qui est ensuite
+compressé avec l’utilitaire gzip.</p>
+
+<p>Java offre le support de la compression gzip avec le package <code class="language-plaintext highlighter-rouge">java.util.zip</code>. Par contre, Java ne
+fournit pas le support de l’archive tar. Nous allons donc utiliser une implémentation tierce, la
+plus populaire étant <a href="http://commons.apache.org/compress/">Commons Compress</a> d’Apache.</p>
+
+<p>Le code à écrire est relativement court et peu complexe. Mais il pose souvent des difficultés aux
+développeurs débutants. Voici les différents points d’attention :</p>
+
+<p>Pour des raisons de performance, il faut éviter de créer physiquement l’archive puis de la
+compresser mais travailler directement en mémoire. Pour ce faire, nous allons utiliser le mécanisme
+de chainage de streams de java.</p>
+
+<p>Il faut aussi gérer finement les exceptions, à l’aide de blocs <code class="language-plaintext highlighter-rouge">finally</code>, afin de garantir la
+fermeture des streams en toute circonstance.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">FileUtils</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">1024</span><span class="o">;</span>
+
+    <span class="c1">// Suppresses default constructor, ensuring non-instantiability.</span>
+    <span class="kd">private</span> <span class="nf">FileUtils</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Crée une nouvelle archive compressée au format tar gz.
+     *
+     * Vérifie préalablement que chaque fichier à archiver peut être lu. Si tel n'est pas le cas, une exception
+     * est levée et le fichier archive n'est pas créé.
+     *
+     * @param ins les fichiers à archiver
+     * @param out le fichier de sortie
+     *
+     * @throws TechnicalException si au moins un fichier ne peut être lu ou dans le cas d'erreurs d'E/S
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">createTarGz</span><span class="o">(</span><span class="nc">List</span><span class="n">$lt</span><span class="o">;</span><span class="nc">File</span><span class="n">$gt</span><span class="o">;</span> <span class="n">ins</span><span class="o">,</span> <span class="nc">File</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">check</span><span class="o">(</span><span class="n">ins</span><span class="o">);</span>
+        <span class="nc">TarArchiveOutputStream</span> <span class="n">taos</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">taos</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TarArchiveOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="nc">GZIPOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="n">out</span><span class="o">)));</span>
+            <span class="n">addFilesToArchive</span><span class="o">(</span><span class="n">ins</span><span class="o">,</span> <span class="n">taos</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">ioe</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">TechnicalException</span><span class="o">(</span><span class="n">ioe</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">closeQuietly</span><span class="o">(</span><span class="n">taos</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">check</span><span class="o">(</span><span class="nc">List</span><span class="n">$lt</span><span class="o">;</span><span class="nc">File</span><span class="n">$gt</span><span class="o">;</span> <span class="n">ins</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">File</span> <span class="n">file</span> <span class="o">:</span> <span class="n">ins</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">file</span><span class="o">.</span><span class="na">canRead</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">TechnicalException</span><span class="o">(</span><span class="s">"The file \""</span> <span class="o">+</span> <span class="n">file</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"\" cannot be read."</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">addFilesToArchive</span><span class="o">(</span><span class="nc">List</span><span class="n">$lt</span><span class="o">;</span><span class="nc">File</span><span class="n">$gt</span><span class="o">;</span> <span class="n">ins</span><span class="o">,</span> <span class="nc">TarArchiveOutputStream</span> <span class="n">tos</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">File</span> <span class="n">in</span> <span class="o">:</span> <span class="n">ins</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">addFileToArchive</span><span class="o">(</span><span class="n">in</span><span class="o">,</span> <span class="n">tos</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">addFileToArchive</span><span class="o">(</span><span class="nc">File</span> <span class="n">in</span><span class="o">,</span> <span class="nc">TarArchiveOutputStream</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="nc">TarArchiveEntry</span> <span class="n">entry</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TarArchiveEntry</span><span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">entry</span><span class="o">.</span><span class="na">setSize</span><span class="o">(</span><span class="n">in</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">putArchiveEntry</span><span class="o">(</span><span class="n">entry</span><span class="o">);</span>
+        <span class="n">copy</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileInputStream</span><span class="o">(</span><span class="n">in</span><span class="o">),</span> <span class="n">out</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">closeArchiveEntry</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** Astuce : laisse le flux de sortie ouvert pour permettre les écritures ultérieures */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">copy</span><span class="o">(</span><span class="nc">InputStream</span> <span class="n">in</span><span class="o">,</span> <span class="nc">OutputStream</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="kt">byte</span><span class="o">[]</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="no">BUFFER_SIZE</span><span class="o">];</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(-</span><span class="mi">1</span> <span class="o">!=</span> <span class="o">(</span><span class="n">n</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="n">out</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">buffer</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">closeQuietly</span><span class="o">(</span><span class="n">in</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">closeQuietly</span><span class="o">(</span><span class="nc">InputStream</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">in</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">in</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">ioe</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// Silent catch</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">closeQuietly</span><span class="o">(</span><span class="nc">OutputStream</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">out</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">ioe</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// Silent catch</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/creer-une-archive-tar-gz.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Yann Moisan</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Yann Moisan</li><li><a class="u-email" href="mailto:yamo93+blog@gmail.com">yamo93+blog@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/YannMoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">YannMoisan</span></a></li><li><a href="https://www.linkedin.com/in/yann-moisan-01771746"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">yann-moisan-01771746</span></a></li><li><a href="https://www.twitter.com/yannmoisan"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">yannmoisan</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Blog de Yann Moisan Scala, Java, Linux</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
