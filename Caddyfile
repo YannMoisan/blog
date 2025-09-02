@@ -1,87 +1,91 @@
 # Main blog site
+# Defines virtual hosts for both www and non-www domains
 yannmoisan.com, www.yannmoisan.com {
+    # Sets document root where static files are served from
     root * /var/www/yannmoisan.com
     
     # Security headers (improved from your nginx config)
     header {
-        X-Frame-Options SAMEORIGIN
-        X-XSS-Protection "1; mode=block"
-        X-Content-Type-Options nosniff
-        Referrer-Policy no-referrer-when-downgrade
+        X-Frame-Options SAMEORIGIN                           # Prevents clickjacking
+        X-XSS-Protection "1; mode=block"                     # XSS protection for older browsers
+        X-Content-Type-Options nosniff                       # Prevents MIME type sniffing
+        Referrer-Policy no-referrer-when-downgrade          # Controls referrer info
         # Stricter CSP without unsafe-inline
-        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"  # Restricts resource loading
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"  # Forces HTTPS for 1 year
     }
     
     # Cache static assets (equivalent to your 168h nginx rule)
     @static {
-        file
-        path *.css *.js *.gif *.jpg *.jpeg *.png *.ico *.woff *.woff2 *.svg
+        file                                                 # Only match existing files
+        path *.css *.js *.gif *.jpg *.jpeg *.png *.ico *.woff *.woff2 *.svg  # File extensions to cache
     }
     header @static {
-        Cache-Control "public, max-age=604800"  # 168h = 604800 seconds
-        Pragma "public"
+        Cache-Control "public, max-age=604800"              # Cache for 7 days (168h)
+        Pragma "public"                                      # HTTP/1.0 cache directive
     }
     
     # No cache for HTML (equivalent to expires -1)
     @html {
-        path *.html
+        path *.html                                          # Match HTML files
     }
-    header @html Cache-Control "no-cache, no-store, must-revalidate"
+    header @html Cache-Control "no-cache, no-store, must-revalidate"  # Never cache HTML
     
     # Handle root specifically (matching your rewrite rule)
     handle_path / {
-        rewrite * /index.html
-        file_server
+        rewrite * /index.html                                # Always serve index.html for /
+        file_server                                          # Serve the file
     }
     
     # Jekyll-style routing for other paths
-    try_files {path} {path}/ /index.html
-    file_server
+    try_files {path} {path}/ /index.html                     # Try file, then directory, then index.html
+    file_server                                              # Serve files
     
     # Error handling
     handle_errors {
-        @404 expression {http.error.status_code} == 404
+        @404 expression {http.error.status_code} == 404      # Match 404 errors
         handle @404 {
-            rewrite * /index.html
+            rewrite * /index.html                            # Serve index.html for 404s
             file_server
         }
     }
     
     # Enable compression (equivalent to nginx gzip)
-    encode gzip
+    encode gzip                                              # Enable gzip compression
 }
 
 # Talks subdomain
+# Subdomain definition
 talks.yannmoisan.com {
+    # Different document root
     root * /var/www/talks.yannmoisan.com
     
-    # Same security headers
+    # Same security headers (identical to blog)
     header {
-        X-Frame-Options SAMEORIGIN
-        X-XSS-Protection "1; mode=block"
-        X-Content-Type-Options nosniff
-        Referrer-Policy no-referrer-when-downgrade
-        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"
-        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Frame-Options SAMEORIGIN                           # Prevents clickjacking
+        X-XSS-Protection "1; mode=block"                     # XSS protection for older browsers
+        X-Content-Type-Options nosniff                       # Prevents MIME type sniffing
+        Referrer-Policy no-referrer-when-downgrade          # Controls referrer info
+        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"  # Restricts resource loading
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"  # Forces HTTPS for 1 year
     }
     
-    # Same caching rules
+    # Same caching rules (identical to blog)
     @static {
-        file
-        path *.css *.js *.gif *.jpg *.jpeg *.png *.ico *.woff *.woff2 *.svg
+        file                                                 # Only match existing files
+        path *.css *.js *.gif *.jpg *.jpeg *.png *.ico *.woff *.woff2 *.svg  # File extensions to cache
     }
     header @static {
-        Cache-Control "public, max-age=604800"
-        Pragma "public"
+        Cache-Control "public, max-age=604800"              # Cache for 7 days (168h)
+        Pragma "public"                                      # HTTP/1.0 cache directive
     }
     
-    @html path *.html
-    header @html Cache-Control "no-cache, no-store, must-revalidate"
+    @html path *.html                                        # Match HTML files
+    header @html Cache-Control "no-cache, no-store, must-revalidate"  # Never cache HTML
     
     # Standard Jekyll routing
-    try_files {path} {path}/ /index.html
-    file_server
+    try_files {path} {path}/ /index.html                     # Jekyll fallback routing
+    file_server                                              # Serve files
     
-    encode gzip
+    encode gzip                                              # Compression
 }
