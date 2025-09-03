@@ -7,7 +7,6 @@ yannmoisan.com, www.yannmoisan.com {
     # Security headers (improved from your nginx config)
     header {
         X-Frame-Options SAMEORIGIN                           # Prevents clickjacking
-        X-XSS-Protection "1; mode=block"                     # XSS protection for older browsers
         X-Content-Type-Options nosniff                       # Prevents MIME type sniffing
         Referrer-Policy no-referrer-when-downgrade          # Controls referrer info
         # Stricter CSP without unsafe-inline
@@ -22,7 +21,6 @@ yannmoisan.com, www.yannmoisan.com {
     }
     header @static {
         Cache-Control "public, max-age=604800"              # Cache for 7 days (168h)
-        Pragma "public"                                      # HTTP/1.0 cache directive
     }
     
     # No cache for HTML (equivalent to expires -1)
@@ -31,24 +29,9 @@ yannmoisan.com, www.yannmoisan.com {
     }
     header @html Cache-Control "no-cache, no-store, must-revalidate"  # Never cache HTML
     
-    # Handle root specifically (matching your rewrite rule)
-    handle_path / {
-        rewrite * /index.html                                # Always serve index.html for /
-        file_server                                          # Serve the file
-    }
-    
     # Jekyll-style routing for other paths
     try_files {path} {path}/ /index.html                     # Try file, then directory, then index.html
     file_server                                              # Serve files
-    
-    # Error handling
-    handle_errors {
-        @404 expression {http.error.status_code} == 404      # Match 404 errors
-        handle @404 {
-            rewrite * /index.html                            # Serve index.html for 404s
-            file_server
-        }
-    }
     
     # Enable compression (equivalent to nginx gzip)
     encode gzip                                              # Enable gzip compression
@@ -63,7 +46,6 @@ talks.yannmoisan.com {
     # Same security headers (identical to blog)
     header {
         X-Frame-Options SAMEORIGIN                           # Prevents clickjacking
-        X-XSS-Protection "1; mode=block"                     # XSS protection for older browsers
         X-Content-Type-Options nosniff                       # Prevents MIME type sniffing
         Referrer-Policy no-referrer-when-downgrade          # Controls referrer info
         Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src *; script-src 'self' 'unsafe-inline'"  # Restricts resource loading
@@ -77,7 +59,6 @@ talks.yannmoisan.com {
     }
     header @static {
         Cache-Control "public, max-age=604800"              # Cache for 7 days (168h)
-        Pragma "public"                                      # HTTP/1.0 cache directive
     }
     
     @html path *.html                                        # Match HTML files
