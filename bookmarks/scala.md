@@ -46,6 +46,7 @@ Here is the list of my favorite articles collected during my 10 years of languag
 - [Monoid Morphisms, Products, and Coproducts](http://blog.higher-order.com/blog/2014/03/19/monoid-morphisms-products-coproducts/)
 - [A tale on Semirings](https://typelevel.org/blog/2018/11/02/semirings.html)
 - [How can we map a Set?](https://typelevel.org/blog/2014/06/22/mapping-sets.html), on coyoneda
+- [Variance of Monad Transformers](https://typelevel.org/blog/2018/09/29/monad-transformer-variance.html)
 
 ## Advanced - Free monad VS tagless final
 
@@ -86,3 +87,4 @@ Here is the list of my favorite articles collected during my 10 years of languag
 - [Gabriel Volpe](https://gvolpe.com/), author of Practical FP in Scala
 - [Alexandru Nedelcu](https://alexn.org/), author of monix
 - [Nicolas Rinaudo](https://nrinaudo.github.io/), awesome speaker
+- [Fabio Labella](https://systemfw.org/writings.html/)
