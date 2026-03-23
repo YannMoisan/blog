@@ -1,0 +1,3 @@
+https://virtuslab.com/blog/scala/generating-direct-style-scala-3-applications
+https://blog.frankel.ch/writing-agent-skill/
+https://blog.pierre-ricadat.com/introducing-purelogic/

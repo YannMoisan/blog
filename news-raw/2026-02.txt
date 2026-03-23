@@ -1,0 +1,14 @@
+https://medium.com/jonathans-musings/datadog-feature-flags-is-here-8810c366205e
+https://warski.org/blog/secure-dangerous-claude-code-vs-code-setup/
+https://blog.zwindler.fr/2026/02/04/recap-cndf-2026/
+https://martinfowler.com/articles/exploring-gen-ai/context-engineering-coding-agents.html
+https://www.scalateams.com/blog/scala-in-fintech
+https://blog.arkey.fr/2026/02/08/ten-reasons-to-not-use-jdk-httpclient/
+https://o16g.com/
+https://ochenashko.com/practical-observability-distributed-tracing/
+https://fsharpforfunandprofit.com/posts/property-based-testing-2/
+https://philippart-s.github.io/blog/2026-02-18-anthropic-skills/
+https://blog.fogus.me/meta/LLMe.html
+https://localghost.dev/blog/stop-generating-start-thinking/
+https://k33g.org/GRP-DevContainer-2026-02-16-Setup.html
+https://david.pilato.fr/posts/2026-02-06-the-augmented-developer/

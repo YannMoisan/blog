@@ -1,0 +1,8 @@
+https://addyosmani.com/blog/21-lessons/
+https://kmicinski.com/claude-code-and-why-study-cs
+https://chudy.me/blog/what-happens-when-you-type-google-com-and-press-enter
+https://k33g.hashnode.dev/my-little-arrangements-with-claude-code
+https://touilleur-express.fr/2026/01/05/lia-generative-va-changer-notre-facon-de-coder-unpopular-opinion/
+https://openai.com/index/scaling-postgresql/
+https://blog.malt.engineering/dbt-migration-at-malt-2bb754b3304e
+https://mcorbin.fr/posts/2026-01-06-traces-first/

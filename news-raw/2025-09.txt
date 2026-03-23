@@ -1,0 +1,11 @@
+https://chollinger.com/presentations/2025/using-scala-in-a-go-first-company/1
+https://www.elastic.co/blog/jvm-essentials-for-elasticsearch
+https://opentelemetry.io/blog/2025/how-to-name-your-metrics/
+https://git-scm.com/cheat-sheet
+https://m.youtube.com/watch?v=RSWnKrx9Vt8
+https://newsletter.pragmaticengineer.com/p/designing-a-payment-system
+https://blog.rhetoricalmusings.com/posts/contramap/
+https://www.streamingdata.tech/p/streaming-and-the-rad-stack
+https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+https://elly.town/d/blog/2025-09-01-advent-of-code-500.html
+https://medium.com/@EliasWalyBa/rebase-merge-and-the-philosophy-of-history-in-git-21fb19f33f34
