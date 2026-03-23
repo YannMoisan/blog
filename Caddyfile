@@ -10,7 +10,7 @@ yannmoisan.com, www.yannmoisan.com {
         X-Content-Type-Options nosniff                       # Prevents MIME type sniffing
         Referrer-Policy no-referrer-when-downgrade          # Controls referrer info
         # Stricter CSP without unsafe-inline
-        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"  # Restricts resource loading
+        Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline' gist.github.com; img-src 'self' data:; script-src 'self' gist.github.com"  # Restricts resource loading
         Strict-Transport-Security "max-age=31536000; includeSubDomains"  # Forces HTTPS for 1 year
     }
     
